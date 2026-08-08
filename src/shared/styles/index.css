@@ -1,4 +1,33 @@
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 @import 'tailwindcss';
+
+@theme {
+  --font-sans:
+    'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+    system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic',
+    sans-serif;
+
+  --color-primary: #77895d; /* primary_color */
+  --color-off-white: #f9f7f4; /* white_color */
+  --color-off-white-sub: #e0e0e0; /* white_sub_color */
+  --color-text-primary: #222222; /* text_primary_color */
+  --color-text-secondary: #727272; /* text_secondary_color */
+  --color-box-background: #fafafa; /* box_background_color */
+  --color-line: #ededed; /* border_color */
+  --color-outline: #eaeaea; /* outline_color */
+  --color-skeleton: #e2e2e2;
+  --color-dark: #2c2c2c; /* red_color */
+  --color-modal-backdrop: #ffffff80; /* modal_background */
+  --color-tag-lifestyle: #515151;
+  --color-tag-homecare: #44a031;
+  --color-tag-supplement: #2e5632;
+  --color-nav-border: #f4f4f4; /* nav_border_color */
+  --color-nav-background: #fefefed9; /* nav_background_color */
+  --color-primary-box-icon: #c5dac3; /* primary_color_box_icon */
+  --color-highlight: #ff6200; /* highlight_color */
+  /* 알림 스위치 on 상태. Figma에 별도 스위치 컴포넌트 색으로 지정돼 있어 브랜드 그린이 아닙니다. */
+  --color-switch-on: #2563eb; /* Primary/Blue/600 */
+}
 
 :root {
   color-scheme: light dark;
@@ -7,5 +36,26 @@
 body {
   margin: 0;
   min-height: 100svh;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background-color: var(--color-skeleton);
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.95) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
 }
