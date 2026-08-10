@@ -3,6 +3,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { HomeRoutes } from '@/features/home/homeRoutes'
 import { MeasurementRoutes } from '@/features/measurement/measurementRoutes'
 import { MyRoutes } from '@/features/my/myRoutes'
+import { PlanRoutes } from '@/features/plan/planRoutes'
 import BaseLayout from '@/shared/layouts/BaseLayout'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
@@ -13,6 +14,11 @@ const router = createBrowserRouter([
     path: '/',
     element: <BaseLayout />,
     children: HomeRoutes,
+  },
+  {
+    path: '/plan',
+    element: <BaseLayout />,
+    children: PlanRoutes,
   },
   {
     path: '/my',
