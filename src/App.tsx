@@ -4,6 +4,8 @@ import { HomeRoutes } from '@/features/home/homeRoutes'
 import { MeasurementRoutes } from '@/features/measurement/measurementRoutes'
 import { MyRoutes } from '@/features/my/myRoutes'
 import { PlanRoutes } from '@/features/plan/planRoutes'
+import { OnboardRoutes } from '@/features/onboard/pages/onboardRoutes'
+import { TrialRoutes } from '@/features/trial/pages/trialRoutes'
 import BaseLayout from '@/shared/layouts/BaseLayout'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
@@ -32,6 +34,16 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="center-select" replace /> },
       ...MeasurementRoutes,
     ],
+  },
+  {
+    path: '/onboard',
+    element: <BaseLayout />,
+    children: OnboardRoutes,
+  },
+  {
+    path: '/trial',
+    element: <BaseLayout />,
+    children: TrialRoutes,
   },
   {
     path: '*',
