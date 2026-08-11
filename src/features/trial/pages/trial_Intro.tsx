@@ -8,7 +8,7 @@ function Trial_Intro() {
 
   const { currentIndex, handleTap } = useAutoAdvance({
     totalSlides: trialIntroSlides.length,
-    intervalMs: 2500,
+    intervalMs: 2000,
     onComplete: () => {
       navigate("/trial/capture"); 
     },
