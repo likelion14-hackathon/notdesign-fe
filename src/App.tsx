@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { HomeRoutes } from '@/features/home/homeRoutes'
+import { DiaryRoutes } from '@/features/diary/pages/diaryRoutes'
 import { MeasurementRoutes } from '@/features/measurement/measurementRoutes'
 import { MyRoutes } from '@/features/my/myRoutes'
 import { PlanRoutes } from '@/features/plan/planRoutes'
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
     path: '/trial',
     element: <BaseLayout />,
     children: TrialRoutes,
+  },
+  {
+    path: '/diary',
+    element: <BaseLayout />,
+    children: DiaryRoutes,
   },
   {
     path: '*',

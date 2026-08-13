@@ -46,7 +46,10 @@ const OnboardingPage: React.FC = () => {
 
         <div className="flex items-center gap-2 text-xs text-gray-300">
           <span>아직 고민 중이신가요?</span>
-          <button className="underline font-normal font-['Pretendard'] text-white">
+          <button
+            onClick={() => setIsLoginModalOpen(true)}
+            className="underline font-normal font-['Pretendard'] text-white"
+          >
             체험해보기
           </button>
         </div>
