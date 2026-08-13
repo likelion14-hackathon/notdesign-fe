@@ -1,0 +1,37 @@
+import { useNavigate } from 'react-router-dom'
+import { WELLNESS_INTRO } from '@/features/wellness/constants'
+import BottomButton from '@/shared/components/BottomButton'
+import Logo from '@/shared/components/Logo'
+
+export default function WellnessIntroPage() {
+  const navigate = useNavigate()
+
+  return (
+    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+      <Logo />
+
+      <div className="px-5 pt-7.5">
+        <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
+          {WELLNESS_INTRO.eyebrow}
+        </p>
+        <h1 className="text-text-primary mt-2.75 text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
+          {WELLNESS_INTRO.title.join(' ')}
+        </h1>
+      </div>
+
+      <div className="min-h-0 flex-1" />
+
+      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+        <button
+          type="button"
+          className="text-primary mb-5 block w-full text-center text-[16px] leading-4.75 font-semibold tracking-[-0.32px]"
+        >
+          {WELLNESS_INTRO.skipLabel}
+        </button>
+        <BottomButton onClick={() => navigate('/wellness/procedure-cost')}>
+          {WELLNESS_INTRO.startButtonLabel}
+        </BottomButton>
+      </div>
+    </div>
+  )
+}
