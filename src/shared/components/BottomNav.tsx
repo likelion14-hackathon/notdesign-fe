@@ -25,7 +25,6 @@ interface BottomNavProps {
   onSelect?: (id: NavTabId) => void
 }
 
-/** Figma: nav-home-selected (301:1261) */
 export default function BottomNav({ current, onSelect }: BottomNavProps) {
   return (
     <nav className="border-nav-border bg-nav-background flex h-15 gap-0 rounded-[100px] border p-0.75 shadow-[0px_0px_8.3px_-5px_rgba(0,0,0,0.25)] backdrop-blur-[2px]">

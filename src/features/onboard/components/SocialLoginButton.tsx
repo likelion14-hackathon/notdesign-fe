@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 
 interface SocialLoginButtonProps {
-  label: string;
-  icon?: string;
-  bgColor: string;
-  textColor: string;
-  onClick: () => void;
+  label: string
+  icon?: string
+  bgColor: string
+  textColor: string
+  onClick: () => void
 }
 
 const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
@@ -18,12 +18,12 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`w-full h-14 rounded-[10px] flex items-center justify-center gap-2 font-medium ${bgColor} ${textColor}`}
+      className={`flex h-14 w-full items-center justify-center gap-2 rounded-[10px] font-medium ${bgColor} ${textColor}`}
     >
-      {icon ? <img src={icon} alt="" className="w-5 h-5" /> : null}
+      {icon ? <img src={icon} alt="" className="h-5 w-5" /> : null}
       {label}
     </button>
-  );
-};
+  )
+}
 
-export default SocialLoginButton;
+export default SocialLoginButton

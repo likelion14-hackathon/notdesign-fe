@@ -1,38 +1,38 @@
-import { useNavigate } from "react-router-dom";
-import Logo from "@/shared/components/Logo";
-import { trialIntroSlides } from "@/features/trial/data/trialIntroData";
-import { useAutoAdvance } from "@/features/trial/data/useAutoAdvance";
+import { useNavigate } from 'react-router-dom'
+import Logo from '@/shared/components/Logo'
+import { trialIntroSlides } from '@/features/trial/data/trialIntroData'
+import { useAutoAdvance } from '@/features/trial/data/useAutoAdvance'
 
 function Trial_Intro() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const { currentIndex, handleTap } = useAutoAdvance({
     totalSlides: trialIntroSlides.length,
     intervalMs: 2000,
     onComplete: () => {
-      navigate("/trial/capture"); 
+      navigate('/trial/capture')
     },
-  });
+  })
 
-  const currentSlide = trialIntroSlides[currentIndex];
+  const currentSlide = trialIntroSlides[currentIndex]
 
   return (
     <div
       onClick={handleTap}
-      className="relative w-full max-w-md mx-auto h-dvh flex flex-col overflow-hidden bg-off-white cursor-pointer select-none"
+      className="bg-off-white relative mx-auto flex h-dvh w-full max-w-md cursor-pointer flex-col overflow-hidden select-none"
     >
       <Logo />
 
-      <div className="flex-1 flex items-center justify-center px-6">
+      <div className="flex flex-1 items-center justify-center px-6">
         <p
           key={currentIndex}
-          className="text-text-primary text-2xl font-semibold font-sans leading-10 text-center whitespace-pre-line animate-fade-slide-in"
+          className="text-text-primary animate-fade-slide-in text-center font-sans text-2xl leading-10 font-semibold whitespace-pre-line"
         >
           {currentSlide.text}
         </p>
       </div>
     </div>
-  );
+  )
 }
 
-export default Trial_Intro;
+export default Trial_Intro
