@@ -13,9 +13,7 @@ const TrialAnalyzeInProgress = lazy(
 const TrialAnalyzeComplete = lazy(
   () => import('@/features/trial/pages/trial_AnalyzeComplete'),
 )
-const TrialRequest = lazy(
-  () => import('@/features/trial/pages/trial_Request'),
-)
+const TrialRequest = lazy(() => import('@/features/trial/pages/trial_Request'))
 
 export const TrialRoutes: RouteObject[] = [
   {

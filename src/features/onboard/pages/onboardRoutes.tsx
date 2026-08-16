@@ -3,7 +3,9 @@ import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
-const OnboardingPage = lazy(() => import('@/features/onboard/pages/onboardPage'))
+const OnboardingPage = lazy(
+  () => import('@/features/onboard/pages/onboardPage'),
+)
 
 export const OnboardRoutes: RouteObject[] = [
   {

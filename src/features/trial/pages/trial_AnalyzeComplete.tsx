@@ -7,8 +7,8 @@ import TrialLeaveWarningModal from "@/features/trial/components/TrialLeaveWarnin
 import Logo from "@/shared/components/Logo";
 
 function Trial_AnalyzeComplete() {
-  const navigate = useNavigate();
-  const [showLeaveWarning, setShowLeaveWarning] = useState(false);
+  const navigate = useNavigate()
+  const [showLeaveWarning, setShowLeaveWarning] = useState(false)
 
   return (
     <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
@@ -28,7 +28,7 @@ function Trial_AnalyzeComplete() {
       </div>
 
       <div className="shrink-0 px-5 pt-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
-        <BottomButton onClick={() => navigate("/trial/request")}>
+        <BottomButton onClick={() => navigate('/trial/request')}>
           다음으로
         </BottomButton>
       </div>
@@ -40,7 +40,7 @@ function Trial_AnalyzeComplete() {
         />
       )}
     </div>
-  );
+  )
 }
 
-export default Trial_AnalyzeComplete;
+export default Trial_AnalyzeComplete

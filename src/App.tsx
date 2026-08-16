@@ -7,6 +7,7 @@ import { MyRoutes } from '@/features/my/myRoutes'
 import { PlanRoutes } from '@/features/plan/planRoutes'
 import { OnboardRoutes } from '@/features/onboard/pages/onboardRoutes'
 import { TrialRoutes } from '@/features/trial/pages/trialRoutes'
+import { WellnessRoutes } from '@/features/wellness/wellnessRoutes'
 import BaseLayout from '@/shared/layouts/BaseLayout'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
@@ -47,10 +48,17 @@ const router = createBrowserRouter([
     children: TrialRoutes,
   },
   {
+
     path: '/diary',
     element: <BaseLayout />,
     children: DiaryRoutes,
   },
+  {
+    path: '/wellness',
+    element: <BaseLayout />,
+    children: WellnessRoutes,
+  },
+
   {
     path: '*',
     element: withSuspense(<NotFoundPage />),
