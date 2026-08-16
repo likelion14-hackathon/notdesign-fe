@@ -17,8 +17,32 @@ const WellnessEffectPerceptionPage = lazy(
 const WellnessContributionAwarenessPage = lazy(
   () => import('@/features/wellness/pages/WellnessContributionAwarenessPage'),
 )
-const WellnessResultPage = lazy(
-  () => import('@/features/wellness/pages/WellnessResultPage'),
+const WellnessWasteRevealPage = lazy(
+  () => import('@/features/wellness/pages/WellnessWasteRevealPage'),
+)
+const WellnessYearlySpendRevealPage = lazy(
+  () => import('@/features/wellness/pages/WellnessYearlySpendRevealPage'),
+)
+const WellnessMonthlyAvgRevealPage = lazy(
+  () => import('@/features/wellness/pages/WellnessMonthlyAvgRevealPage'),
+)
+const WellnessSpendSummaryPage = lazy(
+  () => import('@/features/wellness/pages/WellnessSpendSummaryPage'),
+)
+const WellnessSavingIntroPage = lazy(
+  () => import('@/features/wellness/pages/WellnessSavingIntroPage'),
+)
+const WellnessPlanTeaserPage = lazy(
+  () => import('@/features/wellness/pages/WellnessPlanTeaserPage'),
+)
+const WellnessPlanTeaserSpendPage = lazy(
+  () => import('@/features/wellness/pages/WellnessPlanTeaserSpendPage'),
+)
+const WellnessPlanTeaserExpandPage = lazy(
+  () => import('@/features/wellness/pages/WellnessPlanTeaserExpandPage'),
+)
+const WellnessPlanCtaPage = lazy(
+  () => import('@/features/wellness/pages/WellnessPlanCtaPage'),
 )
 const WellnessPlanIntroPage = lazy(
   () => import('@/features/wellness/pages/WellnessPlanIntroPage'),
@@ -51,9 +75,49 @@ export const WellnessRoutes: RouteObject[] = [
     handle: { title: '기여도 인지 여부' },
   },
   {
-    path: 'result',
-    element: withSuspense(<WellnessResultPage />),
-    handle: { title: '진단 결과' },
+    path: 'waste-reveal',
+    element: withSuspense(<WellnessWasteRevealPage />),
+    handle: { title: '낭비 비용 공개' },
+  },
+  {
+    path: 'yearly-spend-reveal',
+    element: withSuspense(<WellnessYearlySpendRevealPage />),
+    handle: { title: '연간 지출 비용 공개' },
+  },
+  {
+    path: 'monthly-avg-reveal',
+    element: withSuspense(<WellnessMonthlyAvgRevealPage />),
+    handle: { title: '한 달 평균 지출 비용 공개' },
+  },
+  {
+    path: 'spend-summary',
+    element: withSuspense(<WellnessSpendSummaryPage />),
+    handle: { title: '지출 요약' },
+  },
+  {
+    path: 'saving-intro',
+    element: withSuspense(<WellnessSavingIntroPage />),
+    handle: { title: '절약 안내' },
+  },
+  {
+    path: 'plan-teaser',
+    element: withSuspense(<WellnessPlanTeaserPage />),
+    handle: { title: '플랜 티저' },
+  },
+  {
+    path: 'plan-teaser-spend',
+    element: withSuspense(<WellnessPlanTeaserSpendPage />),
+    handle: { title: '플랜 티저 + 연간 지출 비용' },
+  },
+  {
+    path: 'plan-teaser-expand',
+    element: withSuspense(<WellnessPlanTeaserExpandPage />),
+    handle: { title: '플랜 티저 확장' },
+  },
+  {
+    path: 'plan-cta',
+    element: withSuspense(<WellnessPlanCtaPage />),
+    handle: { title: '플랜 시작 CTA' },
   },
   {
     path: 'plan-intro',

@@ -5,6 +5,7 @@ import {
   WELLNESS_SPENDING_MAX_LABEL,
 } from '@/features/wellness/constants'
 import { useWellnessStore } from '@/features/wellness/store'
+import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 import MoneySlider from '@/shared/components/MoneySlider'
@@ -15,7 +16,7 @@ export default function WellnessSkincareCostPage() {
   const setAmount = useWellnessStore((state) => state.setSkincareCost)
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
       <div className="px-5 pt-7.5">
@@ -37,13 +38,11 @@ export default function WellnessSkincareCostPage() {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1" />
-
-      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+      <BottomBar>
         <BottomButton onClick={() => navigate('/wellness/effect-perception')}>
           다음으로
         </BottomButton>
-      </div>
+      </BottomBar>
     </div>
   )
 }

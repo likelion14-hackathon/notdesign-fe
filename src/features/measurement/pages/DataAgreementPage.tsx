@@ -4,6 +4,7 @@ import {
   MEASUREMENT_AGREEMENT_SECTIONS,
   MEASUREMENT_AGREEMENT_TITLE,
 } from '@/features/measurement/constants'
+import BottomBar from '@/shared/components/BottomBar'
 import Logo from '@/shared/components/Logo'
 
 const ACTION_BUTTON =
@@ -13,7 +14,7 @@ export default function DataAgreementPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
       <FlowHeader
@@ -28,7 +29,7 @@ export default function DataAgreementPage() {
         }
       />
 
-      <div className="mt-10 min-h-0 flex-1 overflow-y-auto px-5">
+      <div className="mt-10 px-5">
         <h2 className="text-text-primary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
           {MEASUREMENT_AGREEMENT_TITLE}
         </h2>
@@ -50,22 +51,24 @@ export default function DataAgreementPage() {
         </div>
       </div>
 
-      <div className="flex shrink-0 gap-2.75 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
-        <button
-          type="button"
-          onClick={() => navigate('/measurement/center-select')}
-          className={`${ACTION_BUTTON} bg-dark grow-153 basis-0`}
-        >
-          거절하기
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/measurement/processing')}
-          className={`${ACTION_BUTTON} bg-primary grow-210 basis-0`}
-        >
-          수락하기
-        </button>
-      </div>
+      <BottomBar>
+        <div className="flex gap-2.75">
+          <button
+            type="button"
+            onClick={() => navigate('/measurement/center-select')}
+            className={`${ACTION_BUTTON} bg-dark grow-153 basis-0`}
+          >
+            거절하기
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate('/measurement/processing')}
+            className={`${ACTION_BUTTON} bg-primary grow-210 basis-0`}
+          >
+            수락하기
+          </button>
+        </div>
+      </BottomBar>
     </div>
   )
 }

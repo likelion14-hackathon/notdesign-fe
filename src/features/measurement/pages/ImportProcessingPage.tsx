@@ -20,7 +20,7 @@ export default function ImportProcessingPage() {
   }, [navigate])
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
       <Logo />
 
       <FlowHeader
@@ -29,7 +29,7 @@ export default function ImportProcessingPage() {
         showBack={false}
       />
 
-      <div className="mt-21.25 min-h-0 flex-1 overflow-y-auto px-5">
+      <div className="mt-21.25 px-5">
         <AnalyzingCard />
       </div>
     </div>
