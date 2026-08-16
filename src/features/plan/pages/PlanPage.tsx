@@ -18,7 +18,7 @@ export default function PlanPage() {
   const handleSelectTab = (id: NavTabId) => {
     if (id === 'home') navigate('/')
     if (id === 'info') navigate('/my')
-    // record는 아직 구현된 화면이 없어 선택만 되고 이동하지 않음
+    if (id === 'record') navigate('/diary')
   }
 
   return (

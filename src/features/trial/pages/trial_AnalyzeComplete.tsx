@@ -23,6 +23,9 @@ function Trial_AnalyzeComplete() {
 
       <div className="mt-21.25 px-5">
         <ResultCard />
+        <p className="mt-[25px] text-text-secondary text-xs text-center leading-[1.6] whitespace-pre-line">
+          {"이 시스템은 의료기기가 아니며, 분석 결과는 미용 참고 정보일 뿐\n진단 목적으로 사용할 수 없음을 유의하시기 바랍니다"}
+        </p>
       </div>
 
       <BottomBar>
@@ -32,8 +35,8 @@ function Trial_AnalyzeComplete() {
       </BottomBar>
 
       {showLeaveWarning && (
-        <LeaveWarningModal
-          onApprove={() => navigate('/trial/capture')}
+        <TrialLeaveWarningModal
+          onApprove={() => navigate("/trial/capture")}
           onReject={() => setShowLeaveWarning(false)}
         />
       )}
