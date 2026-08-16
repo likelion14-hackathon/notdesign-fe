@@ -33,7 +33,10 @@ export default function WellnessWasteRevealPage() {
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
 
   useEffect(() => {
-    setDisplayWasteCost(Math.round(wasteCost))
+    const id = requestAnimationFrame(() => {
+      setDisplayWasteCost(Math.round(wasteCost))
+    })
+    return () => cancelAnimationFrame(id)
   }, [wasteCost])
 
   useEffect(() => {

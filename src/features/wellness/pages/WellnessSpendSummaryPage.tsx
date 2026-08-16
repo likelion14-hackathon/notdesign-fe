@@ -39,9 +39,12 @@ export default function WellnessSpendSummaryPage() {
   const [displayMonthlyAvgSpend, setDisplayMonthlyAvgSpend] = useState(0)
 
   useEffect(() => {
-    setDisplayWasteCost(Math.round(wasteCost))
-    setDisplayYearlySpend(Math.round(yearlySpend))
-    setDisplayMonthlyAvgSpend(Math.round(monthlyAvgSpend))
+    const id = requestAnimationFrame(() => {
+      setDisplayWasteCost(Math.round(wasteCost))
+      setDisplayYearlySpend(Math.round(yearlySpend))
+      setDisplayMonthlyAvgSpend(Math.round(monthlyAvgSpend))
+    })
+    return () => cancelAnimationFrame(id)
   }, [wasteCost, yearlySpend, monthlyAvgSpend])
 
   return (

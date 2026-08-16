@@ -37,7 +37,10 @@ export default function WellnessPlanTeaserSpendPage() {
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
 
   useEffect(() => {
-    setDisplayYearlySpend(Math.round(yearlySpend))
+    const id = requestAnimationFrame(() => {
+      setDisplayYearlySpend(Math.round(yearlySpend))
+    })
+    return () => cancelAnimationFrame(id)
   }, [yearlySpend])
 
   useEffect(() => {

@@ -36,8 +36,11 @@ export default function WellnessYearlySpendRevealPage() {
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
 
   useEffect(() => {
-    setDisplayWasteCost(Math.round(wasteCost))
-    setDisplayYearlySpend(Math.round(yearlySpend))
+    const id = requestAnimationFrame(() => {
+      setDisplayWasteCost(Math.round(wasteCost))
+      setDisplayYearlySpend(Math.round(yearlySpend))
+    })
+    return () => cancelAnimationFrame(id)
   }, [wasteCost, yearlySpend])
 
   useEffect(() => {

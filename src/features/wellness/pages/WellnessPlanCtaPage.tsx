@@ -37,8 +37,11 @@ export default function WellnessPlanCtaPage() {
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
 
   useEffect(() => {
-    setDisplayYearlySpend(Math.round(yearlySpend))
-    setDisplayWasteCost(Math.round(wasteCost))
+    const id = requestAnimationFrame(() => {
+      setDisplayYearlySpend(Math.round(yearlySpend))
+      setDisplayWasteCost(Math.round(wasteCost))
+    })
+    return () => cancelAnimationFrame(id)
   }, [yearlySpend, wasteCost])
 
   return (
