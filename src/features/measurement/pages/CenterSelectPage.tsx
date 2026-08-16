@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CenterSearchInput from '@/features/measurement/components/CenterSearchInput'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import { MEASUREMENT_CENTERS } from '@/features/measurement/constants'
+import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 import TouchableItem from '@/shared/components/TouchableItem'
@@ -22,7 +23,7 @@ export default function CenterSelectPage() {
   }, [keyword])
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
       <FlowHeader
@@ -34,7 +35,7 @@ export default function CenterSelectPage() {
         <CenterSearchInput value={keyword} onChange={setKeyword} />
       </div>
 
-      <div className="mt-5 min-h-0 flex-1 overflow-y-auto">
+      <div className="mt-5">
         {centers.map((center) => (
           <TouchableItem
             key={center.id}
@@ -46,14 +47,14 @@ export default function CenterSelectPage() {
         ))}
       </div>
 
-      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+      <BottomBar>
         <BottomButton
           disabled={selectedId === null}
           onClick={() => navigate('/measurement/agreement')}
         >
           다음으로
         </BottomButton>
-      </div>
+      </BottomBar>
     </div>
   )
 }

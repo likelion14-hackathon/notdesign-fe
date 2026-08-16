@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { WELLNESS_INTRO } from '@/features/wellness/constants'
+import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 
@@ -7,7 +8,7 @@ export default function WellnessIntroPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
       <div className="px-5 pt-7.5">
@@ -19,9 +20,7 @@ export default function WellnessIntroPage() {
         </h1>
       </div>
 
-      <div className="min-h-0 flex-1" />
-
-      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+      <BottomBar>
         <button
           type="button"
           className="text-primary mb-5 block w-full text-center text-[16px] leading-4.75 font-semibold tracking-[-0.32px]"
@@ -31,7 +30,7 @@ export default function WellnessIntroPage() {
         <BottomButton onClick={() => navigate('/wellness/procedure-cost')}>
           {WELLNESS_INTRO.startButtonLabel}
         </BottomButton>
-      </div>
+      </BottomBar>
     </div>
   )
 }

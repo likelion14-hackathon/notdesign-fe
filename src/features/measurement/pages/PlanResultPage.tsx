@@ -6,6 +6,7 @@ import PlanDetailSection from '@/features/measurement/components/PlanDetailSecti
 import PlanScoreCards from '@/features/measurement/components/PlanScoreCards'
 import PlanTimelineSection from '@/features/measurement/components/PlanTimelineSection'
 import { PLAN_RESULT_TITLE } from '@/features/measurement/constants'
+import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import LeaveWarningModal from '@/shared/components/LeaveWarningModal'
 import Logo from '@/shared/components/Logo'
@@ -15,10 +16,10 @@ export default function PlanResultPage() {
   const [showLeaveWarning, setShowLeaveWarning] = useState(false)
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-8.75">
+      <div className="flex flex-col pb-8.75">
         <FlowHeader
           eyebrow="12주 플랜 만들기"
           onBack={() => setShowLeaveWarning(true)}
@@ -43,9 +44,9 @@ export default function PlanResultPage() {
         </div>
       </div>
 
-      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+      <BottomBar>
         <BottomButton onClick={() => navigate('/')}>시작하기</BottomButton>
-      </div>
+      </BottomBar>
 
       {showLeaveWarning && (
         <LeaveWarningModal
