@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
+import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 
@@ -8,7 +9,7 @@ export default function PlanCreationRequestPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
       <FlowHeader
@@ -23,13 +24,11 @@ export default function PlanCreationRequestPage() {
         }
       />
 
-      <div className="min-h-0 flex-1" />
-
-      <div className="shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]">
+      <BottomBar>
         <BottomButton onClick={() => navigate('/measurement/plan-generating')}>
           생성하기
         </BottomButton>
-      </div>
+      </BottomBar>
     </div>
   )
 }

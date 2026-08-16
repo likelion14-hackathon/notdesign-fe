@@ -30,13 +30,48 @@
 }
 
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
+}
+
+html {
+  background-color: var(--color-off-white);
 }
 
 body {
   margin: 0;
-  min-height: 100svh;
+  min-height: 100vh;
+  background-color: var(--color-off-white);
   font-family: var(--font-sans);
+}
+
+@supports (min-height: 100dvh) {
+  body {
+    min-height: 100dvh;
+  }
+}
+
+@utility h-screen-safe {
+  height: 100vh;
+}
+
+@supports (height: 100dvh) {
+  .h-screen-safe {
+    height: 100dvh;
+  }
+}
+
+@utility min-h-screen-safe {
+  min-height: 100vh;
+}
+
+@supports (min-height: 100dvh) {
+  .min-h-screen-safe {
+    min-height: 100dvh;
+  }
+}
+
+@utility pb-bottom-bar {
+  padding-bottom: calc(96px + max(35px, env(safe-area-inset-bottom)));
 }
 
 @keyframes skeleton-shimmer {
@@ -59,7 +94,6 @@ body {
   background-size: 200% 100%;
   animation: skeleton-shimmer 1.2s ease-in-out infinite;
 }
-
 
 @keyframes fadeSlideIn {
   from {
