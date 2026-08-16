@@ -20,9 +20,8 @@ export default function DiaryCalendar() {
     if (id === "record") return
     if (id === 'plan') navigate('/plan')
     if (id === 'info') navigate('/my')
-    if (id === 'home') navigate('/')  
+    if (id === 'home') navigate('/')
   }
-
 
   return (
     <div className='bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col'>
@@ -66,10 +65,8 @@ export default function DiaryCalendar() {
         )}
       </div>
 
-      <div className='flex w-full shrink-0 justify-center px-5 pb-[calc(20px+env(safe-area-inset-bottom))] pt-3'>
-        <div className='w-full max-w-[343px]'>
-          <BottomNav current='record' onSelect={handleTabSelect} />
-        </div>
+      <div className='shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]'>
+        <BottomNav current='record' onSelect={handleTabSelect} />
       </div>
     </div>
   )

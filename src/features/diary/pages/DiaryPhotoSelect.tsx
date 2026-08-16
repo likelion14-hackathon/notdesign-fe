@@ -25,9 +25,7 @@ export default function DiaryPhotoSelect() {
       <div className='shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]'>
         <button
           type='button'
-          onClick={() => {
-            // TODO: 촬영 불가 사유 안내 처리
-          }}
+          onClick={() => navigate("/diary/record/skin-tone")}
           className='text-primary mb-3 w-full text-center text-sm font-medium'
         >
           지금은 촬영할 수 없어요

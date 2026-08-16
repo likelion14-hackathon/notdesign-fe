@@ -8,7 +8,7 @@ export default function DiaryPhotoCaptureComplete() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate("/diary/record/questions")
+      navigate("/diary/record/checklist")
     }, 1500)
 
     return () => clearTimeout(timer)

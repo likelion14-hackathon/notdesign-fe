@@ -1,7 +1,7 @@
 import { DayPicker } from "react-day-picker"
 import "react-day-picker/style.css"
 import { format, isToday } from "date-fns"
-import { RECORDED_DATES } from "@/features/diary/data/diaryData"
+import { useDiaryStore } from "@/features/diary/data/store"
 
 interface MonthGridProps {
   month: Date
@@ -18,8 +18,9 @@ export default function MonthGrid({
   selectedDate,
   onSelectDate,
 }: MonthGridProps) {
-  const isRecorded = (date: Date) =>
-    RECORDED_DATES.includes(format(date, "yyyy-MM-dd"))
+  const records = useDiaryStore((state) => state.records)
+
+  const isRecorded = (date: Date) => Boolean(records[format(date, "yyyy-MM-dd")])
 
   return (
     <div className='h-auto w-full pt-3'>
@@ -66,16 +67,14 @@ export default function MonthGrid({
                   type='button'
                   {...rest}
                   className={`size-9 mx-auto flex items-center justify-center rounded-full text-base font-semibold ${
-                    isSunday
-                      ? "text-orange-500"
-                      : isSaturday
-                        ? "text-blue-500"
-                        : "text-text-primary"
-                  } ${modifiers.outside ? "opacity-40" : ""} ${
                     modifiers.selected
-                      ? "bg-primary text-off-white font-semibold opacity-100"
-                      : ""
-                  }`}
+                      ? "bg-primary text-off-white opacity-100"
+                      : isSunday
+                        ? "text-orange-500"
+                        : isSaturday
+                          ? "text-blue-500"
+                          : "text-text-primary"
+                  } ${modifiers.outside ? "opacity-40" : ""}`}
                 >
                   {day.date.getDate()}
                 </button>
