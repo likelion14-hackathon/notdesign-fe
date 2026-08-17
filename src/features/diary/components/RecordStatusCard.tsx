@@ -10,7 +10,7 @@ interface RecordStatusCardProps {
 
 const SCORE_ROWS = [
   { field: "skinTone" as const, label: "피부톤", description: "오늘 피부 색에 대한 점수를 매겨요" },
-  { field: "dryness" as const, label: "모공, 당김 정도", description: "오늘 피부의 당김, 건조함 정도에 대한 점수를 매겨요" },
+  { field: "dryness" as const, label: "당김, 건조함 정도", description: "오늘 피부의 당김, 건조함 정도에 대한 점수를 매겨요" },
   { field: "redness" as const, label: "붉은기 정도", description: "오늘 내 피부가 얼마나 붉은지에 대한 점수를 매겨요" },
 ]
 
@@ -26,16 +26,21 @@ export default function RecordStatusCard({ selectedDate }: RecordStatusCardProps
 
   if (record) {
     return (
-      <div className='mx-auto flex w-[335px] flex-col gap-4'>
+      <div className='mx-auto flex w-[374px] flex-col gap-4'>
         {SCORE_ROWS.map((row) => (
-          <div key={row.field} className='border-outline bg-white rounded-[16px] border p-5'>
-            <p className='text-text-primary text-base font-semibold'>{row.label}</p>
-            <p className='text-text-secondary mt-1 text-sm'>{row.description}</p>
-            <div className='mt-4'>
+          <div
+            key={row.field}
+            className='border-outline bg-white flex h-[155px] w-[374px] flex-col justify-between rounded-[16px] border p-4'
+          >
+            <div>
+              <p className='text-text-primary text-base font-semibold'>{row.label}</p>
+              <p className='text-text-secondary mt-1 text-sm'>{row.description}</p>
+            </div>
+            <div>
               <div className='text-text-secondary flex justify-between text-[13px] font-medium'>
                 <span>0점</span><span>10점</span>
               </div>
-              <div className='relative mt-2.75 h-7.5'>
+              <div className='relative mt-2 h-7.5'>
                 <div className='bg-line absolute top-1/2 h-2 w-full -translate-y-1/2 rounded-full' />
                 <div
                   className='bg-primary pointer-events-none absolute top-1/2 size-7.5 -translate-y-1/2 rounded-full'
