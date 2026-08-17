@@ -4,7 +4,7 @@ import FlowHeader from '@/features/measurement/components/FlowHeader'
 import ResultCard from '@/features/measurement/components/ResultCard'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
-import LeaveWarningModal from '@/shared/components/LeaveWarningModal'
+import TrialLeaveWarningModal from "@/features/trial/components/TrialLeaveWarningModal"
 import Logo from '@/shared/components/Logo'
 
 function Trial_AnalyzeComplete() {

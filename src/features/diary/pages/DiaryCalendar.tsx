@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import Logo from "@/shared/components/Logo"
 import type { NavTabId } from '@/shared/components/BottomNav'
 import BottomNav from '@/shared/components/BottomNav'
+import BottomBar from '@/shared/components/BottomBar'
 import MonthNavHeader from "@/features/diary/components/MonthNavHeader"
 import MonthGrid from "@/features/diary/components/MonthGrid"
 import WeekCalendarView from "@/features/diary/components/WeekCalendarView"
@@ -43,7 +44,7 @@ export default function DiaryCalendar() {
         </button>
       </div>
 
-      <div className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pt-3'>
+      <div className='pb-bottom-bar min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pt-3'>
         {viewMode === "month" ? (
           <>
             <MonthNavHeader month={month} onMonthChange={setMonth} />
@@ -65,9 +66,9 @@ export default function DiaryCalendar() {
         )}
       </div>
 
-      <div className='shrink-0 px-5 pb-[calc(35px+env(safe-area-inset-bottom))]'>
+      <BottomBar>
         <BottomNav current='record' onSelect={handleTabSelect} />
-      </div>
+      </BottomBar>
     </div>
   )
 }
