@@ -56,7 +56,7 @@ export default function WellnessPlanTeaserExpandPage() {
     <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
       <Logo />
 
-      <div className="flex flex-col gap-7.5 px-5 pt-9">
+      <div className="flex flex-col gap-7.5 px-5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
           {WELLNESS_PLAN_TEASER_EXPAND.title[0]}
           <br />

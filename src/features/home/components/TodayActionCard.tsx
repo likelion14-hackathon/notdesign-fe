@@ -1,12 +1,15 @@
+import { useNavigate } from 'react-router-dom'
 import { HOME_SUMMARY } from '@/features/home/constants'
 import pencilIcon from '@/shared/assets/icons/pencil.svg'
 
 export default function TodayActionCard() {
+  const navigate = useNavigate()
   const { subtitle, title } = HOME_SUMMARY.todayAction
 
   return (
     <button
       type="button"
+      onClick={() => navigate('/diary/photo-select')}
       className="border-nav-border bg-primary relative flex h-24 w-full items-start rounded-[10px] border px-5 pt-6 text-left"
     >
       <div className="min-w-0 flex-1">

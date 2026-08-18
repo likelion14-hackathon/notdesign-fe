@@ -19,6 +19,7 @@ interface LoginModalProps {
   isOpen: boolean
   onClose: () => void
   onKakaoLogin: () => void
+  onLoginSuccess: () => void
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -33,6 +34,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
   isOpen,
   onClose,
   onKakaoLogin,
+  onLoginSuccess,
 }) => {
   const { shouldRender, translateClass } = useSlideUpModal({ isOpen })
   const [step, setStep] = useState<LoginStep>('select')
@@ -67,7 +69,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
       return
     }
     setPasswordError(false)
-    // TODO: API 연동 시 여기서 실제 로그인 요청
+    onLoginSuccess()
   }
 
   return (

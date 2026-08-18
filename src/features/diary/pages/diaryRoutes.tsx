@@ -3,9 +3,7 @@ import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
-const DiaryCalendar = lazy(
-  () => import('@/features/diary/pages/DiaryCalendar'),
-)
+const DiaryCalendar = lazy(() => import('@/features/diary/pages/DiaryCalendar'))
 const DiaryPhotoSelect = lazy(
   () => import('@/features/diary/pages/DiaryPhotoSelect'),
 )

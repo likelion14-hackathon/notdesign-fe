@@ -26,7 +26,7 @@ export default function PlanPage() {
       <Logo />
 
       <div>
-        <div className="px-5 pt-7.5">
+        <div className="px-5">
           <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
             현재 진행 중인 플랜
           </p>

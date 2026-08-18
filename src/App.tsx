@@ -12,8 +12,14 @@ import BaseLayout from '@/shared/layouts/BaseLayout'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
 const NotFoundPage = lazy(() => import('@/shared/pages/NotFoundPage'))
+const DevLinksPage = lazy(() => import('@/shared/pages/DevLinksPage'))
 
 const router = createBrowserRouter([
+  {
+    path: '/__dev',
+    element: withSuspense(<DevLinksPage />),
+    handle: { title: '개발용 링크' },
+  },
   {
     path: '/',
     element: <BaseLayout />,

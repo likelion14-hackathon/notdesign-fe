@@ -2,6 +2,9 @@ import { lazy } from 'react'
 import type { RouteObject } from 'react-router-dom'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
+const ReportRequestPage = lazy(
+  () => import('@/features/measurement/pages/ReportRequestPage'),
+)
 const CenterSelectPage = lazy(
   () => import('@/features/measurement/pages/CenterSelectPage'),
 )
@@ -23,8 +26,28 @@ const PlanGeneratingPage = lazy(
 const PlanResultPage = lazy(
   () => import('@/features/measurement/pages/PlanResultPage'),
 )
+const SixWeekReportPage = lazy(
+  () => import('@/features/measurement/pages/SixWeekReportPage'),
+)
+const ReportImportFailedPage = lazy(
+  () => import('@/features/measurement/pages/ReportImportFailedPage'),
+)
+const ReportGeneratingPage = lazy(
+  () => import('@/features/measurement/pages/ReportGeneratingPage'),
+)
+const NewPlanResultPage = lazy(
+  () => import('@/features/measurement/pages/NewPlanResultPage'),
+)
+const FinalReportPage = lazy(
+  () => import('@/features/measurement/pages/FinalReportPage'),
+)
 
 export const MeasurementRoutes: RouteObject[] = [
+  {
+    path: 'report-request',
+    element: withSuspense(<ReportRequestPage />),
+    handle: { title: '리포트 생성 요청' },
+  },
   {
     path: 'center-select',
     element: withSuspense(<CenterSelectPage />),
@@ -59,5 +82,30 @@ export const MeasurementRoutes: RouteObject[] = [
     path: 'plan-result',
     element: withSuspense(<PlanResultPage />),
     handle: { title: '12주 플랜 결과' },
+  },
+  {
+    path: 'six-week-report',
+    element: withSuspense(<SixWeekReportPage />),
+    handle: { title: '6주차 중간 리포트' },
+  },
+  {
+    path: 'report-import-failed',
+    element: withSuspense(<ReportImportFailedPage />),
+    handle: { title: '측정 데이터 불러오기 실패' },
+  },
+  {
+    path: 'report-generating',
+    element: withSuspense(<ReportGeneratingPage />),
+    handle: { title: '리포트 생성 중' },
+  },
+  {
+    path: 'new-plan-result',
+    element: withSuspense(<NewPlanResultPage />),
+    handle: { title: '새 플랜 결과' },
+  },
+  {
+    path: 'final-report',
+    element: withSuspense(<FinalReportPage />),
+    handle: { title: '12주 최종 리포트' },
   },
 ]

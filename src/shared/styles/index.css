@@ -25,6 +25,7 @@
   --color-nav-background: #fefefed9; /* nav_background_color */
   --color-primary-box-icon: #c5dac3; /* primary_color_box_icon */
   --color-highlight: #ff6200; /* highlight_color */
+  --color-score: #abcf76; /* score_color */
   /* 알림 스위치 on 상태. Figma에 별도 스위치 컴포넌트 색으로 지정돼 있어 브랜드 그린이 아닙니다. */
   --color-switch-on: #2563eb; /* Primary/Blue/600 */
 }
