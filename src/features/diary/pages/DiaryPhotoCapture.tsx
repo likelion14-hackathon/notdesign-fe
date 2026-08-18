@@ -44,19 +44,19 @@ export default function DiaryPhotoCapture() {
     <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-103.5 flex-col overflow-hidden">
       <Logo />
 
-      <div className="mt-[30px] pl-5">
+      <div className="mt-7.5 pl-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
-        <p className="text-text-primary mt-[10px] text-2xl leading-[1.67] font-semibold">
+        <p className="text-text-primary mt-2.5 text-2xl leading-[1.67] font-semibold">
           표시선에 얼굴을 맞춰주세요
         </p>
       </div>
 
-      <div className="mt-[99px] flex justify-center">
-        <div className="bg-primary relative flex h-[374px] w-[374px] items-center justify-center rounded-full">
-          <div className="bg-off-white flex h-[350px] w-[350px] items-center justify-center rounded-full">
-            <div className="bg-outline relative h-[334px] w-[334px] overflow-hidden rounded-full">
+      <div className="mt-24.75 flex justify-center">
+        <div className="bg-primary relative flex h-93.5 w-93.5 items-center justify-center rounded-full">
+          <div className="bg-off-white flex h-87.5 w-87.5 items-center justify-center rounded-full">
+            <div className="bg-outline relative h-83.5 w-83.5 overflow-hidden rounded-full">
               {cameraError ? (
                 <img
                   src={personSilhouette}
@@ -77,8 +77,8 @@ export default function DiaryPhotoCapture() {
         </div>
       </div>
 
-      <div className='mt-[26px] flex justify-center px-8'>
-        <p className='text-text-secondary max-w-[280px] text-center text-xs'>
+      <div className='mt-6.5 flex justify-center px-8'>
+        <p className='text-text-secondary max-w-70 text-center text-xs'>
           {cameraError ?? "표시선에 얼굴이 인식되면 자동으로 촬영돼요"}
         </p>
       </div>

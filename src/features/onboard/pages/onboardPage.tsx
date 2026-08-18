@@ -7,6 +7,9 @@ import proofLogo from '@/shared/assets/icons/proof-logo-light.svg'
 import LoginModal from '@/features/onboard/components/LoginModal'
 import { useThemeColor } from '@/shared/hooks/useThemeColor'
 import { useWellnessStore } from '@/features/wellness/store'
+import { getKakaoAuthorizeUrl } from '@/features/auth/kakao'
+
+const KAKAO_ENTRY_FLOW_KEY = 'kakaoEntryFlow'
 
 const OnboardingPage: React.FC = () => {
   const navigate = useNavigate()
@@ -24,6 +27,23 @@ const OnboardingPage: React.FC = () => {
   const handleLoginSuccess = () => {
     setIsLoginModalOpen(false)
     navigate('/wellness')
+  }
+
+  const handleKakaoLogin = () => {
+    let authorizeUrl: string
+    try {
+      authorizeUrl = getKakaoAuthorizeUrl()
+    } catch (error) {
+      // 카카오 키/Redirect URI 설정 전이라 발생하는 개발 단계 전용 가드.
+      window.alert(
+        error instanceof Error ? error.message : '카카오 로그인 설정을 확인해주세요.',
+      )
+      return
+    }
+
+    const entryFlow = useWellnessStore.getState().entryFlow
+    sessionStorage.setItem(KAKAO_ENTRY_FLOW_KEY, entryFlow)
+    window.location.href = authorizeUrl
   }
 
   return (
@@ -78,7 +98,7 @@ const OnboardingPage: React.FC = () => {
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onKakaoLogin={handleLoginSuccess}
+        onKakaoLogin={handleKakaoLogin}
         onLoginSuccess={handleLoginSuccess}
       />
     </div>

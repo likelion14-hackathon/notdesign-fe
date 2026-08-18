@@ -18,21 +18,21 @@ export default function DiaryPhotoCaptureComplete() {
     <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-103.5 flex-col overflow-hidden">
       <Logo />
 
-      <div className="mt-[30px] pl-5">
+      <div className="mt-7.5 pl-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
-        <p className="text-text-primary mt-[10px] text-2xl leading-[1.67] font-semibold">
+        <p className="text-text-primary mt-2.5 text-2xl leading-[1.67] font-semibold">
           표시선에 얼굴을 맞춰주세요
         </p>
       </div>
 
-      <div className="mt-[99px] flex justify-center">
-        <div className="bg-primary relative flex h-[374px] w-[374px] items-center justify-center rounded-full">
-          <div className="bg-off-white flex h-[350px] w-[350px] items-center justify-center rounded-full">
-            <div className="bg-outline relative flex h-[334px] w-[334px] flex-col items-center justify-center rounded-full">
-              <img src={checkIcon} alt="완료" className="h-[60px] w-[86px]" />
-              <div className="mt-[30px] flex h-[29px] w-[68px] items-center justify-center">
+      <div className="mt-24.75 flex justify-center">
+        <div className="bg-primary relative flex h-93.5 w-93.5 items-center justify-center rounded-full">
+          <div className="bg-off-white flex h-87.5 w-87.5 items-center justify-center rounded-full">
+            <div className="bg-outline relative flex h-83.5 w-83.5 flex-col items-center justify-center rounded-full">
+              <img src={checkIcon} alt="완료" className="h-15 w-21.5" />
+              <div className="mt-7.5 flex h-7.25 w-17 items-center justify-center">
                 <p className="text-primary text-xl font-semibold whitespace-nowrap">
                   좋아요!
                 </p>

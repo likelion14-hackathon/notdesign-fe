@@ -21,7 +21,3 @@ export const LOGIN_MODAL_BUTTON = {
   email: '이메일 계정으로 계속하기',
   continue: '계속하기',
 } as const
-
-// 실제 API 연동 전까지 사용하는 임시 테스트 계정
-export const MOCK_EMAIL = 'test@gm.com'
-export const MOCK_PASSWORD = 'notdesign'
