@@ -42,7 +42,7 @@ export const MEASUREMENT_CENTERS: MeasurementCenter[] = [
 
 export const ANALYZING_METRICS = [
   { label: '색소침착', tone: 'primary' },
-  { label: '수분력', tone: 'dark' },
+  { label: '모공', tone: 'dark' },
   { label: '홍조', tone: 'dark' },
 ] as const
 
@@ -58,7 +58,7 @@ export const MEASUREMENT_RESULT = {
   centerName: '더나 클리닉 강남',
   metrics: [
     { label: '색소침착', percentage: 62, status: '개선 필요', tone: 'primary' },
-    { label: '수분력', percentage: 55, status: '보통', tone: 'dark' },
+    { label: '모공', percentage: 55, status: '보통', tone: 'dark' },
     { label: '홍조', percentage: 41, status: '보통', tone: 'dark' },
   ],
   insight:
@@ -76,7 +76,7 @@ export const PLAN_RESULT_TITLE = [
 
 export const PLAN_SCORE_METRICS: PlanScoreMetric[] = [
   { label: '색소침착', score: 62, status: '매우 낮음', emphasized: true },
-  { label: '수분력', score: 55, status: '보통', emphasized: false },
+  { label: '모공', score: 55, status: '보통', emphasized: false },
   { label: '홍조', score: 41, status: '보통', emphasized: false },
 ]
 

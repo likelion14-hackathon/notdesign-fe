@@ -19,7 +19,7 @@ export const MY_CURRENT_PLAN = {
 
 export const MY_SCORE_METRICS: MyScoreMetric[] = [
   { label: '색소침착', score: 62, status: '매우 낮음' },
-  { label: '수분력', score: 55, status: '보통' },
+  { label: '모공', score: 55, status: '보통' },
   { label: '홍조', score: 41, status: '보통' },
 ]
 
