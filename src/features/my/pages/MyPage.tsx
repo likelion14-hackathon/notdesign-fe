@@ -15,9 +15,13 @@ import BottomBar from '@/shared/components/BottomBar'
 import type { NavTabId } from '@/shared/components/BottomNav'
 import BottomNav from '@/shared/components/BottomNav'
 import Logo from '@/shared/components/Logo'
+import { useAuthStore } from '@/features/auth/store'
+import { signOut } from '@/features/auth/api'
 
 export default function MyPage() {
   const navigate = useNavigate()
+  const email = useAuthStore((state) => state.email)
+  const logout = useAuthStore((state) => state.logout)
   const [notificationState, setNotificationState] = useState(() =>
     Object.fromEntries(MY_NOTIFICATION_SETTINGS.map((item) => [item.id, true])),
   )
@@ -26,6 +30,16 @@ export default function MyPage() {
     if (id === 'home') navigate('/')
     if (id === 'plan') navigate('/plan')
     if (id === 'record') navigate('/diary')
+  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut()
+    } catch {
+    } finally {
+      logout()
+      navigate('/onboard')
+    }
   }
 
   return (
@@ -38,7 +52,7 @@ export default function MyPage() {
             {MY_PROFILE.name}
           </h1>
           <p className="text-text-secondary mt-1 text-[14px] leading-4.5 font-semibold tracking-[-0.28px]">
-            {MY_PROFILE.email}
+            {email ?? MY_PROFILE.email}
           </p>
 
           <div className="mt-7.5">
@@ -94,6 +108,7 @@ export default function MyPage() {
               key={item.title}
               title={item.title}
               highlighted={'highlighted' in item && item.highlighted}
+              onClick={item.title === '로그아웃' ? handleLogout : undefined}
             />
           ))}
         </div>

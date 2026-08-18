@@ -19,14 +19,14 @@ export default function DiaryRecordDiary() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="mt-[30px] px-5">
+      <div className="mt-7.5 px-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
-        <p className="text-text-primary mt-[10px] text-2xl leading-[1.67] font-semibold">
+        <p className="text-text-primary mt-2.5 text-2xl leading-[1.67] font-semibold">
           오늘 하루를 가볍게 정리하세요
         </p>
-        <p className="text-text-secondary mt-1.5 text-right text-sm leading-[18px] font-medium whitespace-nowrap">
+        <p className="text-text-secondary mt-1.5 text-right text-sm leading-4.5 font-medium whitespace-nowrap">
           필수 항목 아님
         </p>
       </div>
@@ -36,7 +36,7 @@ export default function DiaryRecordDiary() {
           value={diaryText}
           onChange={(event) => setDiaryText(event.target.value)}
           placeholder="두 줄 이상 텍스트 입력이 필요할 때 사용돼요"
-          className="border-line text-text-primary placeholder:text-text-secondary h-[254px] w-full resize-none rounded-[12px] border bg-white p-[26px] text-sm placeholder:text-base placeholder:leading-6 placeholder:font-semibold"
+          className="border-line text-text-primary placeholder:text-text-secondary h-63.5 w-full resize-none rounded-xl border bg-white p-6.5 text-sm placeholder:text-base placeholder:leading-6 placeholder:font-semibold"
         />
       </div>
 

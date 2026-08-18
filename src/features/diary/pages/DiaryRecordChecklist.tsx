@@ -18,14 +18,14 @@ export default function DiaryRecordChecklist() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="mt-[30px] px-5">
+      <div className="mt-7.5 px-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
-        <p className="text-text-primary mt-[10px] w-[350px] max-w-full text-2xl leading-[1.67] font-semibold break-keep">
+        <p className="text-text-primary mt-2.5 w-87.5 max-w-full text-2xl leading-[1.67] font-semibold break-keep">
           오늘 피부를 위해 어떤 것을 했나요?
         </p>
-        <p className="text-text-secondary mt-1.5 text-right text-sm leading-[18px] font-medium whitespace-nowrap">
+        <p className="text-text-secondary mt-1.5 text-right text-sm leading-4.5 font-medium whitespace-nowrap">
           중복 선택 가능
         </p>
       </div>

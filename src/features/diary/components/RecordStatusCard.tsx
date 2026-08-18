@@ -40,11 +40,11 @@ export default function RecordStatusCard({
 
   if (record) {
     return (
-      <div className="mx-auto flex w-[374px] flex-col gap-4">
+      <div className="mx-auto flex w-93.5 flex-col gap-4">
         {SCORE_ROWS.map((row) => (
           <div
             key={row.field}
-            className="border-outline flex h-[155px] w-[374px] flex-col justify-between rounded-[16px] border bg-white p-4"
+            className="border-outline flex h-38.75 w-93.5 flex-col justify-between rounded-2xl border bg-white p-4"
           >
             <div>
               <p className="text-text-primary text-base font-semibold">
@@ -75,7 +75,7 @@ export default function RecordStatusCard({
           </div>
         ))}
 
-        <div className="border-outline rounded-[16px] border bg-white p-5">
+        <div className="border-outline rounded-2xl border bg-white p-5">
           <p className="text-text-primary text-base font-semibold">
             체크리스트
           </p>
@@ -88,7 +88,7 @@ export default function RecordStatusCard({
               return (
                 <div key={item} className="flex items-center gap-2">
                   <div
-                    className={`flex size-5 items-center justify-center rounded-[6px] border-2 ${
+                    className={`flex size-5 items-center justify-center rounded-md border-2 ${
                       checked ? 'bg-primary border-primary' : 'border-line'
                     }`}
                   >
@@ -115,12 +115,12 @@ export default function RecordStatusCard({
           </div>
         </div>
 
-        <div className="border-outline rounded-[16px] border bg-white p-5">
+        <div className="border-outline rounded-2xl border bg-white p-5">
           <p className="text-text-primary text-base font-semibold">피부 일기</p>
           <p className="text-text-secondary mt-1 text-sm">
             오늘 내 습관은 얼마나 좋았는지, 하루에 대해 가볍게 적어봐요
           </p>
-          <div className="border-outline mt-4 min-h-[160px] rounded-[12px] border p-4">
+          <div className="border-outline mt-4 min-h-40 rounded-xl border p-4">
             <p className="text-primary text-sm whitespace-pre-wrap">
               {record.diaryText || '작성한 내용이 없어요'}
             </p>
@@ -131,16 +131,16 @@ export default function RecordStatusCard({
   }
 
   return (
-    <div className="mx-auto w-[335px]">
-      <div className="border-outline bg-box-background flex h-[230px] w-full flex-col items-center justify-center rounded-[16px] border text-center">
+    <div className="mx-auto w-83.75">
+      <div className="border-outline bg-box-background flex h-57.5 w-full flex-col items-center justify-center rounded-2xl border text-center">
         {recorded ? (
           <p className="text-text-primary text-base font-semibold">
             오늘의 기록을 확인해보세요
           </p>
         ) : (
-          <div className="flex h-[135px] w-[161px] flex-col items-center justify-center gap-[23px]">
-            <img src={recordIcon} alt="" className="size-[52px]" />
-            <p className="text-text-primary w-[161px] text-base font-semibold">
+          <div className="flex h-33.75 w-40.25 flex-col items-center justify-center gap-5.75">
+            <img src={recordIcon} alt="" className="size-13" />
+            <p className="text-text-primary w-40.25 text-base font-semibold">
               아직 기록하지 않았어요
             </p>
             <p className="text-text-secondary text-sm leading-4 whitespace-nowrap">

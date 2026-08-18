@@ -13,6 +13,7 @@ const ROUTE_GROUPS: { group: string; links: { path: string; title: string }[] }[
     group: '온보딩 / 체험',
     links: [
       { path: '/onboard', title: '온보딩' },
+      { path: '/onboard/kakao/callback', title: '카카오 콜백 (code 없이 접근 시 에러 상태만 확인 가능)' },
       { path: '/trial', title: '체험 인트로' },
       { path: '/trial/capture', title: '체험 촬영' },
       { path: '/trial/capture/complete', title: '체험 촬영 완료' },

@@ -38,7 +38,7 @@ export default function DiaryCalendar() {
           className="text-primary flex items-center gap-1"
         >
           <img src={calendarIcon} alt="" className="size-3.5" />
-          <span className="flex h-[18px] w-16 items-center text-sm font-semibold">
+          <span className="flex h-4.5 w-16 items-center text-sm font-semibold">
             {viewMode === 'month' ? '주차별보기' : '월별보기'}
           </span>
         </button>

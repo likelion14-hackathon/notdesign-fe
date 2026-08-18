@@ -10,11 +10,11 @@ export default function DiaryPhotoSelect() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="mt-[30px] pl-5">
+      <div className="mt-7.5 pl-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
-        <p className="text-text-primary mt-[10px] text-2xl leading-[1.67] font-semibold">
+        <p className="text-text-primary mt-2.5 text-2xl leading-[1.67] font-semibold">
           오늘 하루를 사진 한 장으로
           <br />
           기록해 볼까요?

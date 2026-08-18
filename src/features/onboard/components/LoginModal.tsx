@@ -11,9 +11,9 @@ import {
   LOGIN_MODAL_PLACEHOLDER,
   LOGIN_MODAL_ERROR,
   LOGIN_MODAL_BUTTON,
-  MOCK_EMAIL,
-  MOCK_PASSWORD,
 } from '@/features/onboard/data/loginModalData'
+import { signIn } from '@/features/auth/api'
+import { useAuthStore } from '@/features/auth/store'
 
 interface LoginModalProps {
   isOpen: boolean
@@ -37,11 +37,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
   onLoginSuccess,
 }) => {
   const { shouldRender, translateClass } = useSlideUpModal({ isOpen })
+  const login = useAuthStore((state) => state.login)
   const [step, setStep] = useState<LoginStep>('select')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (!shouldRender) return null
 
@@ -51,7 +53,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
     setEmail('')
     setPassword('')
     setEmailError(false)
-    setPasswordError(false)
+    setPasswordError(null)
   }
 
   const handleEmailContinue = () => {
@@ -63,13 +65,22 @@ const LoginModal: React.FC<LoginModalProps> = ({
     setStep('password')
   }
 
-  const handlePasswordContinue = () => {
-    if (password !== MOCK_PASSWORD || email !== MOCK_EMAIL) {
-      setPasswordError(true)
-      return
+  const handlePasswordContinue = async () => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    try {
+      const tokens = await signIn(email, password)
+      login(tokens)
+      setPasswordError(null)
+      onLoginSuccess()
+    } catch (error) {
+      // 404(존재하지 않는 이메일), 401(비밀번호 불일치)
+      const message =
+        error instanceof Error ? error.message : LOGIN_MODAL_ERROR.password
+      setPasswordError(message)
+    } finally {
+      setIsSubmitting(false)
     }
-    setPasswordError(false)
-    onLoginSuccess()
   }
 
   return (
@@ -162,7 +173,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value)
-                  if (passwordError) setPasswordError(false)
+                  if (passwordError) setPasswordError(null)
                 }}
                 placeholder={LOGIN_MODAL_PLACEHOLDER.password}
                 className={`h-14 w-full rounded-[10px] border bg-neutral-700 px-4 text-white placeholder:text-neutral-400 ${
@@ -171,15 +182,16 @@ const LoginModal: React.FC<LoginModalProps> = ({
               />
               {passwordError && (
                 <p className="mt-2 text-xs text-orange-500">
-                  {LOGIN_MODAL_ERROR.password}
+                  {passwordError}
                 </p>
               )}
             </div>
             <button
               onClick={handlePasswordContinue}
-              className="bg-primary h-14 w-full rounded-[10px] font-semibold text-white"
+              disabled={isSubmitting}
+              className="bg-primary h-14 w-full rounded-[10px] font-semibold text-white disabled:opacity-60"
             >
-              {LOGIN_MODAL_BUTTON.continue}
+              {isSubmitting ? '로그인 중...' : LOGIN_MODAL_BUTTON.continue}
             </button>
           </div>
         )}
