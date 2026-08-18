@@ -85,8 +85,8 @@ function Trial_Capture() {
       </div>
 
       {/* 안내 문구 */}
-      <div className="mt-[26px] flex justify-center">
-        <p className="text-text-secondary h-[14px] w-[204px] text-center font-sans text-xs whitespace-nowrap">
+      <div className="mt-[26px] flex justify-center px-8">
+        <p className="text-text-secondary max-w-[280px] text-center font-sans text-xs">
           {cameraError ?? '표시선에 얼굴이 인식되면 자동으로 촬영돼요'}
         </p>
       </div>
