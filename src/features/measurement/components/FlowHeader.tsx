@@ -34,7 +34,7 @@ export default function FlowHeader({
   const hasAction = Boolean(backTo || onBack)
 
   return (
-    <div className="shrink-0 px-5 pt-7.5">
+    <div className="shrink-0 px-5">
       <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
         {eyebrow}
       </p>

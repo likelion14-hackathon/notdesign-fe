@@ -1,5 +1,6 @@
 import NumberFlow from '@number-flow/react'
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import chevronDown from '@/shared/assets/icons/chevron-down.svg'
 import coins from '@/shared/assets/images/coins.png'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
@@ -13,6 +14,10 @@ import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 
 export default function WellnessPlanCtaPage() {
+  const navigate = useNavigate()
+  const entryFlow = useWellnessStore((state) => state.entryFlow)
+  const nextPath =
+    entryFlow === 'trial' ? '/trial' : '/measurement/center-select'
   const procedureCost = useWellnessStore((state) => state.procedureCost)
   const skincareCost = useWellnessStore((state) => state.skincareCost)
   const effectPerceptionId = useWellnessStore(
@@ -48,7 +53,7 @@ export default function WellnessPlanCtaPage() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="px-5 pt-9">
+      <div className="px-5">
         <div className="flex flex-col gap-7.5">
           <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
             {WELLNESS_PLAN_CTA.title[0]}
@@ -92,7 +97,9 @@ export default function WellnessPlanCtaPage() {
       </div>
 
       <BottomBar>
-        <BottomButton>{WELLNESS_PLAN_CTA.startButtonLabel}</BottomButton>
+        <BottomButton onClick={() => navigate(nextPath)}>
+          {WELLNESS_PLAN_CTA.startButtonLabel}
+        </BottomButton>
       </BottomBar>
     </div>
   )

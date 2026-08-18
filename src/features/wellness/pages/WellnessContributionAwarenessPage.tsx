@@ -17,7 +17,7 @@ export default function WellnessContributionAwarenessPage() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="px-5 pt-7.5">
+      <div className="px-5">
         <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
           {WELLNESS_CONTRIBUTION_AWARENESS.eyebrow}
         </p>

@@ -51,7 +51,7 @@ export default function WellnessWasteRevealPage() {
     <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
       <Logo />
 
-      <div className="flex flex-col items-center gap-15.5 px-13.5 pt-7.5">
+      <div className="flex flex-col items-center gap-15.5 px-13.5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
           {WELLNESS_WASTE_REVEAL.userName}
           {WELLNESS_WASTE_REVEAL.title[0]}

@@ -1,5 +1,5 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 interface DiaryRecordData {
   skinTone: number
@@ -34,7 +34,7 @@ export const useDiaryStore = create<DiaryStore>()(
       dryness: 5,
       redness: 5,
       checklist: [],
-      diaryText: "",
+      diaryText: '',
       records: {},
       startRecord: (date) =>
         set({
@@ -43,7 +43,7 @@ export const useDiaryStore = create<DiaryStore>()(
           dryness: 5,
           redness: 5,
           checklist: [],
-          diaryText: "",
+          diaryText: '',
         }),
       setSkinTone: (value) => set({ skinTone: value }),
       setDryness: (value) => set({ dryness: value }),
@@ -81,8 +81,8 @@ export const useDiaryStore = create<DiaryStore>()(
       },
     }),
     {
-      name: "diary-storage",
+      name: 'diary-storage',
       partialize: (state) => ({ records: state.records }),
-    }
-  )
+    },
+  ),
 )

@@ -13,7 +13,7 @@ export default function ImportProcessingPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       // replace: true — 로딩 화면은 실제 콘텐츠가 없는 과도 상태라 히스토리에 남기지 않습니다.
-      navigate('/measurement/result', { replace: true })
+      navigate('/measurement/report-generating', { replace: true })
     }, SIMULATED_LOADING_MS)
 
     return () => clearTimeout(timer)

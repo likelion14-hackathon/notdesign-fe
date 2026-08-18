@@ -1,12 +1,12 @@
-import { addDays, isSameDay, startOfWeek } from "date-fns"
-import RecordStatusCard from "@/features/diary/components/RecordStatusCard"
+import { addDays, isSameDay, startOfWeek } from 'date-fns'
+import RecordStatusCard from '@/features/diary/components/RecordStatusCard'
 
 interface WeekCalendarViewProps {
   selectedDate: Date
   onSelectDate: (date: Date) => void
 }
 
-const WEEK_LABELS = ["월", "화", "수", "목", "금", "토", "일"]
+const WEEK_LABELS = ['월', '화', '수', '목', '금', '토', '일']
 
 export default function WeekCalendarView({
   selectedDate,
@@ -17,22 +17,22 @@ export default function WeekCalendarView({
 
   return (
     <div>
-      <div className='flex justify-between'>
+      <div className="flex justify-between">
         {weekDays.map((date, i) => {
           const selected = isSameDay(date, selectedDate)
           return (
             <button
               key={date.toISOString()}
-              type='button'
+              type="button"
               onClick={() => onSelectDate(date)}
               className={`flex flex-col items-center gap-1 rounded-[10px] px-2 py-2 ${
-                selected ? "bg-outline" : ""
+                selected ? 'bg-outline' : ''
               }`}
             >
-              <span className='text-text-primary text-center text-base font-semibold'>
+              <span className="text-text-primary text-center text-base font-semibold">
                 {date.getDate()}
               </span>
-              <span className='text-text-primary text-xs font-semibold'>
+              <span className="text-text-primary text-xs font-semibold">
                 {WEEK_LABELS[i]}
               </span>
             </button>
@@ -40,7 +40,7 @@ export default function WeekCalendarView({
         })}
       </div>
 
-      <div className='border-line -mx-5 mt-4 mb-6 border-b-2' />
+      <div className="border-line -mx-5 mt-4 mb-6 border-b-2" />
 
       <RecordStatusCard selectedDate={selectedDate} />
     </div>

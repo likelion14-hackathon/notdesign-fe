@@ -44,9 +44,6 @@ const WellnessPlanTeaserExpandPage = lazy(
 const WellnessPlanCtaPage = lazy(
   () => import('@/features/wellness/pages/WellnessPlanCtaPage'),
 )
-const WellnessPlanIntroPage = lazy(
-  () => import('@/features/wellness/pages/WellnessPlanIntroPage'),
-)
 
 export const WellnessRoutes: RouteObject[] = [
   {
@@ -118,10 +115,5 @@ export const WellnessRoutes: RouteObject[] = [
     path: 'plan-cta',
     element: withSuspense(<WellnessPlanCtaPage />),
     handle: { title: '플랜 시작 CTA' },
-  },
-  {
-    path: 'plan-intro',
-    element: withSuspense(<WellnessPlanIntroPage />),
-    handle: { title: '플랜 안내' },
   },
 ]

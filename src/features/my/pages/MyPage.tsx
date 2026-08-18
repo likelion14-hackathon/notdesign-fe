@@ -33,7 +33,7 @@ export default function MyPage() {
       <Logo />
 
       <div>
-        <div className="px-5 pt-7.5">
+        <div className="px-5">
           <h1 className="text-text-primary text-[26px] leading-10 font-semibold tracking-[-0.52px]">
             {MY_PROFILE.name}
           </h1>

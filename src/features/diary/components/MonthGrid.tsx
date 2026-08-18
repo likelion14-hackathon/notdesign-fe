@@ -1,7 +1,7 @@
-import { DayPicker } from "react-day-picker"
-import "react-day-picker/style.css"
-import { format, isToday } from "date-fns"
-import { useDiaryStore } from "@/features/diary/data/store"
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/style.css'
+import { format, isToday } from 'date-fns'
+import { useDiaryStore } from '@/features/diary/data/store'
 
 interface MonthGridProps {
   month: Date
@@ -10,7 +10,7 @@ interface MonthGridProps {
   onSelectDate: (date: Date) => void
 }
 
-const WEEKDAY_LABELS = ["일", "월", "화", "수", "목", "금", "토"]
+const WEEKDAY_LABELS = ['일', '월', '화', '수', '목', '금', '토']
 
 export default function MonthGrid({
   month,
@@ -20,19 +20,20 @@ export default function MonthGrid({
 }: MonthGridProps) {
   const records = useDiaryStore((state) => state.records)
 
-  const isRecorded = (date: Date) => Boolean(records[format(date, "yyyy-MM-dd")])
+  const isRecorded = (date: Date) =>
+    Boolean(records[format(date, 'yyyy-MM-dd')])
 
   return (
-    <div className='h-auto w-full pt-3'>
+    <div className="h-auto w-full pt-3">
       <DayPicker
-        mode='single'
+        mode="single"
         selected={selectedDate}
         onSelect={(date) => date && onSelectDate(date)}
         month={month}
         onMonthChange={onMonthChange}
         weekStartsOn={0}
         showOutsideDays
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         formatters={{
           formatWeekdayName: (date) => WEEKDAY_LABELS[date.getDay()],
         }}
@@ -59,27 +60,27 @@ export default function MonthGrid({
             const isSaturday = weekday === 6
 
             return (
-              <div className='relative flex h-full flex-col items-center justify-center gap-1'>
+              <div className="relative flex h-full flex-col items-center justify-center gap-1">
                 <span
-                  className={`size-1.25 rounded-full ${recorded ? "bg-primary" : "bg-transparent"} ${modifiers.outside ? "opacity-40" : ""}`}
+                  className={`size-1.25 rounded-full ${recorded ? 'bg-primary' : 'bg-transparent'} ${modifiers.outside ? 'opacity-40' : ''}`}
                 />
                 <button
-                  type='button'
+                  type="button"
                   {...rest}
-                  className={`size-9 mx-auto flex items-center justify-center rounded-full text-base font-semibold ${
+                  className={`mx-auto flex size-9 items-center justify-center rounded-full text-base font-semibold ${
                     modifiers.selected
-                      ? "bg-primary text-off-white opacity-100"
+                      ? 'bg-primary text-off-white opacity-100'
                       : isSunday
-                        ? "text-orange-500"
+                        ? 'text-orange-500'
                         : isSaturday
-                          ? "text-blue-500"
-                          : "text-text-primary"
-                  } ${modifiers.outside ? "opacity-40" : ""}`}
+                          ? 'text-blue-500'
+                          : 'text-text-primary'
+                  } ${modifiers.outside ? 'opacity-40' : ''}`}
                 >
                   {day.date.getDate()}
                 </button>
                 {today && !modifiers.selected && (
-                  <span className='text-primary absolute -bottom-1 text-[9px] font-semibold'>
+                  <span className="text-primary absolute -bottom-1 text-[9px] font-semibold">
                     오늘
                   </span>
                 )}

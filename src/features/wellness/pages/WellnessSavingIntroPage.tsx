@@ -20,7 +20,7 @@ export default function WellnessSavingIntroPage() {
     <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
       <Logo />
 
-      <div className="px-5 pt-9">
+      <div className="px-5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
           {WELLNESS_SAVING_INTRO.title[0]}
           <br />

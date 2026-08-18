@@ -51,7 +51,7 @@ export default function WellnessSpendSummaryPage() {
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
       <Logo />
 
-      <div className="px-13.5 pt-7.5">
+      <div className="px-13.5">
         <div className="flex flex-col items-center gap-15.5">
           <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
             {WELLNESS_SPEND_SUMMARY.userName}

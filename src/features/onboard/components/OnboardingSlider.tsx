@@ -28,15 +28,15 @@ const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
     >
       {/* 텍스트 영역 */}
       <div key={currentIndex} className="animate-fade-slide-in text-left">
-        {/* 제목 상자 - 374x80 */}
-        <div className="h-[80px] w-[374px]">
+        {/* 제목 상자 */}
+        <div className="min-h-[80px] w-full">
           <h1 className="text-2xl leading-[1.67] font-medium whitespace-pre-line">
             {currentSlide.title}
           </h1>
         </div>
 
-        {/* 설명 상자 - 374x75, 위쪽 31px 간격 */}
-        <div className="mt-[31px] h-[75px] w-[374px]">
+        {/* 설명 상자 - 위쪽 31px 간격 */}
+        <div className="mt-[31px] min-h-[75px] w-full">
           <p className="text-sm leading-relaxed font-light break-keep text-white">
             {currentSlide.description}
           </p>
