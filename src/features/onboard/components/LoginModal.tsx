@@ -76,7 +76,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
       onClick={handleClose}
     >
       <div
-        className={`bg-text-primary border-dark relative flex min-h-96 w-full max-w-md flex-col rounded-tl-[50px] rounded-tr-[50px] border-t px-8 pt-8 pb-10 transition-transform duration-300 ease-out ${translateClass}`}
+        className={`bg-text-primary border-dark relative flex w-full max-w-md flex-col rounded-tl-[50px] rounded-tr-[50px] border-t px-8 pt-8 pb-[35px] transition-transform duration-300 ease-out ${translateClass}`}
         onClick={(e) => e.stopPropagation()}
       >
         <button

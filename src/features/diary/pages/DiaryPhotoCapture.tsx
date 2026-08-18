@@ -77,8 +77,8 @@ export default function DiaryPhotoCapture() {
         </div>
       </div>
 
-      <div className='mt-[26px] flex justify-center'>
-        <p className='text-text-secondary w-[204px] text-center text-xs whitespace-nowrap'>
+      <div className='mt-[26px] flex justify-center px-8'>
+        <p className='text-text-secondary max-w-[280px] text-center text-xs'>
           {cameraError ?? "표시선에 얼굴이 인식되면 자동으로 촬영돼요"}
         </p>
       </div>
