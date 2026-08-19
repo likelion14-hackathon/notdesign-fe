@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import ResultCard from '@/features/measurement/components/ResultCard'
@@ -6,9 +6,12 @@ import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import TrialLeaveWarningModal from "@/features/trial/components/TrialLeaveWarningModal"
 import Logo from '@/shared/components/Logo'
+import type { DiaryAnalysisResult } from '@/features/analyze/types'
 
 function Trial_AnalyzeComplete() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const analysisResult = location.state as DiaryAnalysisResult | null
   const [showLeaveWarning, setShowLeaveWarning] = useState(false)
 
   return (
@@ -29,7 +32,11 @@ function Trial_AnalyzeComplete() {
       </div>
 
       <BottomBar>
-        <BottomButton onClick={() => navigate('/trial/request')}>
+        <BottomButton
+          onClick={() =>
+            navigate('/trial/request', { state: analysisResult })
+          }
+        >
           다음으로
         </BottomButton>
       </BottomBar>

@@ -1,18 +1,25 @@
 import Logo from '@/shared/components/Logo'
 import checkIcon from '@/shared/assets/icons/check.svg'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+interface CaptureCompleteState {
+  requestId?: string
+}
 
 function Trial_CaptureComplete() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const requestId = (location.state as CaptureCompleteState | null)
+    ?.requestId
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/trial/analyze')
+      navigate('/trial/analyze', { state: { requestId } })
     }, 1500)
 
     return () => clearTimeout(timer)
-  }, [navigate])
+  }, [navigate, requestId])
 
   return (
     <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden">

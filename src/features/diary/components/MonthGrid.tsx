@@ -1,7 +1,8 @@
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/style.css'
 import { format, isToday } from 'date-fns'
-import { useDiaryStore } from '@/features/diary/data/store'
+import { useDiaryCalendar } from '@/features/diary/hooks/useDiaryCalendar'
+import { ApiError } from '@/shared/api/apiError'
 
 interface MonthGridProps {
   month: Date
@@ -18,13 +19,36 @@ export default function MonthGrid({
   selectedDate,
   onSelectDate,
 }: MonthGridProps) {
-  const records = useDiaryStore((state) => state.records)
+  const year = month.getFullYear()
+  // Date.getMonth()는 0부터 시작하니 API가 기대하는 1~12로 맞춰준다.
+  const monthNumber = month.getMonth() + 1
+  const {
+    data: calendarDays,
+    isLoading,
+    isError,
+    error,
+  } = useDiaryCalendar(year, monthNumber)
 
-  const isRecorded = (date: Date) =>
-    Boolean(records[format(date, 'yyyy-MM-dd')])
+  const recordedDates = new Set(
+    (calendarDays ?? []).filter((day) => day.recorded).map((day) => day.date),
+  )
+
+  const isRecorded = (date: Date) => recordedDates.has(format(date, 'yyyy-MM-dd'))
+
+  const errorMessage =
+    isError && error instanceof ApiError
+      ? error.message
+      : isError
+        ? '기록 여부를 불러오지 못했어요.'
+        : null
 
   return (
     <div className="h-auto w-full pt-3">
+      {errorMessage && (
+        <p className="text-text-secondary mb-2 text-center text-xs">
+          {errorMessage}
+        </p>
+      )}
       <DayPicker
         mode="single"
         selected={selectedDate}
@@ -62,7 +86,13 @@ export default function MonthGrid({
             return (
               <div className="relative flex h-full flex-col items-center justify-center gap-1">
                 <span
-                  className={`size-1.25 rounded-full ${recorded ? 'bg-primary' : 'bg-transparent'} ${modifiers.outside ? 'opacity-40' : ''}`}
+                  className={`size-1.25 rounded-full ${
+                    isLoading
+                      ? 'bg-line animate-pulse'
+                      : recorded
+                        ? 'bg-primary'
+                        : 'bg-transparent'
+                  } ${modifiers.outside ? 'opacity-40' : ''}`}
                 />
                 <button
                   type="button"

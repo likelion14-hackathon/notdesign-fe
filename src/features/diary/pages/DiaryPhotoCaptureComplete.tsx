@@ -1,18 +1,25 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Logo from '@/shared/components/Logo'
 import checkIcon from '@/shared/assets/icons/check.svg'
 
+interface PhotoCaptureCompleteState {
+  requestId?: string
+}
+
 export default function DiaryPhotoCaptureComplete() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const requestId = (location.state as PhotoCaptureCompleteState | null)
+    ?.requestId
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/diary/record/checklist')
+      navigate('/diary/analyze', { state: { requestId } })
     }, 1500)
 
     return () => clearTimeout(timer)
-  }, [navigate])
+  }, [navigate, requestId])
 
   return (
     <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-103.5 flex-col overflow-hidden">
