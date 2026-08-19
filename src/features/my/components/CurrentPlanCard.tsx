@@ -1,8 +1,20 @@
 import { MY_CURRENT_PLAN } from '@/features/my/constants'
 
-export default function CurrentPlanCard() {
+interface CurrentPlanCardProps {
+  progress?: { currentWeek: number; totalWeeks: number; progressRate: number }
+}
+
+export default function CurrentPlanCard({ progress }: CurrentPlanCardProps) {
   const { weekLabel, percentage, startWeekLabel, midWeekLabel, endWeekLabel } =
-    MY_CURRENT_PLAN
+    progress
+      ? {
+          weekLabel: `${progress.currentWeek}주차`,
+          percentage: progress.progressRate,
+          startWeekLabel: '0주',
+          midWeekLabel: `${Math.round(progress.totalWeeks / 2)}주`,
+          endWeekLabel: `${progress.totalWeeks}주`,
+        }
+      : MY_CURRENT_PLAN
 
   return (
     <div className="border-outline bg-box-background w-full rounded-[10px] border px-5 pt-5 pb-5">

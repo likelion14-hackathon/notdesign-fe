@@ -1,11 +1,11 @@
-import React from "react";
-import type { OnboardingSlide } from "@/features/onboard/data/onboardingData";
-import { useSwipeAndZone } from "@/features/onboard/data/useSwipeAndZone";
+import React from 'react'
+import type { OnboardingSlide } from '@/features/onboard/data/onboardingData'
+import { useSwipeAndZone } from '@/features/onboard/data/useSwipeAndZone'
 
 interface OnboardingSliderProps {
-  slides: OnboardingSlide[];
-  currentIndex: number;
-  onSlideChange: (index: number) => void;
+  slides: OnboardingSlide[]
+  currentIndex: number
+  onSlideChange: (index: number) => void
 }
 
 const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
@@ -13,56 +13,56 @@ const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
   currentIndex,
   onSlideChange,
 }) => {
-  const currentSlide = slides[currentIndex];
+  const currentSlide = slides[currentIndex]
 
   const touchHandlers = useSwipeAndZone({
     currentIndex,
     totalSlides: slides.length,
     onSlideChange,
-  });
+  })
 
   return (
     <div
-      className="relative w-full flex-1 flex flex-col justify-end pb-16 px-6 text-white z-10 select-none touch-pan-y cursor-pointer"
+      className="relative z-10 flex min-h-0 w-full flex-1 cursor-pointer touch-none flex-col justify-end overflow-hidden px-6 pb-16 text-white select-none"
       {...touchHandlers}
     >
       {/* 텍스트 영역 */}
-      <div key={currentIndex} className="text-left animate-fade-slide-in">
-        {/* 제목 상자 - 374x80 */}
-        <div className="w-[374px] h-[80px]">
-          <h1 className="text-2xl font-medium leading-[1.67] whitespace-pre-line">
+      <div key={currentIndex} className="animate-fade-slide-in text-left">
+        {/* 제목 상자 */}
+        <div className="min-h-20 w-full">
+          <h1 className="text-2xl leading-[1.67] font-medium whitespace-pre-line">
             {currentSlide.title}
           </h1>
         </div>
 
-        {/* 설명 상자 - 374x75, 위쪽 31px 간격 */}
-        <div className="w-[374px] h-[75px] mt-[31px]">
-          <p className="text-sm font-light text-white leading-relaxed break-keep">
+        {/* 설명 상자 - 위쪽 31px 간격 */}
+        <div className="mt-7.75 min-h-18.75 w-full">
+          <p className="text-sm leading-relaxed font-light break-keep text-white">
             {currentSlide.description}
           </p>
         </div>
       </div>
 
       {/* 인디케이터 (점 3개) - 높이 15, 아래쪽 31px 간격 */}
-      <div className="h-[15px] flex justify-center items-center gap-2 mt-[31px]">
+      <div className="mt-7.75 flex h-3.75 items-center justify-center gap-2">
         {slides.map((_, idx) => (
           <button
             key={idx}
             onClick={(e) => {
-              e.stopPropagation();
-              onSlideChange(idx);
+              e.stopPropagation()
+              onSlideChange(idx)
             }}
-            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            className={`h-2 w-2 rounded-full transition-colors duration-300 ${
               currentIndex === idx
-                ? " bg-white"
-                : " bg-white/40 hover:bg-white/60"
+                ? 'bg-white'
+                : 'bg-white/40 hover:bg-white/60'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default OnboardingSlider;
+export default OnboardingSlider

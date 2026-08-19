@@ -11,6 +11,10 @@ export const HOME_SUMMARY = {
     subtitle: '석훈님, 잊지 않으셨죠?',
     title: '오늘의 실천을 기록하세요!',
   },
+  todayActionDone: {
+    subtitle: '오늘도 수고하셨어요',
+    title: '오늘 기록을 완료했어요!',
+  },
   cycle: {
     caption: '6주차 중간 측정까지',
     remaining: '9일 남음',

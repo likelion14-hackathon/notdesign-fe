@@ -1,37 +1,165 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import PlanGeneratingCard from '@/features/measurement/components/PlanGeneratingCard'
+import BottomBar from '@/shared/components/BottomBar'
+import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
+import { applyAdjustedPlan, createPlan } from '@/features/plan/api'
+import { usePlanStore } from '@/features/plan/store'
+import { DEFAULT_MONTHLY_BUDGET } from '@/features/plan/constants'
+import { ApiError } from '@/shared/api/apiError'
+import { queryClient } from '@/shared/api/queryClient'
 
-/** 실제 API 연동 전까지 로딩 상태를 흉내 내는 시간(ms) */
-const SIMULATED_LOADING_MS = 2400
+const MIN_LOADING_MS = 2400
+
+const NEXT_NO_FINAL_REPORT_MESSAGE =
+  '12주 사이클을 마쳐야 다음 플랜을 만들 수 있어요'
+const ADJUST_NO_CURRENT_CYCLE_MESSAGE = '진행 중인 사이클이 없어요'
+
+type GeneratingMode = 'NEW' | 'NEXT' | 'ADJUST'
+
+interface PlanGeneratingLocationState {
+  /** 'NEW': 12주 플랜 처음 만들기(기본값, 항상 성공한 것처럼 목업으로 진행)
+   *  'NEXT': FINAL 리포트 확인 후 다음 12주 플랜 만들기(실제 에러 처리)
+   *  'ADJUST': 6주차 MID 리포트에서 조정 플랜을 생성해 현재 사이클에 바로 적용(실제 에러 처리) */
+  mode?: GeneratingMode
+}
 
 export default function PlanGeneratingPage() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const mode = (location.state as PlanGeneratingLocationState | null)?.mode ?? 'NEW'
+  const setCreatedPlan = usePlanStore((state) => state.setCreatedPlan)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  /** 404(직전 사이클 미종료/진행 중 사이클 없음)는 다시 시도해도 해결되지 않아 재시도 버튼을 숨긴다 */
+  const [isRetryable, setIsRetryable] = useState(false)
+  const [isRetrying, setIsRetrying] = useState(false)
+  const hasRequestedRef = useRef(false)
+
+  const runNew = () => {
+    const apiPromise = createPlan({
+      mode: 'NEW',
+      monthlyBudget: DEFAULT_MONTHLY_BUDGET,
+    })
+      .then((plan) => {
+        setCreatedPlan(plan, DEFAULT_MONTHLY_BUDGET)
+      })
+      .catch(() => {
+        // 실제 생성에 실패해도(측정 결과 없음 등) 지금은 목업 결과 화면으로 그대로 진행.
+      })
+    const minDelayPromise = new Promise((resolve) =>
+      setTimeout(resolve, MIN_LOADING_MS),
+    )
+
+    Promise.all([apiPromise, minDelayPromise]).then(() => {
+      navigate('/measurement/plan-result', { replace: true })
+    })
+  }
+
+  const runNext = () => {
+    createPlan({ mode: 'NEXT' })
+      .then((plan) => {
+        setCreatedPlan(plan, Math.round(plan.totalPrice / 3))
+        navigate('/measurement/new-plan-result', { replace: true })
+      })
+      .catch((error: unknown) => {
+        if (error instanceof ApiError && error.code === 'C404') {
+          setErrorMessage(NEXT_NO_FINAL_REPORT_MESSAGE)
+          setIsRetryable(false)
+        } else {
+          setErrorMessage(
+            error instanceof ApiError
+              ? error.message
+              : '플랜을 생성하지 못했어요. 다시 시도해주세요.',
+          )
+          setIsRetryable(true)
+        }
+      })
+      .finally(() => setIsRetrying(false))
+  }
+
+  const runAdjust = () => {
+    createPlan({ mode: 'ADJUST' })
+      .then((plan) => applyAdjustedPlan(plan.planId))
+      .then(() => {
+        // currentWeek이 바뀌었으니 홈/플랜/정보 화면의 진행 상태 캐시를 갱신한다.
+        queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+        navigate('/', { replace: true })
+      })
+      .catch((error: unknown) => {
+        if (error instanceof ApiError && error.code === 'C404') {
+          setErrorMessage(ADJUST_NO_CURRENT_CYCLE_MESSAGE)
+          setIsRetryable(false)
+        } else {
+          setErrorMessage(
+            error instanceof ApiError
+              ? error.message
+              : '플랜을 조정하지 못했어요. 다시 시도해주세요.',
+          )
+          setIsRetryable(true)
+        }
+      })
+      .finally(() => setIsRetrying(false))
+  }
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // replace: true — 로딩 화면은 실제 콘텐츠가 없는 과도 상태라 히스토리에 남기지 않습니다.
-      navigate('/measurement/plan-result', { replace: true })
-    }, SIMULATED_LOADING_MS)
+    if (hasRequestedRef.current) return
+    hasRequestedRef.current = true
 
-    return () => clearTimeout(timer)
-  }, [navigate])
+    if (mode === 'NEXT') {
+      runNext()
+      return
+    }
+
+    if (mode === 'ADJUST') {
+      runAdjust()
+      return
+    }
+
+    runNew()
+  }, [])
+
+  const handleRetry = () => {
+    if (isRetrying) return
+    setIsRetrying(true)
+    setErrorMessage(null)
+
+    if (mode === 'ADJUST') {
+      runAdjust()
+      return
+    }
+
+    runNext()
+  }
 
   return (
-    <div className="bg-off-white mx-auto flex h-svh w-full max-w-103.5 flex-col">
+    <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
       <Logo />
 
       <FlowHeader
         eyebrow="12주 플랜 만들기"
-        title="12주 플랜을 생성하는 중"
+        title={errorMessage ? '플랜을 생성하지 못했어요' : '12주 플랜을 생성하는 중'}
         showBack={false}
       />
 
-      <div className="mt-21.25 min-h-0 flex-1 overflow-y-auto px-5">
-        <PlanGeneratingCard />
-      </div>
+      {errorMessage ? (
+        <p className="text-text-secondary mt-21.25 px-5 text-[14px] font-medium break-keep">
+          {errorMessage}
+        </p>
+      ) : (
+        <div className="mt-21.25 px-5">
+          <PlanGeneratingCard />
+        </div>
+      )}
+
+      {errorMessage && mode !== 'NEW' && isRetryable && (
+        <BottomBar>
+          <BottomButton onClick={handleRetry} disabled={isRetrying}>
+            {isRetrying ? '다시 시도하는 중...' : '다시 시도하기'}
+          </BottomButton>
+        </BottomBar>
+      )}
     </div>
   )
 }
