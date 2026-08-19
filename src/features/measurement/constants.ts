@@ -4,7 +4,6 @@ import type {
   ContributionItem,
   CostItem,
   FinalScoreMetric,
-  MeasurementCenter,
   PlanCategory,
   PlanDetailItem,
   PlanScoreMetric,
@@ -22,29 +21,6 @@ export const PLAN_CATEGORY_TAG: Record<
   supplement: { label: '영양제', colorClass: 'bg-tag-supplement' },
 }
 
-export const MEASUREMENT_CENTERS: MeasurementCenter[] = [
-  {
-    id: 'deona-gangnam',
-    name: '더나 클리닉 강남',
-    address: '서울특별시 서초구 서초대로77길 17, 지하 2층',
-  },
-  {
-    id: 'mred-cheongjin',
-    name: '엠레드 안티에이징 센터',
-    address: '서울특별시 강남구 삼성로731로 청진빌딩 GF, 2층, 4층',
-  },
-  {
-    id: 'mred-eunha',
-    name: '엠레드 안티에이징 센터',
-    address: '서울특별시 강남구 삼성로 725, 은하빌딩 1층, 2층',
-  },
-  {
-    id: 'wim-gangnam',
-    name: '윔 센터 강남',
-    address: '서울특별시 서초구 서초대로77길 17, 지하 1층',
-  },
-]
-
 export const ANALYZING_METRICS = [
   { label: '색소침착', tone: 'primary' },
   { label: '모공', tone: 'dark' },
@@ -57,7 +33,6 @@ export const ANALYZING_METRICS = [
  */
 export const MEASUREMENT_RESULT = {
   name: '신석훈',
-  /** "OO님을 위한 ..." 처럼 호칭에 쓰는 이름 */
   givenName: '석훈',
   measuredAt: '2026년 7월 28일 측정',
   centerName: '더나 클리닉 강남',

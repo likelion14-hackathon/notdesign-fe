@@ -1,34 +1,17 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { WELLNESS_WASTE_REVEAL } from '@/features/wellness/constants'
-import { useWellnessStore } from '@/features/wellness/store'
-import { calculateWellnessResult } from '@/features/wellness/utils'
+import { useWellnessResult } from '@/features/wellness/useWellnessResult'
+import { useAuthStore } from '@/features/auth/store'
 import Logo from '@/shared/components/Logo'
 
 const AUTO_ADVANCE_MS = 2400
 
 export default function WellnessWasteRevealPage() {
   const navigate = useNavigate()
-  const procedureCost = useWellnessStore((state) => state.procedureCost)
-  const skincareCost = useWellnessStore((state) => state.skincareCost)
-  const effectPerceptionId = useWellnessStore(
-    (state) => state.effectPerceptionId,
-  )
-  const contributionAwarenessId = useWellnessStore(
-    (state) => state.contributionAwarenessId,
-  )
-
-  const { wasteCost } = useMemo(
-    () =>
-      calculateWellnessResult({
-        procedureCost,
-        skincareCost,
-        effectPerceptionId,
-        contributionAwarenessId,
-      }),
-    [procedureCost, skincareCost, effectPerceptionId, contributionAwarenessId],
-  )
+  const { wasteCost } = useWellnessResult()
+  const userName = useAuthStore((state) => state.name)
 
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
 
@@ -53,7 +36,7 @@ export default function WellnessWasteRevealPage() {
 
       <div className="flex flex-col items-center gap-15.5 px-13.5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-          {WELLNESS_WASTE_REVEAL.userName}
+          {userName ?? WELLNESS_WASTE_REVEAL.userName}
           {WELLNESS_WASTE_REVEAL.title[0]}
           <br />
           {WELLNESS_WASTE_REVEAL.title[1]}

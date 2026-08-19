@@ -45,14 +45,14 @@ function Trial_Capture() {
       <Logo />
 
       {/* 제목 영역 */}
-      <div className="mt-[30px] pl-[20px]">
-        <div className="h-[18px] w-[64px]">
+      <div className="mt-7.5 pl-5">
+        <div className="h-4.5 w-16">
           <span className="text-text-secondary font-sans text-base font-semibold whitespace-nowrap">
             체험해보기
           </span>
         </div>
 
-        <div className="mt-[10px] h-[40px] w-[276px]">
+        <div className="mt-2.5 h-10 w-69">
           <p className="text-text-primary font-sans text-2xl leading-[1.67] font-semibold">
             표시선에 얼굴을 맞춰주세요
           </p>
@@ -60,10 +60,10 @@ function Trial_Capture() {
       </div>
 
       {/* 원형 가이드 영역 */}
-      <div className="mt-[99px] flex justify-center">
-        <div className="bg-primary relative flex h-[374px] w-[374px] items-center justify-center rounded-full">
-          <div className="bg-off-white flex h-[350px] w-[350px] items-center justify-center rounded-full">
-            <div className="bg-outline relative h-[334px] w-[334px] overflow-hidden rounded-full">
+      <div className="mt-24.75 flex justify-center">
+        <div className="bg-primary relative flex h-93.5 w-93.5 items-center justify-center rounded-full">
+          <div className="bg-off-white flex h-87.5 w-87.5 items-center justify-center rounded-full">
+            <div className="bg-outline relative h-83.5 w-83.5 overflow-hidden rounded-full">
               {cameraError ? (
                 <img
                   src={personSilhouette}
@@ -85,14 +85,14 @@ function Trial_Capture() {
       </div>
 
       {/* 안내 문구 */}
-      <div className="mt-[26px] flex justify-center px-8">
-        <p className="text-text-secondary max-w-[280px] text-center font-sans text-xs">
+      <div className="mt-6.5 flex justify-center px-8">
+        <p className="text-text-secondary max-w-70 text-center font-sans text-xs">
           {cameraError ?? '표시선에 얼굴이 인식되면 자동으로 촬영돼요'}
         </p>
       </div>
 
       {/* 촬영하기 버튼 */}
-      <div className="mt-auto px-[20px] pb-10">
+      <div className="mt-auto px-5 pb-10">
         <BottomButton onClick={() => navigate('/trial/capture/complete')}>
           촬영하기
         </BottomButton>

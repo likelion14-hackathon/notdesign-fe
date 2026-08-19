@@ -1,12 +1,11 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
 import rocket from '@/shared/assets/images/rocket.png'
 import { WELLNESS_PLAN_TEASER_SPEND } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
-import { useWellnessStore } from '@/features/wellness/store'
-import { calculateWellnessResult } from '@/features/wellness/utils'
+import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import Logo from '@/shared/components/Logo'
 
 /** 다음 화면(진단 결과)으로 자동 전환되기까지의 시간(ms) */
@@ -14,25 +13,7 @@ const AUTO_ADVANCE_MS = 2400
 
 export default function WellnessPlanTeaserSpendPage() {
   const navigate = useNavigate()
-  const procedureCost = useWellnessStore((state) => state.procedureCost)
-  const skincareCost = useWellnessStore((state) => state.skincareCost)
-  const effectPerceptionId = useWellnessStore(
-    (state) => state.effectPerceptionId,
-  )
-  const contributionAwarenessId = useWellnessStore(
-    (state) => state.contributionAwarenessId,
-  )
-
-  const { yearlySpend } = useMemo(
-    () =>
-      calculateWellnessResult({
-        procedureCost,
-        skincareCost,
-        effectPerceptionId,
-        contributionAwarenessId,
-      }),
-    [procedureCost, skincareCost, effectPerceptionId, contributionAwarenessId],
-  )
+  const { yearlySpend } = useWellnessResult()
 
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
 

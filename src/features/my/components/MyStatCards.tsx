@@ -1,7 +1,23 @@
 import { MY_STATS } from '@/features/my/constants'
 
-export default function MyStatCards() {
-  const { recordDays, averageRate } = MY_STATS
+interface MyStatCardsProps {
+  /** 없으면 기존 목업을 보여줌 */
+  stats?: { elapsedDays: number; recordedDays: number }
+}
+
+export default function MyStatCards({ stats }: MyStatCardsProps) {
+  const { recordDays, averageRate } = stats
+    ? {
+        recordDays: { label: '기록', value: `${stats.recordedDays}일` },
+        averageRate: {
+          label: '평균 실행률',
+          value:
+            stats.elapsedDays > 0
+              ? `${Math.round((stats.recordedDays / stats.elapsedDays) * 100)}%`
+              : '0%',
+        },
+      }
+    : MY_STATS
 
   return (
     <div className="flex gap-4">

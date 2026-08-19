@@ -1,5 +1,5 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import chevronDown from '@/shared/assets/icons/chevron-down.svg'
 import coins from '@/shared/assets/images/coins.png'
@@ -8,7 +8,7 @@ import rocket from '@/shared/assets/images/rocket.png'
 import { WELLNESS_PLAN_CTA } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
 import { useWellnessStore } from '@/features/wellness/store'
-import { calculateWellnessResult } from '@/features/wellness/utils'
+import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
@@ -18,25 +18,7 @@ export default function WellnessPlanCtaPage() {
   const entryFlow = useWellnessStore((state) => state.entryFlow)
   const nextPath =
     entryFlow === 'trial' ? '/trial' : '/measurement/center-select'
-  const procedureCost = useWellnessStore((state) => state.procedureCost)
-  const skincareCost = useWellnessStore((state) => state.skincareCost)
-  const effectPerceptionId = useWellnessStore(
-    (state) => state.effectPerceptionId,
-  )
-  const contributionAwarenessId = useWellnessStore(
-    (state) => state.contributionAwarenessId,
-  )
-
-  const { yearlySpend, wasteCost } = useMemo(
-    () =>
-      calculateWellnessResult({
-        procedureCost,
-        skincareCost,
-        effectPerceptionId,
-        contributionAwarenessId,
-      }),
-    [procedureCost, skincareCost, effectPerceptionId, contributionAwarenessId],
-  )
+  const { yearlySpend, wasteCost } = useWellnessResult()
 
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
   const [displayWasteCost, setDisplayWasteCost] = useState(0)

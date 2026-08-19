@@ -24,7 +24,6 @@ const EXPERIMENT_BADGE_VISIBLE_MS = 3000
 /** 배지가 사라지는 페이드아웃 애니메이션 시간(ms). 트랜지션 클래스의 duration과 맞춰야 함 */
 const EXPERIMENT_BADGE_FADE_MS = 300
 
-/** Figma: PF_REPORT_6-WEEK (962:2866, 439:1269) */
 export default function SixWeekReportPage() {
   const navigate = useNavigate()
   const [experimentBadgeState, setExperimentBadgeState] = useState<

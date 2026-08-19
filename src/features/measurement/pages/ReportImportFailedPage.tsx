@@ -8,7 +8,6 @@ import Logo from '@/shared/components/Logo'
 /** 실제 API 연동 전까지 로딩 상태를 흉내 내는 시간(ms) */
 const SIMULATED_LOADING_MS = 2400
 
-/** Figma: PF_REPORT_IN_PROCESS - 데이터 없음 (962:2694) */
 export default function ReportImportFailedPage() {
   const navigate = useNavigate()
   const [showFailedModal, setShowFailedModal] = useState(false)

@@ -6,11 +6,6 @@ interface FlowHeaderProps {
   eyebrow: string
   title: ReactNode
   backTo?: string
-  /**
-   * 뒤로가기 클릭 시 바로 이동하는 대신 실행할 핸들러.
-   * 지정하면 backTo로의 자동 이동 대신 이 함수만 호출됩니다.
-   * (예: 이동 전 확인 모달을 띄우는 경우)
-   */
   onBack?: () => void
   showBack?: boolean
 }

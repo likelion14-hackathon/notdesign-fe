@@ -1,8 +1,58 @@
 import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
+import { useMeasurementStore } from '@/features/measurement/store'
+import { useAuthStore } from '@/features/auth/store'
+import { scoreStatus } from '@/features/measurement/scoreStatus'
 import ProgressRing from '@/shared/components/ProgressRing'
 
+type MetricTone = 'primary' | 'dark'
+
+function formatMeasuredAt(isoString: string): string {
+  const date = new Date(isoString)
+  if (Number.isNaN(date.getTime())) return isoString
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 측정`
+}
+
 export default function ResultCard() {
-  const { name, measuredAt, centerName, metrics, insight } = MEASUREMENT_RESULT
+  const offlineResult = useMeasurementStore((state) => state.offlineResult)
+  const userName = useAuthStore((state) => state.name)
+
+  const baseMetrics: { label: string; percentage: number; status: string }[] =
+    offlineResult
+      ? [
+          {
+            label: '색소침착',
+            percentage: offlineResult.pigmentation,
+            status: scoreStatus(offlineResult.pigmentation),
+          },
+          {
+            label: '모공',
+            percentage: offlineResult.pores,
+            status: scoreStatus(offlineResult.pores),
+          },
+          {
+            label: '홍조',
+            percentage: offlineResult.erythema,
+            status: scoreStatus(offlineResult.erythema),
+          },
+        ]
+      : [...MEASUREMENT_RESULT.metrics]
+
+  const lowest = [...baseMetrics].sort((a, b) => a.percentage - b.percentage)[0]
+
+  const metrics: { label: string; percentage: number; tone: MetricTone; status: string }[] =
+    baseMetrics.map((metric) => ({
+      ...metric,
+      tone: metric.label === lowest.label ? 'primary' : 'dark',
+    }))
+  const insight = offlineResult
+    ? `${lowest.label} 지표가 세 항목 중 가장 낮은 상태예요. 12주 플랜을 구성할 때에는 이 지표를 1순위로 구성할 예정이에요!`
+    : MEASUREMENT_RESULT.insight
+
+  const name = userName ?? MEASUREMENT_RESULT.name
+  const measuredAt = offlineResult
+    ? formatMeasuredAt(offlineResult.measuredAt)
+    : MEASUREMENT_RESULT.measuredAt
+  const centerName = offlineResult?.clinicName ?? MEASUREMENT_RESULT.centerName
 
   return (
     <div className="border-outline bg-box-background mx-auto w-full max-w-81.75 rounded-[10px] border px-5 pt-6.25 pb-7.25">

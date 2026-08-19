@@ -1,7 +1,6 @@
 import { HOME_SUMMARY } from '@/features/home/constants'
 
 interface ImportPromptCardProps {
-  /** 아직 연결된 화면이 없으면 생략 — 버튼이 눌려도 아무 동작도 하지 않음 */
   onImport?: () => void
 }
 

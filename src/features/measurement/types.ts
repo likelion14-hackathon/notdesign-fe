@@ -1,8 +1,24 @@
-/** 오프라인 측정을 진행한 센터 */
-export interface MeasurementCenter {
-  id: string
+/** 오프라인 측정을 진행할 수 있는 클리닉(GET /api/clinics 응답) */
+export interface Clinic {
+  id: number
   name: string
   address: string
+}
+
+/** 오프라인 측정 결과 불러오기(POST /api/results) 응답 */
+export interface OfflineResult {
+  id: number
+  clinicId: number | null
+  clinicName: string | null
+  planId: number | null
+  /** 색소침착 정도 (0~100) */
+  pigmentation: number
+  /** 홍조 정도 (0~100) */
+  erythema: number
+  /** 모공 정도 (0~100) */
+  pores: number
+  measuredAt: string
+  createdAt: string
 }
 
 /** 이용 동의서의 조항 */
@@ -36,6 +52,8 @@ export interface PlanTimelineRow {
 export interface PlanDetailItem {
   weekLabel: string
   category: PlanCategory
+  /** 서버 categoryName을 그대로 쓰고 싶을 때. 없으면 PLAN_CATEGORY_TAG의 라벨을 쓴다 */
+  categoryLabel?: string
   name: string
   frequency: string
   price: string

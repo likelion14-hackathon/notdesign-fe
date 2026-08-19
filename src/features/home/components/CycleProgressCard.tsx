@@ -1,8 +1,24 @@
 import { HOME_SUMMARY } from '@/features/home/constants'
+import type { CurrentPlanSummary } from '@/features/plan/types'
 
-export default function CycleProgressCard() {
-  const { caption, remaining, weekLabel, percentage, reservation } =
-    HOME_SUMMARY.cycle
+interface CycleProgressCardProps {
+  summary: CurrentPlanSummary
+}
+
+export default function CycleProgressCard({ summary }: CycleProgressCardProps) {
+  const { reservation } = HOME_SUMMARY.cycle
+  const { currentWeek, totalWeeks, progressRate, daysToMidReport, daysToFinalReport } =
+    summary
+
+  const isMidReportNext = daysToMidReport > 0
+  const midWeek = Math.round(totalWeeks / 2)
+  const caption = isMidReportNext
+    ? `${midWeek}주차 중간 측정까지`
+    : `${totalWeeks}주차 최종 측정까지`
+  const daysLeft = isMidReportNext ? daysToMidReport : daysToFinalReport
+  const remaining = daysLeft > 0 ? `${daysLeft}일 남음` : '오늘이에요'
+  const weekLabel = `${currentWeek}주차 / ${totalWeeks}주차`
+  const percentage = progressRate
 
   return (
     <div className="w-full">

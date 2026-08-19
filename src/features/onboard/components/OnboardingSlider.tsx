@@ -29,14 +29,14 @@ const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
       {/* 텍스트 영역 */}
       <div key={currentIndex} className="animate-fade-slide-in text-left">
         {/* 제목 상자 */}
-        <div className="min-h-[80px] w-full">
+        <div className="min-h-20 w-full">
           <h1 className="text-2xl leading-[1.67] font-medium whitespace-pre-line">
             {currentSlide.title}
           </h1>
         </div>
 
         {/* 설명 상자 - 위쪽 31px 간격 */}
-        <div className="mt-[31px] min-h-[75px] w-full">
+        <div className="mt-7.75 min-h-18.75 w-full">
           <p className="text-sm leading-relaxed font-light break-keep text-white">
             {currentSlide.description}
           </p>
@@ -44,7 +44,7 @@ const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
       </div>
 
       {/* 인디케이터 (점 3개) - 높이 15, 아래쪽 31px 간격 */}
-      <div className="mt-[31px] flex h-[15px] items-center justify-center gap-2">
+      <div className="mt-7.75 flex h-3.75 items-center justify-center gap-2">
         {slides.map((_, idx) => (
           <button
             key={idx}

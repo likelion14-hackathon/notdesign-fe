@@ -7,8 +7,6 @@ interface MenuRowProps {
   highlighted?: boolean
   onClick?: () => void
 }
-
-/** 플랜/계정 섹션의 목록 행. description 유무에 따라 높이가 달라짐 */
 export default function MenuRow({
   title,
   description,
