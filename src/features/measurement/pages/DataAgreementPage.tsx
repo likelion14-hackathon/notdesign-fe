@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import {
@@ -6,12 +7,35 @@ import {
 } from '@/features/measurement/constants'
 import BottomBar from '@/shared/components/BottomBar'
 import Logo from '@/shared/components/Logo'
+import { agreeToMeasurementUsage } from '@/features/user/api'
+import { useAuthStore } from '@/features/auth/store'
+import { ApiError } from '@/shared/api/apiError'
 
 const ACTION_BUTTON =
   'flex h-14.5 items-center justify-center rounded-[10px] text-[15px] font-semibold tracking-[-0.3px] text-off-white shadow-[0px_0px_8.4px_0px_rgba(115,115,115,0.25)]'
 
 export default function DataAgreementPage() {
   const navigate = useNavigate()
+  const setUserInfo = useAuthStore((state) => state.setUserInfo)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleAccept = async () => {
+    if (isSubmitting) return
+    setIsSubmitting(true)
+    try {
+      const user = await agreeToMeasurementUsage()
+      setUserInfo({ email: user.email, name: user.name })
+      navigate('/measurement/processing', { state: { flow: 'import' } })
+    } catch (error) {
+      setErrorMessage(
+        error instanceof ApiError
+          ? error.message
+          : '동의 처리에 실패했습니다. 다시 시도해주세요.',
+      )
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
@@ -52,6 +76,11 @@ export default function DataAgreementPage() {
       </div>
 
       <BottomBar>
+        {errorMessage && (
+          <p className="text-highlight mb-2.75 text-center text-[13px] font-semibold">
+            {errorMessage}
+          </p>
+        )}
         <div className="flex gap-2.75">
           <button
             type="button"
@@ -62,10 +91,11 @@ export default function DataAgreementPage() {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/measurement/processing')}
-            className={`${ACTION_BUTTON} bg-primary grow-210 basis-0`}
+            onClick={handleAccept}
+            disabled={isSubmitting}
+            className={`${ACTION_BUTTON} bg-primary grow-210 basis-0 disabled:opacity-60`}
           >
-            수락하기
+            {isSubmitting ? '처리 중...' : '수락하기'}
           </button>
         </div>
       </BottomBar>

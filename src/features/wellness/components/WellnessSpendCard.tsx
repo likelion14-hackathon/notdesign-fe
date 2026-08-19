@@ -8,7 +8,6 @@ interface WellnessSpendCardProps {
   bgClassName?: string
 }
 
-/** Figma: 웰니스 지출 진단 - 지출 요약 카드 (아이콘 + 라벨 + 값) */
 export default function WellnessSpendCard({
   icon,
   iconClassName,

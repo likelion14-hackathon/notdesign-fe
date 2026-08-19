@@ -5,8 +5,11 @@ interface PlanDetailRowProps {
   item: PlanDetailItem
 }
 
+const FALLBACK_TAG = { label: '기타', colorClass: 'bg-dark' }
+
 export default function PlanDetailRow({ item }: PlanDetailRowProps) {
-  const tag = PLAN_CATEGORY_TAG[item.category]
+  const tag = PLAN_CATEGORY_TAG[item.category] ?? FALLBACK_TAG
+  const tagLabel = item.categoryLabel ?? tag.label
 
   return (
     <div className="border-line flex flex-col gap-2.25 border-b px-5 pt-5.75 pb-6">
@@ -19,7 +22,7 @@ export default function PlanDetailRow({ item }: PlanDetailRowProps) {
           <span
             className={`${tag.colorClass} text-off-white shrink-0 rounded-[5px] pt-0.75 pr-2 pb-0.5 pl-1.75 text-[11px] leading-normal font-medium tracking-[-0.22px]`}
           >
-            {tag.label}
+            {tagLabel}
           </span>
           <span className="text-text-primary min-w-0 flex-1 truncate text-[14px] leading-normal font-semibold tracking-[-0.28px]">
             {item.name}

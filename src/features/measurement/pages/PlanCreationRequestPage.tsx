@@ -1,12 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
+import { useAuthStore } from '@/features/auth/store'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 
 export default function PlanCreationRequestPage() {
   const navigate = useNavigate()
+  const userName = useAuthStore((state) => state.name)
+  const givenName = userName ?? MEASUREMENT_RESULT.givenName
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
@@ -17,7 +20,7 @@ export default function PlanCreationRequestPage() {
         backTo="/measurement/result"
         title={
           <>
-            {MEASUREMENT_RESULT.givenName}님을 위한 12주 플랜을
+            {givenName}님을 위한 12주 플랜을
             <br />
             생성해 볼까요?
           </>

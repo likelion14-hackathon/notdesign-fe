@@ -1,38 +1,21 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import lightbulb from '@/shared/assets/images/lightbulb.png'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
 import wallet from '@/shared/assets/images/wallet.png'
 import { WELLNESS_SPEND_SUMMARY } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
-import { useWellnessStore } from '@/features/wellness/store'
-import { calculateWellnessResult } from '@/features/wellness/utils'
+import { useWellnessResult } from '@/features/wellness/useWellnessResult'
+import { useAuthStore } from '@/features/auth/store'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 
 export default function WellnessSpendSummaryPage() {
   const navigate = useNavigate()
-  const procedureCost = useWellnessStore((state) => state.procedureCost)
-  const skincareCost = useWellnessStore((state) => state.skincareCost)
-  const effectPerceptionId = useWellnessStore(
-    (state) => state.effectPerceptionId,
-  )
-  const contributionAwarenessId = useWellnessStore(
-    (state) => state.contributionAwarenessId,
-  )
-
-  const { grade, wasteCost, yearlySpend, monthlyAvgSpend } = useMemo(
-    () =>
-      calculateWellnessResult({
-        procedureCost,
-        skincareCost,
-        effectPerceptionId,
-        contributionAwarenessId,
-      }),
-    [procedureCost, skincareCost, effectPerceptionId, contributionAwarenessId],
-  )
+  const { grade, wasteCost, yearlySpend, monthlyAvgSpend } = useWellnessResult()
+  const userName = useAuthStore((state) => state.name)
 
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
@@ -54,7 +37,7 @@ export default function WellnessSpendSummaryPage() {
       <div className="px-13.5">
         <div className="flex flex-col items-center gap-15.5">
           <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-            {WELLNESS_SPEND_SUMMARY.userName}
+            {userName ?? WELLNESS_SPEND_SUMMARY.userName}
             {WELLNESS_SPEND_SUMMARY.title[0]}
             <br />
             {WELLNESS_SPEND_SUMMARY.title[1]}

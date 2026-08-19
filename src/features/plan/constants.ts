@@ -13,3 +13,6 @@ export const PLAN_TAB_COST_SUMMARY = {
   total: { label: '총 금액 (12주)', amount: '64.3만원' },
   monthly: { label: '1달 예상 금액', amount: '21.4만원' },
 } as const
+
+/** 월 예산 입력 UI가 아직 없어서 임시로 쓰는 기본값(원) */
+export const DEFAULT_MONTHLY_BUDGET = 300_000

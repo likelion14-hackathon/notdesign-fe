@@ -1,23 +1,41 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import PlanGeneratingCard from '@/features/measurement/components/PlanGeneratingCard'
 import Logo from '@/shared/components/Logo'
+import { createPlan } from '@/features/plan/api'
+import { usePlanStore } from '@/features/plan/store'
+import { DEFAULT_MONTHLY_BUDGET } from '@/features/plan/constants'
 
-/** 실제 API 연동 전까지 로딩 상태를 흉내 내는 시간(ms) */
-const SIMULATED_LOADING_MS = 2400
+const MIN_LOADING_MS = 2400
 
 export default function PlanGeneratingPage() {
   const navigate = useNavigate()
+  const setCreatedPlan = usePlanStore((state) => state.setCreatedPlan)
+  const hasRequestedRef = useRef(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // replace: true — 로딩 화면은 실제 콘텐츠가 없는 과도 상태라 히스토리에 남기지 않습니다.
-      navigate('/measurement/plan-result', { replace: true })
-    }, SIMULATED_LOADING_MS)
+    if (hasRequestedRef.current) return
+    hasRequestedRef.current = true
 
-    return () => clearTimeout(timer)
-  }, [navigate])
+    const apiPromise = createPlan({
+      mode: 'NEW',
+      monthlyBudget: DEFAULT_MONTHLY_BUDGET,
+    })
+      .then((plan) => {
+        setCreatedPlan(plan, DEFAULT_MONTHLY_BUDGET)
+      })
+      .catch(() => {
+        // 실제 생성에 실패해도(측정 결과 없음 등) 지금은 목업 결과 화면으로 그대로 진행.
+      })
+    const minDelayPromise = new Promise((resolve) =>
+      setTimeout(resolve, MIN_LOADING_MS),
+    )
+
+    Promise.all([apiPromise, minDelayPromise]).then(() => {
+      navigate('/measurement/plan-result', { replace: true })
+    })
+  }, [])
 
   return (
     <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">

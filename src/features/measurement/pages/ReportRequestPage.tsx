@@ -6,7 +6,6 @@ import Logo from '@/shared/components/Logo'
 const ACTION_BUTTON =
   'flex h-14.5 items-center justify-center rounded-[10px] text-[15px] font-semibold tracking-[-0.3px] shadow-[0px_0px_8.4px_0px_rgba(115,115,115,0.25)]'
 
-/** Figma: PF_REPORT_REQUEST (924:2468, 962:3036) */
 export default function ReportRequestPage() {
   const navigate = useNavigate()
 
@@ -37,7 +36,11 @@ export default function ReportRequestPage() {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/measurement/processing')}
+            onClick={() =>
+              navigate('/measurement/processing', {
+                state: { flow: 'report' },
+              })
+            }
             className={`${ACTION_BUTTON} bg-primary text-off-white flex-1`}
           >
             불러오기
