@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import kakaoLogo from '@/shared/assets/icons/kakao-logo.svg'
 import SocialLoginButton from '@/features/onboard/components/SocialLoginButton'
 import { useSlideUpModal } from '@/features/onboard/data/useSlideUpModal'
+import { usePageBackground } from '@/shared/hooks/usePageBackground'
+import { useScrollLock } from '@/shared/hooks/useScrollLock'
+import { useVisualViewport } from '@/shared/hooks/useVisualViewport'
 import warningIcon from '@/shared/assets/icons/Vector.svg'
 import mailIcon from '@/shared/assets/icons/mail.svg'
 import lockIcon from '@/shared/assets/icons/lock.svg'
@@ -24,6 +27,9 @@ interface LoginModalProps {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+const MODAL_PADDING_BOTTOM = 35
+const MODAL_BACKGROUND = '#222222'
+
 const STEP_ICON: Record<LoginStep, string> = {
   select: warningIcon,
   email: mailIcon,
@@ -37,6 +43,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
   onLoginSuccess,
 }) => {
   const { shouldRender, translateClass } = useSlideUpModal({ isOpen })
+  useScrollLock(isOpen)
+  usePageBackground(isOpen ? MODAL_BACKGROUND : null)
+  const viewport = useVisualViewport(isOpen)
   const login = useAuthStore((state) => state.login)
   const [step, setStep] = useState<LoginStep>('select')
   const [email, setEmail] = useState('')
@@ -44,24 +53,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  /**
-   * 입력창에 포커스가 잡히면 iOS가 그 입력창을 보이게 하려고 페이지 자체를
-   * 스크롤시킨다. 모달이 열려있는 동안은 그 스크롤을 즉시 원위치로 되돌려
-   * 배경 페이지가 움직이지 않게 한다.
-   */
-  useEffect(() => {
-    if (!isOpen) return
-
-    const resetScroll = () => {
-      if (window.scrollY !== 0 || window.scrollX !== 0) {
-        window.scrollTo(0, 0)
-      }
-    }
-
-    window.addEventListener('scroll', resetScroll)
-    return () => window.removeEventListener('scroll', resetScroll)
-  }, [isOpen])
 
   if (!shouldRender) return null
 
@@ -103,11 +94,18 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   return (
     <div
-      className="absolute inset-0 z-50 flex items-end justify-center backdrop-blur-[2px]"
+      className="fixed inset-0 z-50 flex items-end justify-center overflow-hidden backdrop-blur-[2px]"
+      data-vv="overlay"
       onClick={handleClose}
     >
       <div
-        className={`bg-text-primary border-dark relative flex w-full max-w-md flex-col rounded-tl-[50px] rounded-tr-[50px] border-t px-8 pt-8 pb-[35px] transition-transform duration-300 ease-out ${translateClass}`}
+        className={`bg-text-primary border-dark relative flex max-h-full w-full max-w-md flex-col overflow-y-auto overscroll-contain rounded-tl-[50px] rounded-tr-[50px] border-t px-8 pt-8 ${translateClass}`}
+        style={{
+          paddingBottom: `${MODAL_PADDING_BOTTOM + viewport.keyboardHeight}px`,
+          transition:
+            'transform 300ms ease-out, padding-bottom 280ms cubic-bezier(0.32, 0.72, 0, 1)',
+        }}
+        data-vv="panel"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -128,7 +126,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         <img
           src={step === 'email' && emailError ? warningIcon : STEP_ICON[step]}
           alt=""
-          className="mb-4 h-12 w-12"
+          className="mb-4 h-12 w-12 shrink-0"
         />
 
         <h2 className="mb-8 text-lg font-semibold text-white">
@@ -136,7 +134,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         </h2>
 
         {step === 'select' && (
-          <div className="flex flex-col gap-3">
+          <div className="flex shrink-0 flex-col gap-3">
             <SocialLoginButton
               label={LOGIN_MODAL_BUTTON.kakao}
               icon={kakaoLogo}
@@ -154,7 +152,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         )}
 
         {step === 'email' && (
-          <div className="flex flex-col gap-3">
+          <div className="flex shrink-0 flex-col gap-3">
             <div>
               <input
                 type="email"
@@ -184,7 +182,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         )}
 
         {step === 'password' && (
-          <div className="flex flex-col gap-3">
+          <div className="flex shrink-0 flex-col gap-3">
             <div>
               <input
                 type="password"
@@ -199,9 +197,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 } focus:outline-none`}
               />
               {passwordError && (
-                <p className="mt-2 text-xs text-orange-500">
-                  {passwordError}
-                </p>
+                <p className="mt-2 text-xs text-orange-500">{passwordError}</p>
               )}
             </div>
             <button

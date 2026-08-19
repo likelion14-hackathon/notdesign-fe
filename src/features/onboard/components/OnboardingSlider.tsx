@@ -23,7 +23,7 @@ const OnboardingSlider: React.FC<OnboardingSliderProps> = ({
 
   return (
     <div
-      className="relative z-10 flex w-full flex-1 cursor-pointer touch-pan-y flex-col justify-end px-6 pb-16 text-white select-none"
+      className="relative z-10 flex min-h-0 w-full flex-1 cursor-pointer touch-none flex-col justify-end overflow-hidden px-6 pb-16 text-white select-none"
       {...touchHandlers}
     >
       {/* 텍스트 영역 */}
