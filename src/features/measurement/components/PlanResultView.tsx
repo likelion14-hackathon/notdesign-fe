@@ -10,11 +10,12 @@ import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import LeaveWarningModal from '@/shared/components/LeaveWarningModal'
 import Logo from '@/shared/components/Logo'
-import { deletePlan, startPlan } from '@/features/plan/api'
+import { deletePlan, startNextPlan, startPlan } from '@/features/plan/api'
 import { usePlanStore } from '@/features/plan/store'
 import { buildDetailItems, buildTimelineRows, formatManwon } from '@/features/plan/utils'
 import { useMeasurementStore } from '@/features/measurement/store'
 import { rankByLowest } from '@/features/measurement/priorityLabels'
+import { ApiError } from '@/shared/api/apiError'
 
 interface PlanResultViewProps {
   eyebrow: string
@@ -33,6 +34,7 @@ export default function PlanResultView({
   const [showLeaveWarning, setShowLeaveWarning] = useState(false)
   const [isStarting, setIsStarting] = useState(false)
   const [isLeaving, setIsLeaving] = useState(false)
+  const [startErrorMessage, setStartErrorMessage] = useState<string | null>(null)
 
   const handleLeaveApprove = async () => {
     if (isLeaving) return
@@ -42,6 +44,7 @@ export default function PlanResultView({
         await deletePlan(createdPlan.planId)
       }
     } catch {
+      // 삭제 실패해도 어차피 뒤로 나가는 흐름이라 무시한다.
     } finally {
       navigate('/measurement/plan-request')
     }
@@ -50,11 +53,28 @@ export default function PlanResultView({
   const handleStart = async () => {
     if (isStarting) return
     setIsStarting(true)
+    setStartErrorMessage(null)
+
+    if (createdPlan?.mode === 'NEXT') {
+      try {
+        await startNextPlan(createdPlan.planId)
+        navigate('/')
+      } catch (error) {
+        setStartErrorMessage(
+          error instanceof ApiError ? error.message : '플랜을 시작하지 못했어요.',
+        )
+      } finally {
+        setIsStarting(false)
+      }
+      return
+    }
+
     try {
       if (createdPlan) {
         await startPlan(createdPlan.planId)
       }
     } catch {
+      // 시작 실패해도(이미 목업으로 진행되는 NEW 플로우라) 무시하고 홈으로 이동한다.
     } finally {
       navigate('/')
     }
@@ -126,9 +146,16 @@ export default function PlanResultView({
       </div>
 
       <BottomBar>
-        <BottomButton onClick={handleStart} disabled={isStarting}>
-          {isStarting ? '시작하는 중...' : '시작하기'}
-        </BottomButton>
+        <div className="flex flex-col gap-2.75">
+          {startErrorMessage && (
+            <p className="text-highlight text-center text-[13px] font-semibold break-keep">
+              {startErrorMessage}
+            </p>
+          )}
+          <BottomButton onClick={handleStart} disabled={isStarting}>
+            {isStarting ? '시작하는 중...' : '시작하기'}
+          </BottomButton>
+        </div>
       </BottomBar>
 
       {showBack && showLeaveWarning && (

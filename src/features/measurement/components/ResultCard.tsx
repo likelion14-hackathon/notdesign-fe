@@ -12,27 +12,34 @@ function formatMeasuredAt(isoString: string): string {
   return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 측정`
 }
 
-export default function ResultCard() {
+interface ResultCardProps {
+  /** 없으면 offlineResult(오프라인 측정 불러오기)로 대체하고, 그마저 없으면 기존 목업을 보여줌 */
+  metrics?: { pigmentation: number; pores: number; erythema: number }
+}
+
+export default function ResultCard({ metrics: metricsProp }: ResultCardProps = {}) {
   const offlineResult = useMeasurementStore((state) => state.offlineResult)
   const userName = useAuthStore((state) => state.name)
 
+  const realMetrics = metricsProp ?? offlineResult
+
   const baseMetrics: { label: string; percentage: number; status: string }[] =
-    offlineResult
+    realMetrics
       ? [
           {
             label: '색소침착',
-            percentage: offlineResult.pigmentation,
-            status: scoreStatus(offlineResult.pigmentation),
+            percentage: realMetrics.pigmentation,
+            status: scoreStatus(realMetrics.pigmentation),
           },
           {
             label: '모공',
-            percentage: offlineResult.pores,
-            status: scoreStatus(offlineResult.pores),
+            percentage: realMetrics.pores,
+            status: scoreStatus(realMetrics.pores),
           },
           {
             label: '홍조',
-            percentage: offlineResult.erythema,
-            status: scoreStatus(offlineResult.erythema),
+            percentage: realMetrics.erythema,
+            status: scoreStatus(realMetrics.erythema),
           },
         ]
       : [...MEASUREMENT_RESULT.metrics]
@@ -44,7 +51,7 @@ export default function ResultCard() {
       ...metric,
       tone: metric.label === lowest.label ? 'primary' : 'dark',
     }))
-  const insight = offlineResult
+  const insight = realMetrics
     ? `${lowest.label} 지표가 세 항목 중 가장 낮은 상태예요. 12주 플랜을 구성할 때에는 이 지표를 1순위로 구성할 예정이에요!`
     : MEASUREMENT_RESULT.insight
 

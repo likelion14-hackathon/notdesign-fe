@@ -197,7 +197,7 @@ export default function SixWeekReportPage() {
                 type="button"
                 onClick={() =>
                   navigate('/measurement/plan-generating', {
-                    state: { mode: 'NEXT' },
+                    state: { mode: 'ADJUST' },
                   })
                 }
                 className="bg-primary text-off-white flex h-14.5 flex-1 items-center justify-center rounded-[10px] text-[15px] font-semibold tracking-[-0.3px] shadow-[0px_0px_4.2px_0px_rgba(115,115,115,0.25)]"

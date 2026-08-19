@@ -5,20 +5,25 @@ import PlanGeneratingCard from '@/features/measurement/components/PlanGenerating
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
-import { createPlan } from '@/features/plan/api'
+import { applyAdjustedPlan, createPlan } from '@/features/plan/api'
 import { usePlanStore } from '@/features/plan/store'
 import { DEFAULT_MONTHLY_BUDGET } from '@/features/plan/constants'
 import { ApiError } from '@/shared/api/apiError'
+import { queryClient } from '@/shared/api/queryClient'
 
 const MIN_LOADING_MS = 2400
 
 const NEXT_NO_FINAL_REPORT_MESSAGE =
   '12주 사이클을 마쳐야 다음 플랜을 만들 수 있어요'
+const ADJUST_NO_CURRENT_CYCLE_MESSAGE = '진행 중인 사이클이 없어요'
+
+type GeneratingMode = 'NEW' | 'NEXT' | 'ADJUST'
 
 interface PlanGeneratingLocationState {
   /** 'NEW': 12주 플랜 처음 만들기(기본값, 항상 성공한 것처럼 목업으로 진행)
-   *  'NEXT': FINAL 리포트 확인 후 다음 12주 플랜 만들기(실제 에러 처리) */
-  mode?: 'NEW' | 'NEXT'
+   *  'NEXT': FINAL 리포트 확인 후 다음 12주 플랜 만들기(실제 에러 처리)
+   *  'ADJUST': 6주차 MID 리포트에서 조정 플랜을 생성해 현재 사이클에 바로 적용(실제 에러 처리) */
+  mode?: GeneratingMode
 }
 
 export default function PlanGeneratingPage() {
@@ -27,7 +32,7 @@ export default function PlanGeneratingPage() {
   const mode = (location.state as PlanGeneratingLocationState | null)?.mode ?? 'NEW'
   const setCreatedPlan = usePlanStore((state) => state.setCreatedPlan)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
-  /** 404(C404, 직전 사이클 미종료)는 다시 시도해도 해결되지 않아 재시도 버튼을 숨긴다 */
+  /** 404(직전 사이클 미종료/진행 중 사이클 없음)는 다시 시도해도 해결되지 않아 재시도 버튼을 숨긴다 */
   const [isRetryable, setIsRetryable] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
   const hasRequestedRef = useRef(false)
@@ -74,12 +79,41 @@ export default function PlanGeneratingPage() {
       .finally(() => setIsRetrying(false))
   }
 
+  const runAdjust = () => {
+    createPlan({ mode: 'ADJUST' })
+      .then((plan) => applyAdjustedPlan(plan.planId))
+      .then(() => {
+        // currentWeek이 바뀌었으니 홈/플랜/정보 화면의 진행 상태 캐시를 갱신한다.
+        queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
+        navigate('/', { replace: true })
+      })
+      .catch((error: unknown) => {
+        if (error instanceof ApiError && error.code === 'C404') {
+          setErrorMessage(ADJUST_NO_CURRENT_CYCLE_MESSAGE)
+          setIsRetryable(false)
+        } else {
+          setErrorMessage(
+            error instanceof ApiError
+              ? error.message
+              : '플랜을 조정하지 못했어요. 다시 시도해주세요.',
+          )
+          setIsRetryable(true)
+        }
+      })
+      .finally(() => setIsRetrying(false))
+  }
+
   useEffect(() => {
     if (hasRequestedRef.current) return
     hasRequestedRef.current = true
 
     if (mode === 'NEXT') {
       runNext()
+      return
+    }
+
+    if (mode === 'ADJUST') {
+      runAdjust()
       return
     }
 
@@ -90,6 +124,12 @@ export default function PlanGeneratingPage() {
     if (isRetrying) return
     setIsRetrying(true)
     setErrorMessage(null)
+
+    if (mode === 'ADJUST') {
+      runAdjust()
+      return
+    }
+
     runNext()
   }
 
@@ -113,7 +153,7 @@ export default function PlanGeneratingPage() {
         </div>
       )}
 
-      {errorMessage && mode === 'NEXT' && isRetryable && (
+      {errorMessage && mode !== 'NEW' && isRetryable && (
         <BottomBar>
           <BottomButton onClick={handleRetry} disabled={isRetrying}>
             {isRetrying ? '다시 시도하는 중...' : '다시 시도하기'}
