@@ -4,12 +4,13 @@ import Logo from '@/shared/components/Logo'
 import BottomButton from '@/shared/components/BottomButton'
 import AnalyzingCard from '@/features/measurement/components/AnalyzingCard'
 import { getDiaryPhotoAnalysisResult } from '@/features/analyze/api'
+import {
+  ANALYZE_POLL_INTERVAL_MS,
+  ANALYZE_POLL_MAX_ATTEMPTS,
+} from '@/features/analyze/constants'
 import { mapAnalysisResultToDiaryScores } from '@/features/diary/mapping'
 import { useDiaryStore } from '@/features/diary/data/store'
 import { ApiError } from '@/shared/api/apiError'
-
-const POLL_INTERVAL_MS = 2500
-const POLL_TIMEOUT_MS = 45_000
 
 interface AnalyzeInProgressState {
   requestId?: string
@@ -35,9 +36,10 @@ export default function DiaryAnalyzeInProgress() {
 
     let cancelled = false
     let timer: ReturnType<typeof setTimeout> | undefined
-    const startedAt = Date.now()
+    let attempt = 0
 
     const poll = async () => {
+      attempt += 1
       try {
         const result = await getDiaryPhotoAnalysisResult(requestId)
         if (cancelled) return
@@ -55,13 +57,13 @@ export default function DiaryAnalyzeInProgress() {
         if (cancelled) return
 
         const status = error instanceof ApiError ? error.status : null
-        // 404는 "결과 없음/진행중/실패"가 다 섞여있어서, 타임아웃 전까지는 에러로 취급하지 않고 계속 폴링한다.
+        // 404는 "결과 없음/진행중/실패"가 다 섞여있어서, 최대 시도 횟수 전까지는 에러로 취급하지 않고 계속 폴링한다.
         if (status === 404) {
-          if (Date.now() - startedAt >= POLL_TIMEOUT_MS) {
+          if (attempt >= ANALYZE_POLL_MAX_ATTEMPTS) {
             setErrorMessage('분석에 실패했어요. 다시 시도해주세요.')
             return
           }
-          timer = setTimeout(poll, POLL_INTERVAL_MS)
+          timer = setTimeout(poll, ANALYZE_POLL_INTERVAL_MS)
           return
         }
 

@@ -4,12 +4,15 @@ import type { ReportResponseDto } from '@/features/report/types'
 
 /**
  * 진행 중인 사이클과 최근 측정 데이터를 기반으로 리포트(MID/FINAL)를 생성.
- * 리포트 종류는 서버가 결정.
+ * 리포트 종류는 서버가 결정. OpenAI 호출이 포함돼 오래 걸릴 수 있어
+ * 전역 타임아웃(10초) 대신 타임아웃 없음(0)으로 호출한다.
  */
 export async function createReport(): Promise<ReportResponseDto> {
   try {
     const { data } = await api.post<ApiEnvelope<ReportResponseDto>>(
       '/api/reports',
+      undefined,
+      { timeout: 0 },
     )
     return unwrap(data)
   } catch (error) {

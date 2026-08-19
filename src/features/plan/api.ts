@@ -7,6 +7,7 @@ import {
   type ApiEnvelope,
 } from '@/shared/api/apiError'
 import type {
+  AdjustPlanResult,
   CreatePlanParams,
   CreatePlanResult,
   CurrentPlanDetail,
@@ -54,6 +55,44 @@ export async function startPlan(planId: number): Promise<StartPlanResult> {
       )
     }
     throw apiError
+  }
+}
+
+/**
+ * 12주를 마친 현재 사이클을 종료하고, mode=NEXT로 생성해둔 planId로 새 사이클을 시작한다.
+ * 진행 중인 사이클이 아직 12주를 채우지 못했으면 409(C4094)로 거부된다.
+ */
+export async function startNextPlan(planId: number): Promise<StartPlanResult> {
+  try {
+    const { data } = await api.post<ApiEnvelope<StartPlanResult>>(
+      `/api/plans/${planId}/next`,
+    )
+    return unwrap(data)
+  } catch (error) {
+    const apiError = toApiError(error)
+    if (apiError.code === 'C4094') {
+      throw new ApiError(
+        '현재 진행 중인 플랜이 아직 끝나지 않았어요.',
+        apiError.code,
+        apiError.status,
+      )
+    }
+    throw apiError
+  }
+}
+
+/**
+ * 6주차 중간 리포트에서 받은 조정 플랜(mode=ADJUST로 생성한 planId)을
+ * 새 사이클로 만들지 않고 현재 진행 중인 사이클에 그대로 적용한다.
+ */
+export async function applyAdjustedPlan(planId: number): Promise<AdjustPlanResult> {
+  try {
+    const { data } = await api.post<ApiEnvelope<AdjustPlanResult>>(
+      `/api/plans/${planId}/adjust`,
+    )
+    return unwrap(data)
+  } catch (error) {
+    throw toApiError(error)
   }
 }
 

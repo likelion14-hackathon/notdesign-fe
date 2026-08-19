@@ -54,6 +54,16 @@ export interface StartPlanResult {
   startedAt: string
 }
 
+/**
+ * "조정 플랜 적용 및 시작" 응답. 새 사이클을 만드는 startPlan/startNextPlan과 달리
+ * 기존 사이클에 그대로 반영하는 API라 필드 구조가 다르다(processId/startedAt 없음).
+ */
+export interface AdjustPlanResult {
+  planId: number
+  /** 적용 시점의 진행 주차 */
+  currentWeek: number
+}
+
 export interface PlanProgress {
   /** 1부터 시작, 최대 totalWeeks */
   currentWeek: number
