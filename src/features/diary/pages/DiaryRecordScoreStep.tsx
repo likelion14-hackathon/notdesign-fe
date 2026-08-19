@@ -21,7 +21,7 @@ const STEPS = {
   redness: {
     title: '오늘 피부의 붉은기는 어땠나요?',
     label: '붉은기 점수',
-    next: '/diary/record/diary',
+    next: '/diary/record/checklist',
     field: 'redness',
   },
 } as const

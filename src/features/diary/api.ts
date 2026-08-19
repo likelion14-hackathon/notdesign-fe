@@ -1,5 +1,7 @@
 import { api } from '@/shared/api/axios'
+import { format } from 'date-fns'
 import {
+  ApiError,
   assertSuccess,
   toApiError,
   unwrap,
@@ -78,5 +80,20 @@ export async function getDiaryDetail(recordedDate: string): Promise<DiaryDetail>
     return unwrap(data)
   } catch (error) {
     throw toApiError(error)
+  }
+}
+
+/**
+ * 오늘 날짜로 기록 작성 여부를 확인한다. getDiaryDetail과 같은 엔드포인트를
+ * 오늘 날짜로 호출할 뿐이지만, 404(C404, 오늘 아직 기록 안 씀)는 진짜 에러가
+ * 아니라 정상적인 "미작성" 상태라 여기서 null로 변환해 던지지 않는다.
+ */
+export async function getTodayDiaryStatus(): Promise<DiaryDetail | null> {
+  const today = format(new Date(), 'yyyy-MM-dd')
+  try {
+    return await getDiaryDetail(today)
+  } catch (error) {
+    if (error instanceof ApiError && error.code === 'C404') return null
+    throw error
   }
 }

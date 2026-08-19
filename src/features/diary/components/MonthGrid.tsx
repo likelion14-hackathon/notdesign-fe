@@ -97,6 +97,13 @@ export default function MonthGrid({
                 <button
                   type="button"
                   {...rest}
+                  onClick={(event) => {
+                    rest.onClick?.(event)
+                    // react-day-picker의 mode="single"은 이미 선택된 날짜를 다시 누르면
+                    // 선택 해제(onSelect(undefined))로 처리해서 아무 반응이 없어 보인다.
+                    // 항상 그 날짜로 선택되도록 명시적으로 한 번 더 호출한다.
+                    onSelectDate(day.date)
+                  }}
                   className={`mx-auto flex size-9 items-center justify-center rounded-full text-base font-semibold ${
                     modifiers.selected
                       ? 'bg-primary text-off-white opacity-100'

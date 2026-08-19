@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { format } from 'date-fns'
+import { format, isToday } from 'date-fns'
 import BottomButton from '@/shared/components/BottomButton'
 import SkeletonBar from '@/shared/components/SkeletonBar'
 import { useDiaryStore } from '@/features/diary/data/store'
@@ -34,6 +34,7 @@ export default function RecordStatusCard({
 }: RecordStatusCardProps) {
   const navigate = useNavigate()
   const dateKey = format(selectedDate, 'yyyy-MM-dd')
+  const isSelectedToday = isToday(selectedDate)
   const startRecord = useDiaryStore((state) => state.startRecord)
   const {
     data: detail,
@@ -179,20 +180,24 @@ export default function RecordStatusCard({
             아직 기록하지 않았어요
           </p>
           <p className="text-text-secondary text-sm leading-4 whitespace-nowrap">
-            오늘의 하루를 기록해 볼까요?
+            {isSelectedToday
+              ? '오늘의 하루를 기록해 볼까요?'
+              : '그날은 기록을 남기지 않았어요'}
           </p>
         </div>
       </div>
-      <div className="mt-4">
-        <BottomButton
-          onClick={() => {
-            startRecord(dateKey)
-            navigate('/diary/photo-select')
-          }}
-        >
-          기록하기
-        </BottomButton>
-      </div>
+      {isSelectedToday && (
+        <div className="mt-4">
+          <BottomButton
+            onClick={() => {
+              startRecord(dateKey)
+              navigate('/diary/photo-select')
+            }}
+          >
+            기록하기
+          </BottomButton>
+        </div>
+      )}
     </div>
   )
 }

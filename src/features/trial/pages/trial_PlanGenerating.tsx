@@ -48,7 +48,7 @@ export default function Trial_PlanGenerating() {
       .then(([plan]) => {
         // TRIAL은 월 예산 개념이 없어서, NEW 전용 필드인 monthlyBudget은 0으로 둔다.
         setCreatedPlan(plan, 0)
-        navigate('/trial/plan-result', { replace: true })
+        navigate('/trial/plan-result', { replace: true, state: analysisResult })
       })
       .catch((error) => {
         const code = error instanceof ApiError ? error.code : null

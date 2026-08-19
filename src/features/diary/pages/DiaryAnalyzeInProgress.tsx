@@ -52,7 +52,7 @@ export default function DiaryAnalyzeInProgress() {
         setDryness(scores.dryness)
         setRedness(scores.redness)
 
-        navigate('/diary/record/diary', { replace: true })
+        navigate('/diary/record/checklist', { replace: true })
       } catch (error) {
         if (cancelled) return
 

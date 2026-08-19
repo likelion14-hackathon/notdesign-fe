@@ -5,7 +5,7 @@ interface DiaryRecordData {
   skinTone: number
   dryness: number
   redness: number
-  checklist: string[]
+  checkedTodoIds: number[]
   diaryText: string
 }
 
@@ -14,14 +14,15 @@ interface DiaryStore {
   skinTone: number
   dryness: number
   redness: number
-  checklist: string[]
+  /** "오늘 피부를 위해 어떤 것을 했나요?" 화면에서 체크한 현재 플랜 투두(checklistId) 목록 */
+  checkedTodoIds: number[]
   diaryText: string
   records: Record<string, DiaryRecordData>
   startRecord: (date: string) => void
   setSkinTone: (value: number) => void
   setDryness: (value: number) => void
   setRedness: (value: number) => void
-  toggleChecklistItem: (item: string) => void
+  toggleTodoId: (checklistId: number) => void
   setDiaryText: (value: string) => void
   submitRecord: () => void
 }
@@ -33,7 +34,7 @@ export const useDiaryStore = create<DiaryStore>()(
       skinTone: 5,
       dryness: 5,
       redness: 5,
-      checklist: [],
+      checkedTodoIds: [],
       diaryText: '',
       records: {},
       startRecord: (date) =>
@@ -42,17 +43,17 @@ export const useDiaryStore = create<DiaryStore>()(
           skinTone: 5,
           dryness: 5,
           redness: 5,
-          checklist: [],
+          checkedTodoIds: [],
           diaryText: '',
         }),
       setSkinTone: (value) => set({ skinTone: value }),
       setDryness: (value) => set({ dryness: value }),
       setRedness: (value) => set({ redness: value }),
-      toggleChecklistItem: (item) =>
+      toggleTodoId: (checklistId) =>
         set((state) => ({
-          checklist: state.checklist.includes(item)
-            ? state.checklist.filter((value) => value !== item)
-            : [...state.checklist, item],
+          checkedTodoIds: state.checkedTodoIds.includes(checklistId)
+            ? state.checkedTodoIds.filter((value) => value !== checklistId)
+            : [...state.checkedTodoIds, checklistId],
         })),
       setDiaryText: (value) => set({ diaryText: value }),
       submitRecord: () => {
@@ -61,7 +62,7 @@ export const useDiaryStore = create<DiaryStore>()(
           skinTone,
           dryness,
           redness,
-          checklist,
+          checkedTodoIds,
           diaryText,
           records,
         } = get()
@@ -73,7 +74,7 @@ export const useDiaryStore = create<DiaryStore>()(
               skinTone,
               dryness,
               redness,
-              checklist,
+              checkedTodoIds,
               diaryText,
             },
           },
