@@ -20,6 +20,7 @@ import type {
 /**
  * AI 12주 플랜을 생성한다. mode로 시나리오를 구분한다(NEW/NEXT/ADJUST/TRIAL).
  * 지금은 NEW만 실제로 쓰이며, monthlyBudget은 NEW 전용, skinTone/pores/redness는 TRIAL 전용이다.
+ * OpenAI 호출이 포함돼 오래 걸릴 수 있어 전역 타임아웃(10초) 대신 타임아웃 없음(0)으로 호출한다.
  */
 export async function createPlan(
   params: CreatePlanParams,
@@ -28,6 +29,7 @@ export async function createPlan(
     const { data } = await api.post<ApiEnvelope<CreatePlanResult>>(
       '/api/plans',
       params,
+      { timeout: 0 },
     )
     return unwrap(data)
   } catch (error) {
