@@ -1,23 +1,92 @@
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import PlanGeneratingCard from '@/features/measurement/components/PlanGeneratingCard'
 import Logo from '@/shared/components/Logo'
+import BottomButton from '@/shared/components/BottomButton'
+import { createPlan } from '@/features/plan/api'
+import { usePlanStore } from '@/features/plan/store'
+import { ApiError } from '@/shared/api/apiError'
+import type { DiaryAnalysisResult } from '@/features/analyze/types'
 
-/** 실제 API 연동 전까지 로딩 상태를 흉내 내는 시간(ms) */
-const SIMULATED_LOADING_MS = 2400
+const MIN_LOADING_MS = 2400
+
+const PLAN_ERROR_MESSAGE: Partial<Record<string, string>> = {
+  C5002: '플랜 생성에 실패했어요. 다시 시도해주세요.',
+}
 
 export default function Trial_PlanGenerating() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const analysisResult = location.state as DiaryAnalysisResult | null
+  const setCreatedPlan = usePlanStore((state) => state.setCreatedPlan)
+  const hasRequestedRef = useRef(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // replace: true — 로딩 화면은 실제 콘텐츠가 없는 과도 상태라 히스토리에 남기지 않습니다.
-      navigate('/trial/plan-result', { replace: true })
-    }, SIMULATED_LOADING_MS)
+    if (hasRequestedRef.current) return
+    hasRequestedRef.current = true
 
-    return () => clearTimeout(timer)
-  }, [navigate])
+    if (!analysisResult) {
+      const id = requestAnimationFrame(() => {
+        setErrorMessage('분석 결과를 찾을 수 없어요. 다시 촬영해주세요.')
+      })
+      return () => cancelAnimationFrame(id)
+    }
+
+    const apiPromise = createPlan({
+      mode: 'TRIAL',
+      skinTone: analysisResult.skinTone,
+      pores: analysisResult.pores,
+      redness: analysisResult.redness,
+    })
+    const minDelayPromise = new Promise((resolve) =>
+      setTimeout(resolve, MIN_LOADING_MS),
+    )
+
+    Promise.all([apiPromise, minDelayPromise])
+      .then(([plan]) => {
+        // TRIAL은 월 예산 개념이 없어서, NEW 전용 필드인 monthlyBudget은 0으로 둔다.
+        setCreatedPlan(plan, 0)
+        navigate('/trial/plan-result', { replace: true })
+      })
+      .catch((error) => {
+        const code = error instanceof ApiError ? error.code : null
+        const fallback =
+          error instanceof Error
+            ? error.message
+            : '플랜 생성에 실패했어요. 다시 시도해주세요.'
+        setErrorMessage((code && PLAN_ERROR_MESSAGE[code]) ?? fallback)
+      })
+  }, [])
+
+  if (errorMessage) {
+    const retryTo = analysisResult ? '/trial/request' : '/trial/capture'
+
+    return (
+      <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
+        <Logo />
+
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 text-center">
+          <p className="text-text-primary text-base font-semibold break-keep">
+            {errorMessage}
+          </p>
+          <div className="w-full max-w-60">
+            <BottomButton
+              onClick={() =>
+                navigate(retryTo, {
+                  replace: true,
+                  state: analysisResult,
+                })
+              }
+            >
+              다시 시도하기
+            </BottomButton>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">

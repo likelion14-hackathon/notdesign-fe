@@ -18,6 +18,15 @@ export interface PlanItem {
   reason: string
 }
 
+export interface PlanTodo {
+  checklistId: number
+  category: PlanItemCategory
+  categoryName: string
+  content: string
+  /** 하루 기록 작성 전 조회용이라 서버는 항상 false로 준다. 실제 체크 여부는 프론트에서 로컬로 관리한다. */
+  done: boolean
+}
+
 export interface CreatePlanResult {
   planId: number
   mode: PlanMode

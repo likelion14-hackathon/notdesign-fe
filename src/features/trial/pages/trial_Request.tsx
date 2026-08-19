@@ -1,13 +1,16 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
 import { useAuthStore } from '@/features/auth/store'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
+import type { DiaryAnalysisResult } from '@/features/analyze/types'
 
 function Trial_Request() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const analysisResult = location.state as DiaryAnalysisResult | null
   const userName = useAuthStore((state) => state.name)
   const givenName = userName ?? MEASUREMENT_RESULT.givenName
 
@@ -28,7 +31,11 @@ function Trial_Request() {
       />
 
       <BottomBar>
-        <BottomButton onClick={() => navigate('/trial/plan-generating')}>
+        <BottomButton
+          onClick={() =>
+            navigate('/trial/plan-generating', { state: analysisResult })
+          }
+        >
           생성하기
         </BottomButton>
       </BottomBar>

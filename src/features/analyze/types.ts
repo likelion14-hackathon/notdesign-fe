@@ -1,12 +1,26 @@
-export interface AnalyzeRequest {
-  imageUrl: string
-}
-
-export interface AnalyzeRequestResult {
+export interface AnalyzeDiaryResult {
   requestId: string
 }
 
-/** GET /analyses/{requestId} 명세가 확정되면 실제 필드로 채움. */
-export type AnalyzeResult = unknown
+export interface DiaryAnalysisResult {
+  skinTone: number
+  pores: number
+  redness: number
+  confidence: {
+    skinTone: number
+    pores: number
+    redness: number
+  }
+}
 
-export type AnalyzeStatus = 'pending' | 'done' | 'timeout'
+/** GET /api/analyses/{requestId} (diary 사진 분석 결과 조회) 응답. 0~100 스케일. */
+export interface DiaryPhotoAnalysisResult {
+  pigmentation: number
+  erythema: number
+  pores: number
+  confidence: {
+    pigmentation: number
+    erythema: number
+    pores: number
+  }
+}

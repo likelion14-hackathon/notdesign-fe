@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import AnalyzingCard from '@/features/measurement/components/AnalyzingCard'
-import FlowHeader from '@/features/measurement/components/FlowHeader'
 import Logo from '@/shared/components/Logo'
 import BottomButton from '@/shared/components/BottomButton'
-import { getDiaryAnalysisResult } from '@/features/analyze/api'
+import AnalyzingCard from '@/features/measurement/components/AnalyzingCard'
+import { getDiaryPhotoAnalysisResult } from '@/features/analyze/api'
+import { mapAnalysisResultToDiaryScores } from '@/features/diary/mapping'
+import { useDiaryStore } from '@/features/diary/data/store'
 import { ApiError } from '@/shared/api/apiError'
 
 const POLL_INTERVAL_MS = 2500
@@ -14,11 +15,14 @@ interface AnalyzeInProgressState {
   requestId?: string
 }
 
-function Trial_AnalyzeInProgress() {
+export default function DiaryAnalyzeInProgress() {
   const navigate = useNavigate()
   const location = useLocation()
   const requestId = (location.state as AnalyzeInProgressState | null)
     ?.requestId
+  const setSkinTone = useDiaryStore((state) => state.setSkinTone)
+  const setDryness = useDiaryStore((state) => state.setDryness)
+  const setRedness = useDiaryStore((state) => state.setRedness)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   useEffect(() => {
@@ -35,19 +39,26 @@ function Trial_AnalyzeInProgress() {
 
     const poll = async () => {
       try {
-        const result = await getDiaryAnalysisResult(requestId)
+        const result = await getDiaryPhotoAnalysisResult(requestId)
         if (cancelled) return
-        navigate('/trial/analyze/complete', { replace: true, state: result })
+
+        const scores = mapAnalysisResultToDiaryScores(result)
+        console.log('[diary-analyze] raw result (0~100):', result)
+        console.log('[diary-analyze] mapped store scores (0~10):', scores)
+
+        setSkinTone(scores.skinTone)
+        setDryness(scores.dryness)
+        setRedness(scores.redness)
+
+        navigate('/diary/record/diary', { replace: true })
       } catch (error) {
         if (cancelled) return
 
         const status = error instanceof ApiError ? error.status : null
-        // 404는 "아직 분석이 안 끝남"을 의미할 수도 있어서, 타임아웃 전까지는 에러로 취급하지 않고 계속 폴링한다.
+        // 404는 "결과 없음/진행중/실패"가 다 섞여있어서, 타임아웃 전까지는 에러로 취급하지 않고 계속 폴링한다.
         if (status === 404) {
           if (Date.now() - startedAt >= POLL_TIMEOUT_MS) {
-            setErrorMessage(
-              '분석이 지연되고 있어요. 잠시 후 다시 시도해주세요.',
-            )
+            setErrorMessage('분석에 실패했어요. 다시 시도해주세요.')
             return
           }
           timer = setTimeout(poll, POLL_INTERVAL_MS)
@@ -68,10 +79,10 @@ function Trial_AnalyzeInProgress() {
       cancelled = true
       if (timer) clearTimeout(timer)
     }
-  }, [requestId, navigate])
+  }, [requestId, navigate, setSkinTone, setDryness, setRedness])
 
   return (
-    <div className="bg-off-white min-h-screen-safe mx-auto flex w-full max-w-103.5 flex-col">
+    <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-103.5 flex-col overflow-hidden">
       <Logo />
 
       {errorMessage ? (
@@ -81,7 +92,9 @@ function Trial_AnalyzeInProgress() {
           </p>
           <div className="w-full max-w-60">
             <BottomButton
-              onClick={() => navigate('/trial/capture', { replace: true })}
+              onClick={() =>
+                navigate('/diary/photo-capture', { replace: true })
+              }
             >
               다시 시도하기
             </BottomButton>
@@ -89,11 +102,14 @@ function Trial_AnalyzeInProgress() {
         </div>
       ) : (
         <>
-          <FlowHeader
-            eyebrow="체험해보기"
-            title="사진을 분석하고 있어요"
-            showBack={false}
-          />
+          <div className="mt-7.5 pl-5">
+            <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
+              오늘의 기록
+            </span>
+            <p className="text-text-primary mt-2.5 text-2xl leading-[1.67] font-semibold">
+              분석 중이에요...
+            </p>
+          </div>
 
           <div className="mt-21.25 px-5">
             <AnalyzingCard />
@@ -103,5 +119,3 @@ function Trial_AnalyzeInProgress() {
     </div>
   )
 }
-
-export default Trial_AnalyzeInProgress

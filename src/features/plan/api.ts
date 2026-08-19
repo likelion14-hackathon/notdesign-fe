@@ -12,6 +12,7 @@ import type {
   CurrentPlanDetail,
   CurrentPlanStats,
   CurrentPlanSummary,
+  PlanTodo,
   StartPlanResult,
 } from '@/features/plan/types'
 
@@ -102,6 +103,25 @@ export async function getCurrentPlanStats(): Promise<CurrentPlanStats | null> {
   try {
     const { data } = await api.get<ApiEnvelope<CurrentPlanStats>>(
       '/api/plans/current/stats',
+    )
+    return unwrap(data)
+  } catch (error) {
+    const apiError = toApiError(error)
+    if (apiError.code === 'C404') {
+      return null
+    }
+    throw apiError
+  }
+}
+
+/**
+ * 진행 중인 플랜에서 오늘 실천할 체크리스트 목록을 조회한다 (하루 기록 작성 화면용).
+ * 진행 중인 플랜이 없으면(404 C404) 에러로 던지지 않고 null을 반환한다 — 정상적인 빈 상태이기 때문이다.
+ */
+export async function getCurrentPlanTodos(): Promise<PlanTodo[] | null> {
+  try {
+    const { data } = await api.get<ApiEnvelope<PlanTodo[]>>(
+      '/api/plans/current/todos',
     )
     return unwrap(data)
   } catch (error) {

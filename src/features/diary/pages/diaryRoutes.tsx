@@ -13,6 +13,9 @@ const DiaryPhotoCapture = lazy(
 const DiaryPhotoCaptureComplete = lazy(
   () => import('@/features/diary/pages/DiaryPhotoCaptureComplete'),
 )
+const DiaryAnalyzeInProgress = lazy(
+  () => import('@/features/diary/pages/DiaryAnalyzeInProgress'),
+)
 const DiaryRecordScoreStep = lazy(
   () => import('@/features/diary/pages/DiaryRecordScoreStep'),
 )
@@ -43,6 +46,11 @@ export const DiaryRoutes: RouteObject[] = [
     path: 'photo-capture/complete',
     element: withSuspense(<DiaryPhotoCaptureComplete />),
     handle: { title: '오늘의 기록' },
+  },
+  {
+    path: 'analyze',
+    element: withSuspense(<DiaryAnalyzeInProgress />),
+    handle: { title: '분석 중' },
   },
   {
     path: 'record/:step',
