@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import kakaoLogo from '@/shared/assets/icons/kakao-logo.svg'
 import SocialLoginButton from '@/features/onboard/components/SocialLoginButton'
 import { useSlideUpModal } from '@/features/onboard/data/useSlideUpModal'
@@ -44,6 +44,24 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const [emailError, setEmailError] = useState(false)
   const [passwordError, setPasswordError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  /**
+   * 입력창에 포커스가 잡히면 iOS가 그 입력창을 보이게 하려고 페이지 자체를
+   * 스크롤시킨다. 모달이 열려있는 동안은 그 스크롤을 즉시 원위치로 되돌려
+   * 배경 페이지가 움직이지 않게 한다.
+   */
+  useEffect(() => {
+    if (!isOpen) return
+
+    const resetScroll = () => {
+      if (window.scrollY !== 0 || window.scrollX !== 0) {
+        window.scrollTo(0, 0)
+      }
+    }
+
+    window.addEventListener('scroll', resetScroll)
+    return () => window.removeEventListener('scroll', resetScroll)
+  }, [isOpen])
 
   if (!shouldRender) return null
 

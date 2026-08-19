@@ -6,17 +6,16 @@ import Logo from '@/shared/components/Logo'
 import BottomButton from '@/shared/components/BottomButton'
 import { importOfflineResult } from '@/features/measurement/api/results'
 import { useMeasurementStore } from '@/features/measurement/store'
+import { createReport } from '@/features/report/api'
+import { useReportStore } from '@/features/report/store'
 import { ApiError } from '@/shared/api/apiError'
-
-/** 실제 API 연동 전까지 로딩 상태를 보여주는 시간(ms). */
-const SIMULATED_LOADING_MS = 2400
 
 const NOT_FOUND_MESSAGE =
   '선택하신 클리닉에서 아직 측정 데이터를 확인할 수 없어요.'
 
 interface ProcessingLocationState {
-  /** 'import': 클리닉 선택→동의를 거쳐 새 측정 결과를 불러오는 흐름(이 화면에서 실제 API 호출)
-   *  'report': 기존 플랜의 리포트를 재생성하는 흐름(과거부터 있던 로딩 연출, API 미연동) */
+  /** 'import': 클리닉 선택→동의를 거쳐 새 측정 결과를 불러오는 흐름
+   *  'report': 기존 플랜의 리포트를 재생성하는 흐름(POST /api/reports 호출) */
   flow?: 'import' | 'report'
 }
 
@@ -26,19 +25,43 @@ export default function ImportProcessingPage() {
   const flow = (location.state as ProcessingLocationState | null)?.flow ?? 'report'
   const selectedClinicId = useMeasurementStore((state) => state.selectedClinicId)
   const setOfflineResult = useMeasurementStore((state) => state.setOfflineResult)
+  const setLatestReport = useReportStore((state) => state.setLatestReport)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const hasRequestedRef = useRef(false)
 
   useEffect(() => {
-    if (flow === 'report') {
-      const timer = setTimeout(() => {
-        navigate('/measurement/report-generating', { replace: true })
-      }, SIMULATED_LOADING_MS)
-      return () => clearTimeout(timer)
-    }
-
     if (hasRequestedRef.current) return
     hasRequestedRef.current = true
+
+    if (flow === 'report') {
+      createReport()
+        .then((report) => {
+          setLatestReport(report)
+          navigate('/measurement/report-generating', { replace: true })
+        })
+        .catch((error: unknown) => {
+          if (error instanceof ApiError && error.code === 'C4095') {
+            navigate('/measurement/report-import-failed', {
+              replace: true,
+              state: { reason: 'no_new_data' },
+            })
+            return
+          }
+          if (error instanceof ApiError && error.code === 'C404') {
+            navigate('/measurement/report-import-failed', {
+              replace: true,
+              state: { reason: 'no_cycle' },
+            })
+            return
+          }
+          setErrorMessage(
+            error instanceof ApiError
+              ? error.message
+              : '리포트를 생성하지 못했어요. 다시 시도해주세요.',
+          )
+        })
+      return
+    }
 
     importOfflineResult(selectedClinicId ?? undefined)
       .then((result) => {
