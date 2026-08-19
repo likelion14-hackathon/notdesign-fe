@@ -6,9 +6,7 @@ import { queryClient } from '@/shared/api/queryClient'
 import '@/shared/styles/index.css'
 
 if (import.meta.env.DEV && import.meta.env.VITE_TEST_TOKEN) {
-  if (!localStorage.getItem('accessToken')) {
-    localStorage.setItem('accessToken', import.meta.env.VITE_TEST_TOKEN)
-  }
+  localStorage.setItem('accessToken', import.meta.env.VITE_TEST_TOKEN)
 }
 
 createRoot(document.getElementById('root')!).render(

@@ -11,6 +11,7 @@ export interface ApiEnvelope<T> {
 const DEFAULT_MESSAGE_BY_STATUS: Record<number, string> = {
   400: '요청 내용을 확인해주세요.',
   401: '로그인이 필요합니다. 다시 로그인해주세요.',
+  403: '접근 권한이 없습니다.',
   500: '서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
   502: '서버 연결에 실패했습니다. 잠시 후 다시 시도해주세요.',
 }

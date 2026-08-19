@@ -1,9 +1,15 @@
 import { WEEK_SCORE_METRICS } from '@/features/measurement/constants'
+import type { WeekScoreMetric } from '@/features/measurement/types'
 
-export default function WeekScoreCards() {
+interface WeekScoreCardsProps {
+  /** 없으면 기존 목업을 보여줌 */
+  metrics?: WeekScoreMetric[]
+}
+
+export default function WeekScoreCards({ metrics }: WeekScoreCardsProps) {
   return (
     <div className="flex gap-2.5 px-5">
-      {WEEK_SCORE_METRICS.map((metric) => (
+      {(metrics ?? WEEK_SCORE_METRICS).map((metric) => (
         <div
           key={metric.label}
           className={`flex min-w-0 flex-1 flex-col gap-2.75 rounded-[10px] px-5 py-4.75 ${
