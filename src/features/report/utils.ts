@@ -1,3 +1,4 @@
+import { PLAN_CATEGORY_TAG } from '@/features/measurement/constants'
 import type {
   ActionTimelineRow,
   ContributionItem,
@@ -15,6 +16,13 @@ import type {
 } from '@/features/report/types'
 
 const REPORT_TIMELINE_WEEKS = 12
+
+const CATEGORY_ORDER: PlanCategory[] = [
+  'procedure',
+  'lifestyle',
+  'homecare',
+  'supplement',
+]
 
 const CATEGORY_FROM_API: Record<ReportCategory, PlanCategory> = {
   PROCEDURE: 'procedure',
@@ -100,17 +108,29 @@ export function buildCostItems(contributions: ReportContribution[]): CostItem[] 
   }))
 }
 
-/** "12주 동안 어떻게 실천했을까요?" 타임라인. executions[].doneWeeks 기반 */
+/**
+ * "12주 동안 어떻게 실천했을까요?" 타임라인. 12주 플랜 타임라인(PlanTimelineSection)과
+ * 동일하게 카테고리별로 묶어 "시술/생활 습관/홈케어/영양제" 4줄로 보여준다.
+ * executions[].doneWeeks 기반.
+ */
 export function buildExecutionTimelineRows(
   executions: ReportExecution[],
 ): ActionTimelineRow[] {
-  return executions.map((execution) => {
-    const doneWeekSet = new Set(execution.doneWeeks)
+  return CATEGORY_ORDER.map((category) => {
+    const categoryExecutions = executions.filter(
+      (execution) => CATEGORY_FROM_API[execution.category] === category,
+    )
+    if (categoryExecutions.length === 0) return null
+
+    const doneWeekSet = new Set(
+      categoryExecutions.flatMap((execution) => execution.doneWeeks),
+    )
+
     return {
-      label: execution.name,
+      label: PLAN_CATEGORY_TAG[category].label,
       activeWeeks: Array.from({ length: REPORT_TIMELINE_WEEKS }, (_, index) =>
         doneWeekSet.has(index + 1),
       ),
     }
-  })
+  }).filter((row): row is ActionTimelineRow => row !== null)
 }
