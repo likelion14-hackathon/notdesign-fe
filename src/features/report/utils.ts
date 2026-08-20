@@ -44,10 +44,6 @@ const RELIABILITY_TONE: Record<ReportReliability, 'high' | 'medium'> = {
   LOW: 'medium',
 }
 
-function formatDeltaLabel(delta: number): string {
-  return `${delta > 0 ? '+' : ''}${delta}점`
-}
-
 /** delta(변화량)가 가장 작은(=가장 많이 개선된) 지표를 강조 표시한다 */
 function buildScoreStatuses(metrics: ReportMetric[]): boolean[] {
   if (metrics.length === 0) return []
@@ -91,8 +87,9 @@ export function buildFinalScoreMetrics(
   return metrics.map((metric, index) => ({
     improvement: metric.improvement,
     label: metric.improvementName,
-    scoreLabel: formatDeltaLabel(metric.delta),
-    beforeAfter: `${metric.before} → ${metric.after}`,
+    delta: metric.delta,
+    before: metric.before,
+    after: metric.after,
     status: emphasizedFlags[index] ? '가장 개선됨' : '보통',
   }))
 }
@@ -105,19 +102,9 @@ export function buildWeekScoreMetrics(
   return metrics.map((metric, index) => ({
     improvement: metric.improvement,
     label: metric.improvementName,
-    scoreLabel: formatDeltaLabel(metric.delta),
+    delta: metric.delta,
     status: emphasizedFlags[index] ? '가장 개선됨' : '보통',
   }))
-}
-
-/** 기여 점수. 음수(-5.59)는 지표가 그만큼 내려갔다(개선됐다)는 뜻이다 */
-function formatContributionScore(score: number): string {
-  if (score === 0) return '기여하지 않음'
-  return `${score > 0 ? '+' : ''}${score.toFixed(2)}점`
-}
-
-function formatContributionRate(rate: number): string {
-  return `${Number(rate.toFixed(1))}% 기여`
 }
 
 /** "어떤 노력이 기여했을까요?" 목록 */
@@ -127,7 +114,8 @@ export function buildContributionItems(
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,
-    scoreLabel: formatContributionScore(item.score),
+    score: item.score,
+    contributionRate: item.contributionRate,
     confidence:
       item.score !== 0
         ? {
@@ -135,18 +123,7 @@ export function buildContributionItems(
             tone: RELIABILITY_TONE[item.reliability],
           }
         : undefined,
-    note:
-      item.score !== 0
-        ? formatContributionRate(item.contributionRate)
-        : '지표 변화가 관측되지 않음',
   }))
-}
-
-function formatCostPerPoint(costPerPoint: number): string {
-  if (costPerPoint <= 0) return '비용 없음'
-  if (costPerPoint < 10_000)
-    return `${costPerPoint.toLocaleString('ko-KR')}원/점`
-  return `${(costPerPoint / 10_000).toFixed(1)}만원/점`
 }
 
 /** "1점 개선에 든 비용" 목록. contributions[].costPerPoint 기반 */
@@ -156,7 +133,7 @@ export function buildCostItems(
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,
-    cost: formatCostPerPoint(item.costPerPoint),
+    costPerPoint: item.costPerPoint,
   }))
 }
 
