@@ -8,6 +8,10 @@ export interface KakaoSigninRequest {
   code: string
 }
 
+export interface RefreshRequest {
+  refreshToken: string
+}
+
 export interface SigninResult {
   accessToken: string
   refreshToken: string

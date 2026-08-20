@@ -100,9 +100,12 @@ export interface FinalScoreMetric {
   status: string
 }
 
+/** 실천 타임라인 한 칸의 상태 */
+export type ActionTimelineWeek = 'done' | 'planned' | 'none'
+
 /** "12주 동안 어떻게 실천했을까요?" 차트의 한 줄 */
 export interface ActionTimelineRow {
   label: string
-  /** 1주차~12주차 활성 여부 (길이 12) */
-  activeWeeks: boolean[]
+  /** 1주차~12주차 상태 (길이 12) */
+  weeks: ActionTimelineWeek[]
 }
