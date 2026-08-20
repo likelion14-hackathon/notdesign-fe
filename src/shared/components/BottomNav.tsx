@@ -45,7 +45,7 @@ export default function BottomNav({ current, onSelect }: BottomNavProps) {
             type="button"
             onClick={() => onSelect?.(tab.id)}
             aria-current={selected ? 'page' : undefined}
-            className={`gap-1.875 flex flex-1 flex-col items-center justify-center rounded-[100px] ${
+            className={`gap-[7.5px] flex flex-1 flex-col items-center justify-center rounded-[100px] ${
               selected ? 'bg-primary' : ''
             }`}
           >
