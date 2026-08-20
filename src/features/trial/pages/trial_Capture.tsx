@@ -4,6 +4,7 @@ import BottomButton from '@/shared/components/BottomButton'
 import personSilhouette from '@/shared/assets/icons/person.svg'
 import { useNavigate } from 'react-router-dom'
 import { analyzeDiaryImage } from '@/features/analyze/api'
+import { useScrollLock } from '@/shared/hooks/useScrollLock'
 import { ApiError } from '@/shared/api/apiError'
 
 const ANALYZE_ERROR_MESSAGE: Partial<Record<string, string>> = {
@@ -38,6 +39,7 @@ function Trial_Capture() {
   const [cameraError, setCameraError] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  useScrollLock()
 
   useEffect(() => {
     let cancelled = false
@@ -92,29 +94,25 @@ function Trial_Capture() {
   }
 
   return (
-    <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden">
+    <div className="bg-off-white fixed inset-0 mx-auto flex w-full max-w-md flex-col overflow-hidden">
       <Logo />
 
       {/* 제목 영역 */}
-      <div className="mt-7.5 pl-5">
-        <div className="h-4.5 w-16">
-          <span className="text-text-secondary font-sans text-base font-semibold whitespace-nowrap">
-            체험해보기
-          </span>
-        </div>
+      <div className="shrink-0 pl-5">
+        <span className="text-text-secondary font-sans text-base font-semibold whitespace-nowrap">
+          체험해보기
+        </span>
 
-        <div className="mt-2.5 h-10 w-69">
-          <p className="text-text-primary font-sans text-2xl leading-[1.67] font-semibold">
-            표시선에 얼굴을 맞춰주세요
-          </p>
-        </div>
+        <p className="text-text-primary mt-2.5 font-sans text-2xl leading-[1.67] font-semibold">
+          표시선에 얼굴을 맞춰주세요
+        </p>
       </div>
 
       {/* 원형 가이드 영역 */}
-      <div className="mt-24.75 flex justify-center">
-        <div className="bg-primary relative flex h-93.5 w-93.5 items-center justify-center rounded-full">
-          <div className="bg-off-white flex h-87.5 w-87.5 items-center justify-center rounded-full">
-            <div className="bg-outline relative h-83.5 w-83.5 overflow-hidden rounded-full">
+      <div className="flex min-h-0 flex-1 items-center justify-center px-5">
+        <div className="bg-primary relative flex aspect-square w-full max-w-93.5 items-center justify-center rounded-full">
+          <div className="bg-off-white flex h-[93.6%] w-[93.6%] items-center justify-center rounded-full">
+            <div className="bg-outline relative h-[95.4%] w-[95.4%] overflow-hidden rounded-full">
               {cameraError ? (
                 <img
                   src={personSilhouette}
@@ -136,7 +134,7 @@ function Trial_Capture() {
       </div>
 
       {/* 안내 문구 */}
-      <div className="mt-6.5 flex justify-center px-8">
+      <div className="flex shrink-0 justify-center px-8">
         <p
           className={`max-w-70 text-center font-sans text-xs ${uploadError ? 'text-red-500' : 'text-text-secondary'}`}
         >
@@ -147,7 +145,7 @@ function Trial_Capture() {
       </div>
 
       {/* 촬영하기 버튼 */}
-      <div className="mt-auto px-5 pb-10">
+      <div className="shrink-0 px-5 pt-6.5 pb-[max(40px,env(safe-area-inset-bottom))]">
         <BottomButton
           onClick={handleCapture}
           disabled={isUploading || Boolean(cameraError)}

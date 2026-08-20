@@ -4,6 +4,7 @@ import Logo from '@/shared/components/Logo'
 import BottomButton from '@/shared/components/BottomButton'
 import personSilhouette from '@/shared/assets/icons/person.svg'
 import { requestDiaryAnalysis } from '@/features/analyze/api'
+import { useScrollLock } from '@/shared/hooks/useScrollLock'
 import { ApiError } from '@/shared/api/apiError'
 
 const ANALYZE_ERROR_MESSAGE: Partial<Record<string, string>> = {
@@ -38,6 +39,7 @@ export default function DiaryPhotoCapture() {
   const [cameraError, setCameraError] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  useScrollLock()
 
   useEffect(() => {
     let cancelled = false
@@ -92,10 +94,10 @@ export default function DiaryPhotoCapture() {
   }
 
   return (
-    <div className="bg-off-white relative mx-auto flex h-dvh w-full max-w-103.5 flex-col overflow-hidden">
+    <div className="bg-off-white fixed inset-0 mx-auto flex w-full max-w-103.5 flex-col overflow-hidden">
       <Logo />
 
-      <div className="mt-7.5 pl-5">
+      <div className="shrink-0 pl-5">
         <span className="text-text-secondary text-base font-semibold whitespace-nowrap">
           오늘의 기록
         </span>
@@ -104,10 +106,10 @@ export default function DiaryPhotoCapture() {
         </p>
       </div>
 
-      <div className="mt-24.75 flex justify-center">
-        <div className="bg-primary relative flex h-93.5 w-93.5 items-center justify-center rounded-full">
-          <div className="bg-off-white flex h-87.5 w-87.5 items-center justify-center rounded-full">
-            <div className="bg-outline relative h-83.5 w-83.5 overflow-hidden rounded-full">
+      <div className="flex min-h-0 flex-1 items-center justify-center px-5">
+        <div className="bg-primary relative flex aspect-square w-full max-w-93.5 items-center justify-center rounded-full">
+          <div className="bg-off-white flex h-[93.6%] w-[93.6%] items-center justify-center rounded-full">
+            <div className="bg-outline relative h-[95.4%] w-[95.4%] overflow-hidden rounded-full">
               {cameraError ? (
                 <img
                   src={personSilhouette}
@@ -128,17 +130,17 @@ export default function DiaryPhotoCapture() {
         </div>
       </div>
 
-      <div className='mt-6.5 flex justify-center px-8'>
+      <div className="flex shrink-0 justify-center px-8">
         <p
           className={`max-w-70 text-center text-xs ${uploadError ? 'text-red-500' : 'text-text-secondary'}`}
         >
           {uploadError ??
             cameraError ??
-            "표시선에 얼굴이 인식되면 자동으로 촬영돼요"}
+            '표시선에 얼굴이 인식되면 자동으로 촬영돼요'}
         </p>
       </div>
 
-      <div className="mt-auto px-5 pb-10">
+      <div className="shrink-0 px-5 pt-6.5 pb-[max(40px,env(safe-area-inset-bottom))]">
         <BottomButton
           onClick={handleCapture}
           disabled={isUploading || Boolean(cameraError)}

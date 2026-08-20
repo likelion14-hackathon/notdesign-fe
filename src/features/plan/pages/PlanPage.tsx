@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import PlanCostCards from '@/features/measurement/components/PlanCostCards'
 import PlanDetailSection from '@/features/measurement/components/PlanDetailSection'
 import PlanScoreCards from '@/features/measurement/components/PlanScoreCards'
@@ -8,17 +9,31 @@ import {
   PLAN_TAB_TITLE,
 } from '@/features/plan/constants'
 import { useCurrentPlanDetail } from '@/features/plan/hooks/useCurrentPlanDetail'
-import { buildDetailItems, buildTimelineRows, formatManwon } from '@/features/plan/utils'
+import {
+  buildDetailItems,
+  buildTimelineRows,
+  formatManwon,
+} from '@/features/plan/utils'
 import { rankByLowest } from '@/features/measurement/priorityLabels'
 import { ApiError } from '@/shared/api/apiError'
 import BottomBar from '@/shared/components/BottomBar'
 import type { NavTabId } from '@/shared/components/BottomNav'
 import BottomNav from '@/shared/components/BottomNav'
 import Logo from '@/shared/components/Logo'
+import Toast from '@/shared/components/Toast'
+
+interface PlanLocationState {
+  /** 플랜을 새로 시작한 직후 한 번만 보여주는 안내 문구 */
+  toast?: string
+}
 
 export default function PlanPage() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { data: plan, isLoading, error } = useCurrentPlanDetail()
+  const [toastMessage] = useState(
+    () => (location.state as PlanLocationState | null)?.toast ?? null,
+  )
 
   const handleSelectTab = (id: NavTabId) => {
     if (id === 'home') navigate('/')
@@ -37,7 +52,10 @@ export default function PlanPage() {
   // 서버 응답에 월 예상 금액이 없어서, 총 금액을 12주=3개월 기준으로 환산해서 보여줌.
   const costSummary = plan
     ? {
-        total: { label: '총 금액 (12주)', amount: formatManwon(plan.totalPrice) },
+        total: {
+          label: '총 금액 (12주)',
+          amount: formatManwon(plan.totalPrice),
+        },
         monthly: {
           label: '1달 예상 금액',
           amount: formatManwon(Math.round(plan.totalPrice / 3)),
@@ -116,7 +134,14 @@ export default function PlanPage() {
       </div>
 
       <BottomBar>
-        <BottomNav current="plan" onSelect={handleSelectTab} />
+        <div className="flex flex-col gap-3.75">
+          {toastMessage && (
+            <div className="flex justify-center">
+              <Toast message={toastMessage} />
+            </div>
+          )}
+          <BottomNav current="plan" onSelect={handleSelectTab} />
+        </div>
       </BottomBar>
     </div>
   )
