@@ -74,7 +74,7 @@ export default function MonthGrid({
           disabled: 'text-text-secondary',
         }}
         components={{
-          Nav: () => null,
+          Nav: () => <></>,
           DayButton: (props) => {
             const { day, modifiers, ...rest } = props
             const recorded = isRecorded(day.date)
