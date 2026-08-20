@@ -1,9 +1,10 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
 import { WELLNESS_YEARLY_SPEND_REVEAL } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
+import { useRevealOnce } from '@/features/wellness/useRevealOnce'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import { useUserName } from '@/features/auth/useUserName'
 import Logo from '@/shared/components/Logo'
@@ -15,16 +16,8 @@ export default function WellnessYearlySpendRevealPage() {
   const { wasteCost, yearlySpend } = useWellnessResult()
   const userName = useUserName()
 
-  const [displayWasteCost, setDisplayWasteCost] = useState(0)
-  const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setDisplayWasteCost(Math.round(wasteCost))
-      setDisplayYearlySpend(Math.round(yearlySpend))
-    })
-    return () => cancelAnimationFrame(id)
-  }, [wasteCost, yearlySpend])
+  const displayWasteCost = useRevealOnce('wasteCost', wasteCost)
+  const displayYearlySpend = useRevealOnce('yearlySpend', yearlySpend)
 
   useEffect(() => {
     const timer = setTimeout(() => {

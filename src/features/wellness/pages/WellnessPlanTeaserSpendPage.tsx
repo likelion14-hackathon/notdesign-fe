@@ -1,10 +1,11 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
 import rocket from '@/shared/assets/images/rocket.png'
 import { WELLNESS_PLAN_TEASER_SPEND } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
+import { useRevealOnce } from '@/features/wellness/useRevealOnce'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import Logo from '@/shared/components/Logo'
 
@@ -15,14 +16,7 @@ export default function WellnessPlanTeaserSpendPage() {
   const navigate = useNavigate()
   const { yearlySpend } = useWellnessResult()
 
-  const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setDisplayYearlySpend(Math.round(yearlySpend))
-    })
-    return () => cancelAnimationFrame(id)
-  }, [yearlySpend])
+  const displayYearlySpend = useRevealOnce('plan-yearlySpend', yearlySpend)
 
   useEffect(() => {
     const timer = setTimeout(() => {
