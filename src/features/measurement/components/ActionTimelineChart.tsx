@@ -1,18 +1,16 @@
-import {
-  FINAL_REPORT_TIMELINE_ROWS,
-  PLAN_TIMELINE_WEEK_MARKERS,
-} from '@/features/measurement/constants'
+import { PLAN_TIMELINE_WEEK_MARKERS } from '@/features/measurement/constants'
 import type { ActionTimelineRow } from '@/features/measurement/types'
 
 const LABEL_COLUMN = 'w-24.5 shrink-0'
 
 interface ActionTimelineChartProps {
-  /** 없으면 기존 목업을 보여줌 */
-  rows?: ActionTimelineRow[]
+  rows: ActionTimelineRow[]
 }
 
-export default function ActionTimelineChart({ rows }: ActionTimelineChartProps) {
-  const timelineRows = rows ?? FINAL_REPORT_TIMELINE_ROWS
+export default function ActionTimelineChart({
+  rows,
+}: ActionTimelineChartProps) {
+  const timelineRows = rows
   return (
     <div className="w-full">
       <div className="flex">

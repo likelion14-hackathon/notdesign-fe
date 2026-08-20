@@ -1,44 +1,56 @@
-import { WEEK_SCORE_METRICS } from '@/features/measurement/constants'
 import type { WeekScoreMetric } from '@/features/measurement/types'
+import type { ReportImprovement } from '@/features/report/types'
 
 interface WeekScoreCardsProps {
-  /** 없으면 기존 목업을 보여줌 */
-  metrics?: WeekScoreMetric[]
+  metrics: WeekScoreMetric[]
+  selectedImprovement: ReportImprovement | null
+  onSelect: (improvement: ReportImprovement) => void
 }
 
-export default function WeekScoreCards({ metrics }: WeekScoreCardsProps) {
+export default function WeekScoreCards({
+  metrics,
+  selectedImprovement,
+  onSelect,
+}: WeekScoreCardsProps) {
   return (
     <div className="flex gap-2.5 px-5">
-      {(metrics ?? WEEK_SCORE_METRICS).map((metric) => (
-        <div
-          key={metric.label}
-          className={`flex min-w-0 flex-1 flex-col gap-2.75 rounded-[10px] px-5 py-4.75 ${
-            metric.emphasized ? 'bg-primary' : 'border-text-secondary border'
-          }`}
-        >
-          <p
-            className={`text-[12px] leading-normal font-semibold tracking-[-0.24px] ${
-              metric.emphasized ? 'text-off-white-sub' : 'text-text-secondary'
+      {metrics.map((metric) => {
+        const selected = metric.improvement === selectedImprovement
+
+        return (
+          <button
+            key={metric.improvement}
+            type="button"
+            aria-pressed={selected}
+            onClick={() => onSelect(metric.improvement)}
+            className={`flex min-w-0 flex-1 flex-col items-start gap-2.75 rounded-[10px] px-5 py-4.75 text-left ${
+              selected ? 'bg-primary' : 'border-text-secondary border'
             }`}
           >
-            {metric.label}
-          </p>
-          <p
-            className={`text-[24px] leading-normal font-semibold tracking-[-0.48px] ${
-              metric.emphasized ? 'text-off-white' : 'text-text-primary'
-            }`}
-          >
-            {metric.scoreLabel}
-          </p>
-          <p
-            className={`text-[12px] leading-normal font-semibold tracking-[-0.24px] ${
-              metric.emphasized ? 'text-off-white' : 'text-primary'
-            }`}
-          >
-            {metric.status}
-          </p>
-        </div>
-      ))}
+            <p
+              className={`text-[12px] leading-normal font-semibold tracking-[-0.24px] ${
+                selected ? 'text-off-white-sub' : 'text-text-secondary'
+              }`}
+            >
+              {metric.label}
+            </p>
+            <p
+              className={`text-[24px] leading-normal font-semibold tracking-[-0.48px] ${
+                selected ? 'text-off-white' : 'text-text-primary'
+              }`}
+            >
+              {metric.scoreLabel}
+            </p>
+            <p
+              className={`text-[12px] leading-normal font-semibold tracking-[-0.24px] ${
+                selected ? 'text-off-white' : 'text-primary'
+              }`}
+            >
+              {metric.status}
+            </p>
+          </button>
+        )
+      })}
     </div>
   )
 }

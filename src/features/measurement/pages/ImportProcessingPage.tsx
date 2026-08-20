@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
 import AnalyzingCard from '@/features/measurement/components/AnalyzingCard'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
 import Logo from '@/shared/components/Logo'
@@ -26,6 +27,7 @@ export default function ImportProcessingPage() {
   const selectedClinicId = useMeasurementStore((state) => state.selectedClinicId)
   const setOfflineResult = useMeasurementStore((state) => state.setOfflineResult)
   const setLatestReport = useReportStore((state) => state.setLatestReport)
+  const queryClient = useQueryClient()
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const hasRequestedRef = useRef(false)
 
@@ -37,6 +39,7 @@ export default function ImportProcessingPage() {
       createReport()
         .then((report) => {
           setLatestReport(report)
+          queryClient.invalidateQueries({ queryKey: ['reports', 'latest'] })
           navigate('/measurement/report-generating', { replace: true })
         })
         .catch((error: unknown) => {

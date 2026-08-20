@@ -8,22 +8,23 @@ import NextPlanProposal from '@/features/measurement/components/NextPlanProposal
 import {
   FINAL_REPORT_ACTIONS,
   FINAL_REPORT_CONTRIBUTION_TITLE,
-  FINAL_REPORT_CONTRIBUTIONS,
   FINAL_REPORT_COST_TITLE,
-  FINAL_REPORT_COSTS,
   FINAL_REPORT_EYEBROW,
-  FINAL_REPORT_INSIGHT,
   FINAL_REPORT_TIMELINE_TITLE,
   FINAL_REPORT_TITLE,
-  FINAL_REPORT_TOP_CONTRIBUTOR,
-  FINAL_SCORE_METRICS,
 } from '@/features/measurement/constants'
-import { useReportStore } from '@/features/report/store'
+import type {
+  ReportImprovement,
+  ReportResponseDto,
+} from '@/features/report/types'
 import {
   buildContributionItems,
   buildCostItems,
   buildExecutionTimelineRows,
   buildFinalScoreMetrics,
+  filterContributionsByImprovement,
+  pickDefaultImprovement,
+  pickTopContribution,
 } from '@/features/report/utils'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
@@ -32,7 +33,9 @@ import ProgressRing from '@/shared/components/ProgressRing'
 
 function formatManwonPill(price: number): string {
   const manwon = price / 10_000
-  const label = Number.isInteger(manwon) ? `${manwon}만원` : `${manwon.toFixed(1)}만원`
+  const label = Number.isInteger(manwon)
+    ? `${manwon}만원`
+    : `${manwon.toFixed(1)}만원`
   return `다음 12주 예상 비용 ${label}`
 }
 
@@ -41,33 +44,51 @@ const COST_BADGE_VISIBLE_MS = 3000
 /** 배지가 사라지는 페이드아웃 애니메이션 시간(ms). 트랜지션 클래스의 duration과 맞춰야 함 */
 const COST_BADGE_FADE_MS = 300
 
+interface FinalReportPageProps {
+  report: ReportResponseDto
+}
+
 /** Figma: PF_REPORT_12-WEEK (924:2245) */
-export default function FinalReportPage() {
+export default function FinalReportPage({ report }: FinalReportPageProps) {
   const navigate = useNavigate()
-  const report = useReportStore((state) => state.latestReport)
   const [costBadgeState, setCostBadgeState] = useState<
     'visible' | 'fading' | 'hidden'
   >('visible')
-
-  const scoreMetrics = report
-    ? buildFinalScoreMetrics(report.metrics)
-    : FINAL_SCORE_METRICS
-  const contributions = report
-    ? buildContributionItems(report.contributions)
-    : FINAL_REPORT_CONTRIBUTIONS
-  const costs = report ? buildCostItems(report.contributions) : FINAL_REPORT_COSTS
-  const timelineRows = report
-    ? buildExecutionTimelineRows(report.executions)
-    : undefined
-  const topContributor = useMemo(() => {
-    if (!report || report.contributions.length === 0) return FINAL_REPORT_TOP_CONTRIBUTOR
-    const top = report.contributions.reduce((a, b) =>
-      b.contributionRate > a.contributionRate ? b : a,
+  const [selectedImprovement, setSelectedImprovement] =
+    useState<ReportImprovement | null>(() =>
+      pickDefaultImprovement(report.metrics),
     )
-    return { name: top.content, percentage: Math.round(top.contributionRate) }
-  }, [report])
+
+  const scoreMetrics = useMemo(
+    () => buildFinalScoreMetrics(report.metrics),
+    [report.metrics],
+  )
+  const selectedContributions = useMemo(
+    () =>
+      filterContributionsByImprovement(
+        report.contributions,
+        selectedImprovement,
+      ),
+    [report.contributions, selectedImprovement],
+  )
+  const contributions = useMemo(
+    () => buildContributionItems(selectedContributions),
+    [selectedContributions],
+  )
+  const costs = useMemo(
+    () => buildCostItems(selectedContributions),
+    [selectedContributions],
+  )
+  const topContributor = useMemo(
+    () => pickTopContribution(selectedContributions),
+    [selectedContributions],
+  )
+  const timelineRows = useMemo(
+    () => buildExecutionTimelineRows(report.executions),
+    [report.executions],
+  )
   const pillLabel =
-    report?.nextPlanPrice != null
+    report.nextPlanPrice != null
       ? formatManwonPill(report.nextPlanPrice)
       : FINAL_REPORT_ACTIONS.pillLabel
 
@@ -105,30 +126,29 @@ export default function FinalReportPage() {
       <div className="mt-6.25 flex flex-col gap-6.25">
         <div className="px-5">
           <div className="border-primary rounded-[10px] border px-4.75 py-3">
-            {report ? (
-              <p className="text-[13px] leading-5 font-bold tracking-[-0.24px] break-keep">
-                {report.summary}
-              </p>
-            ) : (
-              <>
-                <p className="text-[13px] leading-5 font-bold tracking-[-0.24px] break-keep">
-                  {FINAL_REPORT_INSIGHT.headline}
-                </p>
-                <p className="text-primary text-[12px] leading-5 tracking-[-0.24px] break-keep">
-                  {FINAL_REPORT_INSIGHT.sub}
-                </p>
-              </>
-            )}
+            <p className="text-[13px] leading-5 font-bold tracking-[-0.24px] break-keep">
+              {report.summary}
+            </p>
           </div>
         </div>
 
-        <FinalScoreCards metrics={scoreMetrics} />
+        <FinalScoreCards
+          metrics={scoreMetrics}
+          selectedImprovement={selectedImprovement}
+          onSelect={setSelectedImprovement}
+        />
 
         <div className="px-5">
           <p className="text-text-primary pb-2.5 text-[16px] leading-normal font-semibold tracking-[-0.32px]">
             {FINAL_REPORT_TIMELINE_TITLE}
           </p>
-          <ActionTimelineChart rows={timelineRows} />
+          {timelineRows.length > 0 ? (
+            <ActionTimelineChart rows={timelineRows} />
+          ) : (
+            <p className="text-text-secondary text-[14px] font-medium break-keep">
+              실천 기록이 아직 없어요.
+            </p>
+          )}
         </div>
 
         <div>
@@ -136,29 +156,37 @@ export default function FinalReportPage() {
             {FINAL_REPORT_CONTRIBUTION_TITLE}
           </p>
 
-          <div className="flex justify-center py-5">
-            <div className="relative size-50">
-              <ProgressRing
-                percentage={topContributor.percentage}
-                tone="primary"
-                className="size-full"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
-                <p className="text-primary text-[20px] leading-normal font-semibold tracking-[-0.4px]">
-                  {topContributor.name}
-                </p>
-                <p className="text-text-secondary text-[16px] leading-normal font-medium tracking-[-0.32px]">
-                  {topContributor.percentage}% 기여
-                </p>
+          {topContributor ? (
+            <>
+              <div className="flex justify-center py-5">
+                <div className="relative size-50">
+                  <ProgressRing
+                    percentage={topContributor.percentage}
+                    tone="primary"
+                    className="size-full"
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+                    <p className="text-primary text-[20px] leading-normal font-semibold tracking-[-0.4px]">
+                      {topContributor.name}
+                    </p>
+                    <p className="text-text-secondary text-[16px] leading-normal font-medium tracking-[-0.32px]">
+                      {topContributor.percentage}% 기여
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div>
-            {contributions.map((item, index) => (
-              <ContributionRow key={`${item.name}-${index}`} item={item} />
-            ))}
-          </div>
+              <div>
+                {contributions.map((item, index) => (
+                  <ContributionRow key={`${item.name}-${index}`} item={item} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <p className="text-text-secondary mt-3.75 px-5 text-[14px] font-medium break-keep">
+              이 지표에 기여한 항목이 아직 없어요.
+            </p>
+          )}
         </div>
 
         <div>
@@ -166,14 +194,20 @@ export default function FinalReportPage() {
             {FINAL_REPORT_COST_TITLE}
           </p>
 
-          <div className="mt-7.25">
-            {costs.map((item, index) => (
-              <CostRow key={`${item.name}-${index}`} item={item} />
-            ))}
-          </div>
+          {costs.length > 0 ? (
+            <div className="mt-7.25">
+              {costs.map((item, index) => (
+                <CostRow key={`${item.name}-${index}`} item={item} />
+              ))}
+            </div>
+          ) : (
+            <p className="text-text-secondary mt-3.75 px-5 text-[14px] font-medium break-keep">
+              비용을 계산할 항목이 없어요.
+            </p>
+          )}
         </div>
 
-        <NextPlanProposal description={report?.nextPlanSuggestion} />
+        <NextPlanProposal description={report.nextPlanSuggestion} />
       </div>
 
       <BottomBar>

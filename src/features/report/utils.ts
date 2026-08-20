@@ -11,6 +11,7 @@ import type {
   ReportCategory,
   ReportContribution,
   ReportExecution,
+  ReportImprovement,
   ReportMetric,
   ReportReliability,
 } from '@/features/report/types'
@@ -54,26 +55,58 @@ function buildScoreStatuses(metrics: ReportMetric[]): boolean[] {
   return metrics.map((metric) => metric.delta === minDelta)
 }
 
+/** 화면에 처음 선택되어 있을 지표. 가장 많이 개선된 지표를 기본값으로 쓴다 */
+export function pickDefaultImprovement(
+  metrics: ReportMetric[],
+): ReportImprovement | null {
+  if (metrics.length === 0) return null
+  return metrics.reduce((a, b) => (b.delta < a.delta ? b : a)).improvement
+}
+
+/** 선택된 지표(색소침착/모공/홍조)에 해당하는 기여 항목만 골라낸다 */
+export function filterContributionsByImprovement(
+  contributions: ReportContribution[],
+  improvement: ReportImprovement | null,
+): ReportContribution[] {
+  if (improvement === null) return []
+  return contributions.filter((item) => item.improvement === improvement)
+}
+
+/** 선택된 지표에서 기여율이 가장 높은 항목 */
+export function pickTopContribution(
+  contributions: ReportContribution[],
+): { name: string; percentage: number } | null {
+  if (contributions.length === 0) return null
+  const top = contributions.reduce((a, b) =>
+    b.contributionRate > a.contributionRate ? b : a,
+  )
+  return { name: top.content, percentage: Math.round(top.contributionRate) }
+}
+
 /** 12주 최종 리포트 상단 점수 카드(전/후 비교 포함) */
-export function buildFinalScoreMetrics(metrics: ReportMetric[]): FinalScoreMetric[] {
+export function buildFinalScoreMetrics(
+  metrics: ReportMetric[],
+): FinalScoreMetric[] {
   const emphasizedFlags = buildScoreStatuses(metrics)
   return metrics.map((metric, index) => ({
+    improvement: metric.improvement,
     label: metric.improvementName,
     scoreLabel: formatDeltaLabel(metric.delta),
     beforeAfter: `${metric.before} → ${metric.after}`,
     status: emphasizedFlags[index] ? '가장 개선됨' : '보통',
-    emphasized: emphasizedFlags[index],
   }))
 }
 
 /** 6주차 중간 리포트 상단 점수 카드 */
-export function buildWeekScoreMetrics(metrics: ReportMetric[]): WeekScoreMetric[] {
+export function buildWeekScoreMetrics(
+  metrics: ReportMetric[],
+): WeekScoreMetric[] {
   const emphasizedFlags = buildScoreStatuses(metrics)
   return metrics.map((metric, index) => ({
+    improvement: metric.improvement,
     label: metric.improvementName,
     scoreLabel: formatDeltaLabel(metric.delta),
     status: emphasizedFlags[index] ? '가장 개선됨' : '보통',
-    emphasized: emphasizedFlags[index],
   }))
 }
 
@@ -84,7 +117,8 @@ export function buildContributionItems(
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,
-    scoreLabel: item.score > 0 ? `-${item.score.toFixed(2)}점` : '기여하지 않음',
+    scoreLabel:
+      item.score > 0 ? `-${item.score.toFixed(2)}점` : '기여하지 않음',
     confidence:
       item.score > 0
         ? {
@@ -92,12 +126,17 @@ export function buildContributionItems(
             tone: RELIABILITY_TONE[item.reliability],
           }
         : undefined,
-    note: item.score > 0 ? `${item.contributionRate}% 기여` : '지표 변화가 관측되지 않음',
+    note:
+      item.score > 0
+        ? `${item.contributionRate}% 기여`
+        : '지표 변화가 관측되지 않음',
   }))
 }
 
 /** "1점 개선에 든 비용" 목록. contributions[].costPerPoint 기반 */
-export function buildCostItems(contributions: ReportContribution[]): CostItem[] {
+export function buildCostItems(
+  contributions: ReportContribution[],
+): CostItem[] {
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,

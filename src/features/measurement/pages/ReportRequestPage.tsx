@@ -29,7 +29,7 @@ export default function ReportRequestPage() {
         <div className="flex gap-2.75">
           <button
             type="button"
-            onClick={() => navigate('/measurement/six-week-report')}
+            onClick={() => navigate('/measurement/report')}
             className={`${ACTION_BUTTON} bg-line text-text-primary flex-1`}
           >
             기존 리포트 열기
