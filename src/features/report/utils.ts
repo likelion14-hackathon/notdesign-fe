@@ -110,6 +110,16 @@ export function buildWeekScoreMetrics(
   }))
 }
 
+/** 기여 점수. 음수(-5.59)는 지표가 그만큼 내려갔다(개선됐다)는 뜻이다 */
+function formatContributionScore(score: number): string {
+  if (score === 0) return '기여하지 않음'
+  return `${score > 0 ? '+' : ''}${score.toFixed(2)}점`
+}
+
+function formatContributionRate(rate: number): string {
+  return `${Number(rate.toFixed(1))}% 기여`
+}
+
 /** "어떤 노력이 기여했을까요?" 목록 */
 export function buildContributionItems(
   contributions: ReportContribution[],
@@ -117,20 +127,26 @@ export function buildContributionItems(
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,
-    scoreLabel:
-      item.score > 0 ? `-${item.score.toFixed(2)}점` : '기여하지 않음',
+    scoreLabel: formatContributionScore(item.score),
     confidence:
-      item.score > 0
+      item.score !== 0
         ? {
             label: RELIABILITY_LABEL[item.reliability],
             tone: RELIABILITY_TONE[item.reliability],
           }
         : undefined,
     note:
-      item.score > 0
-        ? `${item.contributionRate}% 기여`
+      item.score !== 0
+        ? formatContributionRate(item.contributionRate)
         : '지표 변화가 관측되지 않음',
   }))
+}
+
+function formatCostPerPoint(costPerPoint: number): string {
+  if (costPerPoint <= 0) return '비용 없음'
+  if (costPerPoint < 10_000)
+    return `${costPerPoint.toLocaleString('ko-KR')}원/점`
+  return `${(costPerPoint / 10_000).toFixed(1)}만원/점`
 }
 
 /** "1점 개선에 든 비용" 목록. contributions[].costPerPoint 기반 */
@@ -140,17 +156,14 @@ export function buildCostItems(
   return contributions.map((item) => ({
     category: CATEGORY_FROM_API[item.category],
     name: item.content,
-    cost:
-      item.costPerPoint > 0
-        ? `${(item.costPerPoint / 10_000).toFixed(1)}만원/점`
-        : '비용 없음',
+    cost: formatCostPerPoint(item.costPerPoint),
   }))
 }
 
 /**
  * "12주 동안 어떻게 실천했을까요?" 타임라인. 12주 플랜 타임라인(PlanTimelineSection)과
  * 동일하게 카테고리별로 묶어 "시술/생활 습관/홈케어/영양제" 4줄로 보여준다.
- * executions[].doneWeeks 기반.
+ * plannedWeeks(계획)를 기본으로 칠하고, doneWeeks(실천)는 진한 색으로 구분한다.
  */
 export function buildExecutionTimelineRows(
   executions: ReportExecution[],
@@ -161,15 +174,21 @@ export function buildExecutionTimelineRows(
     )
     if (categoryExecutions.length === 0) return null
 
+    const plannedWeekSet = new Set(
+      categoryExecutions.flatMap((execution) => execution.plannedWeeks),
+    )
     const doneWeekSet = new Set(
       categoryExecutions.flatMap((execution) => execution.doneWeeks),
     )
 
     return {
       label: PLAN_CATEGORY_TAG[category].label,
-      activeWeeks: Array.from({ length: REPORT_TIMELINE_WEEKS }, (_, index) =>
-        doneWeekSet.has(index + 1),
-      ),
+      weeks: Array.from({ length: REPORT_TIMELINE_WEEKS }, (_, index) => {
+        const week = index + 1
+        if (doneWeekSet.has(week)) return 'done'
+        if (plannedWeekSet.has(week)) return 'planned'
+        return 'none'
+      }),
     }
   }).filter((row): row is ActionTimelineRow => row !== null)
 }

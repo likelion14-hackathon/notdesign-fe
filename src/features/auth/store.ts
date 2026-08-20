@@ -34,9 +34,12 @@ interface UserInfoPatch {
 interface AuthState {
   isAuthenticated: boolean
   accessToken: string | null
+  refreshToken: string | null
   email: string | null
   name: string | null
   login: (result: SigninResult) => void
+  /** POST /api/auth/refresh 응답 반영. 응답에 없는 이름/이메일은 기존 값을 유지한다 */
+  applyRefresh: (result: SigninResult) => void
   logout: () => void
   setUserInfo: (info: UserInfoPatch) => void
 }
@@ -46,6 +49,7 @@ const initialAccessToken = normalize(localStorage.getItem(ACCESS_TOKEN_KEY))
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: Boolean(initialAccessToken),
   accessToken: initialAccessToken,
+  refreshToken: normalize(localStorage.getItem(REFRESH_TOKEN_KEY)),
   email:
     normalize(localStorage.getItem(USER_EMAIL_KEY)) ??
     extractEmail(initialAccessToken),
@@ -62,16 +66,42 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       isAuthenticated: true,
       accessToken,
+      refreshToken,
       name: nextName,
       email: nextEmail,
     })
   },
+  applyRefresh: ({ accessToken, refreshToken, name, email }) =>
+    set((state) => {
+      const nextName = normalize(name) ?? state.name
+      const nextEmail =
+        normalize(email) ?? extractEmail(accessToken) ?? state.email
+
+      localStorage.setItem(ACCESS_TOKEN_KEY, accessToken)
+      localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken)
+      persist(USER_NAME_KEY, nextName)
+      persist(USER_EMAIL_KEY, nextEmail)
+
+      return {
+        isAuthenticated: true,
+        accessToken,
+        refreshToken,
+        name: nextName,
+        email: nextEmail,
+      }
+    }),
   logout: () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
     localStorage.removeItem(REFRESH_TOKEN_KEY)
     localStorage.removeItem(USER_NAME_KEY)
     localStorage.removeItem(USER_EMAIL_KEY)
-    set({ isAuthenticated: false, accessToken: null, email: null, name: null })
+    set({
+      isAuthenticated: false,
+      accessToken: null,
+      refreshToken: null,
+      email: null,
+      name: null,
+    })
   },
   setUserInfo: ({ email, name }) =>
     set((state) => {
