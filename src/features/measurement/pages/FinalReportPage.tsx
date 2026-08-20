@@ -1,3 +1,4 @@
+import { type Format } from '@number-flow/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ActionTimelineChart from '@/features/measurement/components/ActionTimelineChart'
@@ -26,17 +27,14 @@ import {
   pickDefaultImprovement,
   pickTopContribution,
 } from '@/features/report/utils'
+import AnimatedNumber from '@/shared/components/AnimatedNumber'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 import ProgressRing from '@/shared/components/ProgressRing'
 
-function formatManwonPill(price: number): string {
-  const manwon = price / 10_000
-  const label = Number.isInteger(manwon)
-    ? `${manwon}만원`
-    : `${manwon.toFixed(1)}만원`
-  return `다음 12주 예상 비용 ${label}`
+const MANWON_FORMAT: Format = {
+  maximumFractionDigits: 1,
 }
 
 /** 예상 비용 배지가 화면에 떠 있는 시간(ms) */
@@ -87,10 +85,8 @@ export default function FinalReportPage({ report }: FinalReportPageProps) {
     () => buildExecutionTimelineRows(report.executions),
     [report.executions],
   )
-  const pillLabel =
-    report.nextPlanPrice != null
-      ? formatManwonPill(report.nextPlanPrice)
-      : FINAL_REPORT_ACTIONS.pillLabel
+  const nextPlanManwon =
+    report.nextPlanPrice != null ? report.nextPlanPrice / 10_000 : null
 
   useEffect(() => {
     const fadeTimer = setTimeout(() => {
@@ -126,7 +122,7 @@ export default function FinalReportPage({ report }: FinalReportPageProps) {
       <div className="mt-6.25 flex flex-col gap-6.25">
         <div className="px-5">
           <div className="border-primary rounded-[10px] border px-4.75 py-3">
-            <p className="text-[13px] leading-5 font-bold tracking-[-0.24px] break-keep">
+            <p className="text-primary text-[13px] leading-5 font-bold tracking-[-0.24px] break-keep">
               {report.summary}
             </p>
           </div>
@@ -170,7 +166,10 @@ export default function FinalReportPage({ report }: FinalReportPageProps) {
                       {topContributor.name}
                     </p>
                     <p className="text-text-secondary text-[16px] leading-normal font-medium tracking-[-0.32px]">
-                      {topContributor.percentage}% 기여
+                      <AnimatedNumber
+                        value={topContributor.percentage}
+                        suffix="% 기여"
+                      />
                     </p>
                   </div>
                 </div>
@@ -220,7 +219,18 @@ export default function FinalReportPage({ report }: FinalReportPageProps) {
                   : 'pointer-events-none opacity-0'
               }`}
             >
-              {pillLabel}
+              {nextPlanManwon != null ? (
+                <>
+                  다음 12주 예상 비용{' '}
+                  <AnimatedNumber
+                    value={nextPlanManwon}
+                    suffix="만원"
+                    format={MANWON_FORMAT}
+                  />
+                </>
+              ) : (
+                FINAL_REPORT_ACTIONS.pillLabel
+              )}
             </p>
           )}
           <BottomButton

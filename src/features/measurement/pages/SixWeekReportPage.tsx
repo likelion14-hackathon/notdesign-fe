@@ -22,6 +22,7 @@ import {
   pickDefaultImprovement,
   pickTopContribution,
 } from '@/features/report/utils'
+import AnimatedNumber from '@/shared/components/AnimatedNumber'
 import BottomBar from '@/shared/components/BottomBar'
 import KeepPlanWarningModal from '@/shared/components/KeepPlanWarningModal'
 import Logo from '@/shared/components/Logo'
@@ -137,7 +138,10 @@ export default function SixWeekReportPage({ report }: SixWeekReportPageProps) {
                       {topContributor.name}
                     </p>
                     <p className="text-text-secondary text-[16px] leading-normal font-medium tracking-[-0.32px]">
-                      {topContributor.percentage}% 기여
+                      <AnimatedNumber
+                        value={topContributor.percentage}
+                        suffix="% 기여"
+                      />
                     </p>
                   </div>
                 </div>
