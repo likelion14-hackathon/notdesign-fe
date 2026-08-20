@@ -52,12 +52,12 @@ export default function DiaryRecordChecklist() {
               ? todosError.message
               : '체크리스트를 불러오지 못했어요.'}
           </p>
-        ) : todos.length === 0 ? (
+        ) : (todos ?? []).length === 0 ? (
           <p className="text-text-secondary px-5 text-sm">
             오늘 실천할 항목이 없어요
           </p>
         ) : (
-          todos.map((todo) => (
+          (todos ?? []).map((todo) => (
             <TouchableItemTextOnly
               key={todo.checklistId}
               label={todo.content}
