@@ -39,7 +39,6 @@ export default function PlanResultView({
 }: PlanResultViewProps) {
   const navigate = useNavigate()
   const createdPlan = usePlanStore((state) => state.createdPlan)
-  const monthlyBudget = usePlanStore((state) => state.monthlyBudget)
   const offlineResult = useMeasurementStore((state) => state.offlineResult)
   const realMetrics = metricsProp ?? offlineResult
   const [showLeaveWarning, setShowLeaveWarning] = useState(false)
@@ -117,7 +116,7 @@ export default function PlanResultView({
           total: { label: '총 금액 (12주)', amount: formatManwon(createdPlan.totalPrice) },
           monthly: {
             label: '1달 예상 금액',
-            amount: formatManwon(monthlyBudget ?? 0),
+            amount: formatManwon(Math.round(createdPlan.totalPrice / 3)),
           },
         }
     : undefined

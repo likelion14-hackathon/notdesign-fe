@@ -49,7 +49,7 @@ export default function PlanPage() {
       }
     : undefined
 
-  // 서버 응답에 월 예상 금액이 없어서, 총 금액을 12주=3개월 기준으로 임의 환산해서 보여줌.
+  // 서버 응답에 월 예상 금액이 없어서, 총 금액을 12주=3개월 기준으로 환산해서 보여줌.
   const costSummary = plan
     ? {
         total: {
