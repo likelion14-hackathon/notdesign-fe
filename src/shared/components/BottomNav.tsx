@@ -45,28 +45,22 @@ export default function BottomNav({ current, onSelect }: BottomNavProps) {
             type="button"
             onClick={() => onSelect?.(tab.id)}
             aria-current={selected ? 'page' : undefined}
-            className="flex flex-1 items-center justify-center"
+            className={`gap-1.875 flex flex-1 flex-col items-center justify-center rounded-[100px] ${
+              selected ? 'bg-primary' : ''
+            }`}
           >
-            {/* 배경(pill)을 버튼 전체 폭이 아니라 내용물 크기로 감싸서,
-                선택된 탭이 옆 탭과 딱 붙어 시각적으로 무겁게 보이지 않게 한다. */}
+            <MaskIcon
+              src={tab.icon}
+              className={`${tab.iconClass} ${
+                selected ? 'bg-off-white' : 'bg-text-secondary'
+              }`}
+            />
             <span
-              className={`gap-1.875 flex flex-col items-center justify-center rounded-[100px] px-4 py-2 ${
-                selected ? 'bg-primary' : ''
+              className={`text-[10px] leading-normal font-medium tracking-[-0.2px] ${
+                selected ? 'text-off-white' : 'text-text-secondary'
               }`}
             >
-              <MaskIcon
-                src={tab.icon}
-                className={`${tab.iconClass} ${
-                  selected ? 'bg-off-white' : 'bg-text-secondary'
-                }`}
-              />
-              <span
-                className={`text-[10px] leading-normal font-medium tracking-[-0.2px] ${
-                  selected ? 'text-off-white' : 'text-text-secondary'
-                }`}
-              >
-                {tab.label}
-              </span>
+              {tab.label}
             </span>
           </button>
         )
