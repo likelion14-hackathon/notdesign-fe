@@ -78,8 +78,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
     if (isSubmitting) return
     setIsSubmitting(true)
     try {
-      const tokens = await signIn(email, password)
-      login(tokens)
+      const result = await signIn(email, password)
+      login(result)
       setPasswordError(null)
       onLoginSuccess()
     } catch (error) {

@@ -6,7 +6,7 @@ import wallet from '@/shared/assets/images/wallet.png'
 import { WELLNESS_MONTHLY_AVG_REVEAL } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import Logo from '@/shared/components/Logo'
 
 const AUTO_ADVANCE_MS = 2400
@@ -14,7 +14,7 @@ const AUTO_ADVANCE_MS = 2400
 export default function WellnessMonthlyAvgRevealPage() {
   const navigate = useNavigate()
   const { wasteCost, yearlySpend, monthlyAvgSpend } = useWellnessResult()
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
 
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
@@ -43,7 +43,7 @@ export default function WellnessMonthlyAvgRevealPage() {
 
       <div className="flex flex-col items-center gap-15.5 px-13.5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-          {userName ?? WELLNESS_MONTHLY_AVG_REVEAL.userName}
+          {userName}
           {WELLNESS_MONTHLY_AVG_REVEAL.title[0]}
           <br />
           {WELLNESS_MONTHLY_AVG_REVEAL.title[1]}

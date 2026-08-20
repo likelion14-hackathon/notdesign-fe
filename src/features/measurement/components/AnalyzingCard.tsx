@@ -1,8 +1,5 @@
-import {
-  ANALYZING_METRICS,
-  MEASUREMENT_RESULT,
-} from '@/features/measurement/constants'
-import { useAuthStore } from '@/features/auth/store'
+import { ANALYZING_METRICS } from '@/features/measurement/constants'
+import { useUserName } from '@/features/auth/useUserName'
 import donutDark from '@/shared/assets/icons/donut-dark.svg'
 import donutPrimary from '@/shared/assets/icons/donut-primary.svg'
 import SkeletonBar from '@/shared/components/SkeletonBar'
@@ -10,11 +7,11 @@ import SkeletonParagraphBox from '@/shared/components/SkeletonParagraphBox'
 import SkeletonProfileRow from '@/shared/components/SkeletonProfileRow'
 
 export default function AnalyzingCard() {
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
 
   return (
     <div className="border-outline bg-box-background mx-auto w-full max-w-81.75 rounded-[10px] border px-5 pt-6.25 pb-7.25">
-      <SkeletonProfileRow name={userName ?? MEASUREMENT_RESULT.name} />
+      <SkeletonProfileRow name={userName} />
 
       <div className="mt-9.5 flex gap-5">
         {ANALYZING_METRICS.map((metric) => (

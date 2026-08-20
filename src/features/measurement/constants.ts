@@ -32,8 +32,6 @@ export const ANALYZING_METRICS = [
  * 실제 측정 결과 API가 붙기 전까지 사용하는 임시 데이터
  */
 export const MEASUREMENT_RESULT = {
-  name: '신석훈',
-  givenName: '석훈',
   measuredAt: '2026년 7월 28일 측정',
   centerName: '더나 클리닉 강남',
   metrics: [

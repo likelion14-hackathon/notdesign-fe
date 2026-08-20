@@ -11,4 +11,6 @@ export interface KakaoSigninRequest {
 export interface SigninResult {
   accessToken: string
   refreshToken: string
+  name?: string | null
+  email?: string | null
 }
