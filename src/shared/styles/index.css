@@ -42,6 +42,9 @@ html {
      스크롤 가능 여부와 무관하게 스크롤바 자리를 항상 확보해 너비를 고정한다. */
   overflow-y: auto;
   scrollbar-gutter: stable;
+  /* 가로 모드 전환 등에서 iOS가 본문 글자를 임의로 키우지 않게 한다. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html,
@@ -54,9 +57,22 @@ body {
 }
 
 @supports (min-height: 100dvh) {
+  html,
   body {
     min-height: 100dvh;
   }
+}
+
+/* iOS는 글자 크기가 16px보다 작은 입력 요소에 포커스되면 화면을 자동으로 확대한다(PWA 포함).
+   키보드가 올라올 때 화면이 커지는 걸 막으려면 입력 요소 글자가 16px 이상이어야 한다.
+   확대를 막기 위해 viewport에서 user-scalable을 끄는 방식은 접근성을 해치므로 쓰지 않는다.
+   Tailwind 유틸리티(@layer utilities)보다 우선하도록 레이어 밖에 둔다. */
+input:where(
+  :not([type='range'], [type='checkbox'], [type='radio'], [type='color'])
+),
+textarea,
+select {
+  font-size: max(16px, 1em);
 }
 
 @utility h-screen-safe {
