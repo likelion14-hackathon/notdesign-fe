@@ -44,8 +44,8 @@ export default function WellnessPlanTeaserExpandPage() {
           {WELLNESS_PLAN_TEASER_EXPAND.title[1]}
         </h1>
 
-        <div className="border-primary flex items-start gap-5.75 rounded-[20px] border px-6.25 py-6.25">
-          <img src={rocket} alt="" className="h-16.25 w-15.25 shrink-0" />
+        <div className="border-primary flex h-[121px] items-start gap-4 rounded-[20px] border-2 pt-[25px] pr-[24px] pb-[21px] pl-[25px]">
+          <img src={rocket} alt="" className="h-[75px] w-[70px] shrink-0" />
           <div className="flex flex-col items-start gap-2">
             <p className="text-primary text-[14px] font-semibold tracking-[-0.28px]">
               {WELLNESS_PLAN_TEASER_EXPAND.cardTitle}
@@ -59,7 +59,7 @@ export default function WellnessPlanTeaserExpandPage() {
         <div className="mx-8.5">
           <WellnessSpendCard
             icon={piggyBank}
-            iconClassName="h-16.5 w-17"
+            iconClassName="h-[79px] w-[82px]"
             label={WELLNESS_PLAN_TEASER_EXPAND.yearlySpendLabel}
             value={<NumberFlow value={displayYearlySpend} suffix="원" />}
           />
