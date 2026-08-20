@@ -5,7 +5,6 @@ import BottomButton from '@/shared/components/BottomButton'
 import { signInWithKakao } from '@/features/auth/api'
 import { useAuthStore } from '@/features/auth/store'
 import { useWellnessStore } from '@/features/wellness/store'
-import { getMyInfo } from '@/features/user/api'
 import { ApiError } from '@/shared/api/apiError'
 
 const KAKAO_ENTRY_FLOW_KEY = 'kakaoEntryFlow'
@@ -14,7 +13,6 @@ export default function OnboardKakaoCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const login = useAuthStore((state) => state.login)
-  const setUserInfo = useAuthStore((state) => state.setUserInfo)
   const setEntryFlow = useWellnessStore((state) => state.setEntryFlow)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const hasRequestedRef = useRef(false)
@@ -35,17 +33,8 @@ export default function OnboardKakaoCallback() {
     }
 
     signInWithKakao(code)
-      .then(async (result) => {
+      .then((result) => {
         login(result)
-
-        if (!result.name) {
-          try {
-            const user = await getMyInfo()
-            setUserInfo({ email: user.email, name: user.name })
-          } catch {
-            // 이름 조회 실패는 로그인 자체를 막지 않는다 (홈 화면에서 기본값으로 대체됨)
-          }
-        }
 
         const entryFlow = sessionStorage.getItem(KAKAO_ENTRY_FLOW_KEY)
         sessionStorage.removeItem(KAKAO_ENTRY_FLOW_KEY)
@@ -72,7 +61,9 @@ export default function OnboardKakaoCallback() {
               {errorMessage}
             </p>
             <div className="w-full max-w-60">
-              <BottomButton onClick={() => navigate('/onboard', { replace: true })}>
+              <BottomButton
+                onClick={() => navigate('/onboard', { replace: true })}
+              >
                 다시 시도하기
               </BottomButton>
             </div>
