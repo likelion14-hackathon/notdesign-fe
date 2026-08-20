@@ -1,5 +1,11 @@
+import { type Format } from '@number-flow/react'
 import type { FinalScoreMetric } from '@/features/measurement/types'
 import type { ReportImprovement } from '@/features/report/types'
+import AnimatedNumber from '@/shared/components/AnimatedNumber'
+
+const DELTA_FORMAT: Format = {
+  signDisplay: 'exceptZero',
+}
 
 interface FinalScoreCardsProps {
   metrics: FinalScoreMetric[]
@@ -40,14 +46,20 @@ export default function FinalScoreCards({
                   selected ? 'text-off-white' : 'text-text-primary'
                 }`}
               >
-                {metric.scoreLabel}
+                <AnimatedNumber
+                  value={metric.delta}
+                  suffix="점"
+                  format={DELTA_FORMAT}
+                />
               </p>
               <p
-                className={`text-[11px] leading-4 tracking-[-0.22px] ${
+                className={`flex items-center gap-1 text-[11px] leading-4 tracking-[-0.22px] ${
                   selected ? 'text-score' : 'text-text-secondary'
                 }`}
               >
-                {metric.beforeAfter}
+                <AnimatedNumber value={metric.before} />
+                <span aria-hidden="true">→</span>
+                <AnimatedNumber value={metric.after} />
               </p>
             </div>
             <p

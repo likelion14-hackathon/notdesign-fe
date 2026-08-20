@@ -1,5 +1,16 @@
+import { type Format } from '@number-flow/react'
 import { PLAN_CATEGORY_TAG } from '@/features/measurement/constants'
 import type { ContributionItem } from '@/features/measurement/types'
+import AnimatedNumber from '@/shared/components/AnimatedNumber'
+
+const SCORE_FORMAT: Format = {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+}
+
+const RATE_FORMAT: Format = {
+  maximumFractionDigits: 1,
+}
 
 interface ContributionRowProps {
   item: ContributionItem
@@ -7,6 +18,7 @@ interface ContributionRowProps {
 
 export default function ContributionRow({ item }: ContributionRowProps) {
   const tag = PLAN_CATEGORY_TAG[item.category]
+  const contributed = item.score !== 0
 
   return (
     <div className="border-outline flex flex-col gap-2.25 border-b px-5 py-5.5">
@@ -22,7 +34,15 @@ export default function ContributionRow({ item }: ContributionRowProps) {
           </span>
         </div>
         <span className="text-primary shrink-0 text-[14px] leading-normal font-semibold tracking-[-0.28px]">
-          {item.scoreLabel}
+          {contributed ? (
+            <AnimatedNumber
+              value={item.score}
+              suffix="점"
+              format={SCORE_FORMAT}
+            />
+          ) : (
+            '기여하지 않음'
+          )}
         </span>
       </div>
 
@@ -37,11 +57,17 @@ export default function ContributionRow({ item }: ContributionRowProps) {
           >
             {item.confidence.label}
           </span>
-          <span className="text-text-secondary font-medium">{item.note}</span>
+          <span className="text-text-secondary font-medium">
+            <AnimatedNumber
+              value={item.contributionRate}
+              suffix="% 기여"
+              format={RATE_FORMAT}
+            />
+          </span>
         </div>
       ) : (
         <p className="text-text-secondary text-right text-[12px] leading-normal font-medium tracking-[-0.24px]">
-          {item.note}
+          지표 변화가 관측되지 않음
         </p>
       )}
     </div>

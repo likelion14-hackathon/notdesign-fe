@@ -1,5 +1,11 @@
+import { type Format } from '@number-flow/react'
 import type { WeekScoreMetric } from '@/features/measurement/types'
 import type { ReportImprovement } from '@/features/report/types'
+import AnimatedNumber from '@/shared/components/AnimatedNumber'
+
+const DELTA_FORMAT: Format = {
+  signDisplay: 'exceptZero',
+}
 
 interface WeekScoreCardsProps {
   metrics: WeekScoreMetric[]
@@ -39,7 +45,11 @@ export default function WeekScoreCards({
                 selected ? 'text-off-white' : 'text-text-primary'
               }`}
             >
-              {metric.scoreLabel}
+              <AnimatedNumber
+                value={metric.delta}
+                suffix="점"
+                format={DELTA_FORMAT}
+              />
             </p>
             <p
               className={`text-[12px] leading-normal font-semibold tracking-[-0.24px] ${

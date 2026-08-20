@@ -66,8 +66,8 @@ export interface PlanDetailItem {
 export interface WeekScoreMetric {
   improvement: ReportImprovement
   label: string
-  /** "-14점", "+10점" 처럼 부호가 포함된 표시용 문자열 */
-  scoreLabel: string
+  /** 지표 변화량. 음수면 개선 */
+  delta: number
   status: string
 }
 
@@ -75,28 +75,29 @@ export interface WeekScoreMetric {
 export interface ContributionItem {
   category: PlanCategory
   name: string
-  /** "-9.93점" 또는 "기여하지 않음" */
-  scoreLabel: string
+  /** 기여 점수. 음수면 지표를 그만큼 끌어내렸다는 뜻 */
+  score: number
+  /** 기여율(%) */
+  contributionRate: number
   /** 신뢰도 라벨. 관측되지 않은 항목은 없음 */
   confidence?: { label: string; tone: 'high' | 'medium' }
-  /** 오른쪽(또는 신뢰도 옆)에 붙는 설명 문구 */
-  note: string
 }
 
 /** "1점 개선에 든 비용" 목록의 항목 */
 export interface CostItem {
   category: PlanCategory
   name: string
-  cost: string
+  /** 1점 개선에 든 비용(원). 0이면 비용 없음 */
+  costPerPoint: number
 }
 
 /** 12주 최종 리포트 상단 점수 카드. 6주차 카드에 전/후 비교값이 추가된 버전 */
 export interface FinalScoreMetric {
   improvement: ReportImprovement
   label: string
-  scoreLabel: string
-  /** "62 → 34" 처럼 첫 측정과 최종 측정을 비교하는 문자열 */
-  beforeAfter: string
+  delta: number
+  before: number
+  after: number
   status: string
 }
 
