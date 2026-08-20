@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { WELLNESS_WASTE_REVEAL } from '@/features/wellness/constants'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import Logo from '@/shared/components/Logo'
 
 const AUTO_ADVANCE_MS = 2400
@@ -11,7 +11,7 @@ const AUTO_ADVANCE_MS = 2400
 export default function WellnessWasteRevealPage() {
   const navigate = useNavigate()
   const { wasteCost } = useWellnessResult()
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
 
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
 
@@ -36,7 +36,7 @@ export default function WellnessWasteRevealPage() {
 
       <div className="flex flex-col items-center gap-15.5 px-13.5">
         <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-          {userName ?? WELLNESS_WASTE_REVEAL.userName}
+          {userName}
           {WELLNESS_WASTE_REVEAL.title[0]}
           <br />
           {WELLNESS_WASTE_REVEAL.title[1]}

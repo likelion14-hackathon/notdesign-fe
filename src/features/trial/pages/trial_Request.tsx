@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import FlowHeader from '@/features/measurement/components/FlowHeader'
-import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
@@ -11,8 +10,7 @@ function Trial_Request() {
   const navigate = useNavigate()
   const location = useLocation()
   const analysisResult = location.state as DiaryAnalysisResult | null
-  const userName = useAuthStore((state) => state.name)
-  const givenName = userName ?? MEASUREMENT_RESULT.givenName
+  const userName = useUserName()
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
@@ -23,7 +21,7 @@ function Trial_Request() {
         backTo="/trial/analyze/complete"
         title={
           <>
-            {givenName}님을 위한 일주일 플랜을
+            {userName}님을 위한 일주일 플랜을
             <br />
             생성해 볼까요?
           </>

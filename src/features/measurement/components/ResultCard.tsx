@@ -1,6 +1,6 @@
 import { MEASUREMENT_RESULT } from '@/features/measurement/constants'
 import { useMeasurementStore } from '@/features/measurement/store'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import { scoreStatus } from '@/features/measurement/scoreStatus'
 import ProgressRing from '@/shared/components/ProgressRing'
 
@@ -19,7 +19,7 @@ interface ResultCardProps {
 
 export default function ResultCard({ metrics: metricsProp }: ResultCardProps = {}) {
   const offlineResult = useMeasurementStore((state) => state.offlineResult)
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
 
   const realMetrics = metricsProp ?? offlineResult
 
@@ -55,7 +55,6 @@ export default function ResultCard({ metrics: metricsProp }: ResultCardProps = {
     ? `${lowest.label} 지표가 세 항목 중 가장 낮은 상태예요. 12주 플랜을 구성할 때에는 이 지표를 1순위로 구성할 예정이에요!`
     : MEASUREMENT_RESULT.insight
 
-  const name = userName ?? MEASUREMENT_RESULT.name
   const measuredAt = offlineResult
     ? formatMeasuredAt(offlineResult.measuredAt)
     : MEASUREMENT_RESULT.measuredAt
@@ -67,7 +66,7 @@ export default function ResultCard({ metrics: metricsProp }: ResultCardProps = {
         <div className="bg-primary size-7.5 shrink-0 rounded-full" />
         <div className="mt-1.5 min-w-0 flex-1 space-y-2">
           <p className="text-text-primary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
-            {name}
+            {userName}
           </p>
           <p className="text-text-secondary text-[12px] leading-3.75 font-semibold tracking-[-0.24px]">
             {measuredAt}

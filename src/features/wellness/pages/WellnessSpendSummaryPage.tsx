@@ -7,7 +7,7 @@ import wallet from '@/shared/assets/images/wallet.png'
 import { WELLNESS_SPEND_SUMMARY } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
@@ -15,7 +15,7 @@ import Logo from '@/shared/components/Logo'
 export default function WellnessSpendSummaryPage() {
   const navigate = useNavigate()
   const { grade, wasteCost, yearlySpend, monthlyAvgSpend } = useWellnessResult()
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
 
   const [displayWasteCost, setDisplayWasteCost] = useState(0)
   const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
@@ -37,7 +37,7 @@ export default function WellnessSpendSummaryPage() {
       <div className="px-13.5">
         <div className="flex flex-col items-center gap-15.5">
           <h1 className="text-text-primary text-center text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-            {userName ?? WELLNESS_SPEND_SUMMARY.userName}
+            {userName}
             {WELLNESS_SPEND_SUMMARY.title[0]}
             <br />
             {WELLNESS_SPEND_SUMMARY.title[1]}

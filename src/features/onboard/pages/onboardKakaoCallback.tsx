@@ -35,14 +35,16 @@ export default function OnboardKakaoCallback() {
     }
 
     signInWithKakao(code)
-      .then(async (tokens) => {
-        login(tokens)
+      .then(async (result) => {
+        login(result)
 
-        try {
-          const user = await getMyInfo()
-          setUserInfo({ email: user.email, name: user.name })
-        } catch {
-          // 이름 조회 실패는 로그인 자체를 막지 않는다 (홈 화면에서 기본값으로 대체됨)
+        if (!result.name) {
+          try {
+            const user = await getMyInfo()
+            setUserInfo({ email: user.email, name: user.name })
+          } catch {
+            // 이름 조회 실패는 로그인 자체를 막지 않는다 (홈 화면에서 기본값으로 대체됨)
+          }
         }
 
         const entryFlow = sessionStorage.getItem(KAKAO_ENTRY_FLOW_KEY)

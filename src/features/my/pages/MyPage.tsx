@@ -9,13 +9,13 @@ import {
   MY_ACCOUNT_MENU_ITEMS,
   MY_NOTIFICATION_SETTINGS,
   MY_PLAN_MENU_ITEMS,
-  MY_PROFILE,
 } from '@/features/my/constants'
 import BottomBar from '@/shared/components/BottomBar'
 import type { NavTabId } from '@/shared/components/BottomNav'
 import BottomNav from '@/shared/components/BottomNav'
 import Logo from '@/shared/components/Logo'
 import { useAuthStore } from '@/features/auth/store'
+import { useUserEmail, useUserName } from '@/features/auth/useUserName'
 import { signOut } from '@/features/auth/api'
 import { useCurrentPlanStats } from '@/features/plan/hooks/useCurrentPlanStats'
 import { useCurrentPlanSummary } from '@/features/home/hooks/useCurrentPlanSummary'
@@ -24,8 +24,8 @@ import { ApiError } from '@/shared/api/apiError'
 
 export default function MyPage() {
   const navigate = useNavigate()
-  const email = useAuthStore((state) => state.email)
-  const name = useAuthStore((state) => state.name)
+  const email = useUserEmail()
+  const name = useUserName()
   const logout = useAuthStore((state) => state.logout)
   // 진행률 바는 홈 화면과 동일한 API(GET /api/plans/current)를 그대로 재사용한다.
   const { data: planSummary, error: planSummaryError } = useCurrentPlanSummary()
@@ -59,11 +59,13 @@ export default function MyPage() {
       <div>
         <div className="px-5">
           <h1 className="text-text-primary text-[26px] leading-10 font-semibold tracking-[-0.52px]">
-            {name ?? MY_PROFILE.name}
+            {name}
           </h1>
-          <p className="text-text-secondary mt-1 text-[14px] leading-4.5 font-semibold tracking-[-0.28px]">
-            {email ?? MY_PROFILE.email}
-          </p>
+          {email && (
+            <p className="text-text-secondary mt-1 text-[14px] leading-4.5 font-semibold tracking-[-0.28px]">
+              {email}
+            </p>
+          )}
 
           {planSummary && (
             <div className="mt-7.5">

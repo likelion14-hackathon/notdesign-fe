@@ -72,20 +72,17 @@ export const WELLNESS_SCORE_TABLE: Record<
 }
 
 export const WELLNESS_WASTE_REVEAL = {
-  userName: '석훈',
   title: ['님은 그동안', '얼마나 낭비하고 있었을까요?'],
   wasteCostLabel: '예상 낭비 지출 비용',
 } as const
 
 export const WELLNESS_YEARLY_SPEND_REVEAL = {
-  userName: '석훈',
   title: ['님은 그동안', '얼마나 낭비하고 있었을까요?'],
   wasteCostLabel: '예상 낭비 지출 비용',
   yearlySpendLabel: '최근 1년간 지출 비용',
 } as const
 
 export const WELLNESS_MONTHLY_AVG_REVEAL = {
-  userName: '석훈',
   title: ['님은 그동안', '얼마나 낭비하고 있었을까요?'],
   wasteCostLabel: '예상 낭비 지출 비용',
   yearlySpendLabel: '최근 1년간 지출 비용',
@@ -93,7 +90,6 @@ export const WELLNESS_MONTHLY_AVG_REVEAL = {
 } as const
 
 export const WELLNESS_SPEND_SUMMARY = {
-  userName: '석훈',
   title: ['님은 그동안', '얼마나 낭비하고 있었을까요?'],
   wasteCostLabel: '예상 낭비 지출 비용',
   yearlySpendLabel: '최근 1년간 지출 비용',

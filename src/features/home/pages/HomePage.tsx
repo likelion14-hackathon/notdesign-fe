@@ -5,7 +5,7 @@ import ReportLinkCard from '@/features/home/components/ReportLinkCard'
 import TodayActionCard from '@/features/home/components/TodayActionCard'
 import { HOME_SUMMARY } from '@/features/home/constants'
 import { useCurrentPlanSummary } from '@/features/home/hooks/useCurrentPlanSummary'
-import { useAuthStore } from '@/features/auth/store'
+import { useUserName } from '@/features/auth/useUserName'
 import { ApiError } from '@/shared/api/apiError'
 import BottomBar from '@/shared/components/BottomBar'
 import type { NavTabId } from '@/shared/components/BottomNav'
@@ -14,7 +14,7 @@ import Logo from '@/shared/components/Logo'
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const userName = useAuthStore((state) => state.name)
+  const userName = useUserName()
   const { data: planSummary, error: planSummaryError } = useCurrentPlanSummary()
 
   const handleSelectTab = (id: NavTabId) => {
@@ -29,7 +29,7 @@ export default function HomePage() {
 
       <div className="px-5">
         <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
-          안녕하세요, {userName ?? HOME_SUMMARY.userName}님!
+          안녕하세요, {userName}님!
         </p>
         <h1 className="text-text-primary mt-2.5 text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
           {HOME_SUMMARY.headline}

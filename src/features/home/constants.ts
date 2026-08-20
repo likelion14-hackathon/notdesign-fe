@@ -3,12 +3,9 @@
  * 실제 API가 붙기 전까지 사용하는 임시 데이터
  */
 export const HOME_SUMMARY = {
-  userName: '신석훈',
-  /** "OO님" 호칭에 쓰는 이름 */
-  givenName: '석훈',
   headline: '지금 12주 사이클이 진행 중이에요!',
   todayAction: {
-    subtitle: '석훈님, 잊지 않으셨죠?',
+    subtitle: '{name}님, 잊지 않으셨죠?',
     title: '오늘의 실천을 기록하세요!',
   },
   todayActionDone: {

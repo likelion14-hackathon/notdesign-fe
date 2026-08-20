@@ -4,11 +4,6 @@ import type { MyNotificationSetting, MyScoreMetric } from '@/features/my/types'
  * 정보(마이) 화면 데이터.
  * 실제 API가 붙기 전까지 사용하는 임시 데이터
  */
-export const MY_PROFILE = {
-  name: '신석훈',
-  email: 'seokhoon2@gmail.com',
-} as const
-
 export const MY_CURRENT_PLAN = {
   weekLabel: '4주차',
   percentage: 42,
