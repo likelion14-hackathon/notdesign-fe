@@ -61,11 +61,11 @@ const OnboardingPage: React.FC = () => {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-md overflow-hidden bg-black"
+      className="min-h-screen-safe tracking-2p relative mx-auto flex w-full max-w-md flex-col overflow-hidden bg-black"
       style={{ height: screenHeight }}
     >
       <div
-        className="relative flex h-full w-full flex-col justify-between"
+        className="relative flex min-h-0 w-full flex-1 flex-col justify-between"
         style={{ transform: `translateY(${viewport.offsetTop}px)` }}
       >
         {/* 온보딩 배경 */}
