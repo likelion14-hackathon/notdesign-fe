@@ -1,7 +1,8 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { WELLNESS_WASTE_REVEAL } from '@/features/wellness/constants'
+import { useRevealOnce } from '@/features/wellness/useRevealOnce'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import { useUserName } from '@/features/auth/useUserName'
 import Logo from '@/shared/components/Logo'
@@ -13,14 +14,7 @@ export default function WellnessWasteRevealPage() {
   const { wasteCost } = useWellnessResult()
   const userName = useUserName()
 
-  const [displayWasteCost, setDisplayWasteCost] = useState(0)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setDisplayWasteCost(Math.round(wasteCost))
-    })
-    return () => cancelAnimationFrame(id)
-  }, [wasteCost])
+  const displayWasteCost = useRevealOnce('wasteCost', wasteCost)
 
   useEffect(() => {
     const timer = setTimeout(() => {

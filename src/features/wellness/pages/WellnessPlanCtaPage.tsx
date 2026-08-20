@@ -1,5 +1,4 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import chevronDown from '@/shared/assets/icons/chevron-down.svg'
 import coins from '@/shared/assets/images/coins.png'
@@ -8,6 +7,7 @@ import rocket from '@/shared/assets/images/rocket.png'
 import { WELLNESS_PLAN_CTA } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
 import { useWellnessStore } from '@/features/wellness/store'
+import { useRevealOnce } from '@/features/wellness/useRevealOnce'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import BottomBar from '@/shared/components/BottomBar'
 import BottomButton from '@/shared/components/BottomButton'
@@ -20,16 +20,8 @@ export default function WellnessPlanCtaPage() {
     entryFlow === 'trial' ? '/trial' : '/measurement/center-select'
   const { yearlySpend, wasteCost } = useWellnessResult()
 
-  const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
-  const [displayWasteCost, setDisplayWasteCost] = useState(0)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setDisplayYearlySpend(Math.round(yearlySpend))
-      setDisplayWasteCost(Math.round(wasteCost))
-    })
-    return () => cancelAnimationFrame(id)
-  }, [yearlySpend, wasteCost])
+  const displayYearlySpend = useRevealOnce('plan-yearlySpend', yearlySpend)
+  const displayWasteCost = useRevealOnce('plan-wasteCost', wasteCost)
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">

@@ -1,11 +1,11 @@
 import NumberFlow from '@number-flow/react'
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import lightbulb from '@/shared/assets/images/lightbulb.png'
 import piggyBank from '@/shared/assets/images/piggy-bank.png'
 import wallet from '@/shared/assets/images/wallet.png'
 import { WELLNESS_SPEND_SUMMARY } from '@/features/wellness/constants'
 import WellnessSpendCard from '@/features/wellness/components/WellnessSpendCard'
+import { useRevealOnce } from '@/features/wellness/useRevealOnce'
 import { useWellnessResult } from '@/features/wellness/useWellnessResult'
 import { useUserName } from '@/features/auth/useUserName'
 import BottomBar from '@/shared/components/BottomBar'
@@ -17,18 +17,12 @@ export default function WellnessSpendSummaryPage() {
   const { grade, wasteCost, yearlySpend, monthlyAvgSpend } = useWellnessResult()
   const userName = useUserName()
 
-  const [displayWasteCost, setDisplayWasteCost] = useState(0)
-  const [displayYearlySpend, setDisplayYearlySpend] = useState(0)
-  const [displayMonthlyAvgSpend, setDisplayMonthlyAvgSpend] = useState(0)
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      setDisplayWasteCost(Math.round(wasteCost))
-      setDisplayYearlySpend(Math.round(yearlySpend))
-      setDisplayMonthlyAvgSpend(Math.round(monthlyAvgSpend))
-    })
-    return () => cancelAnimationFrame(id)
-  }, [wasteCost, yearlySpend, monthlyAvgSpend])
+  const displayWasteCost = useRevealOnce('wasteCost', wasteCost)
+  const displayYearlySpend = useRevealOnce('yearlySpend', yearlySpend)
+  const displayMonthlyAvgSpend = useRevealOnce(
+    'monthlyAvgSpend',
+    monthlyAvgSpend,
+  )
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
