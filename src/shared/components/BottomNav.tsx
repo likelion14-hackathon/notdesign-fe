@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import navHome from '@/shared/assets/icons/nav-home.svg'
 import navInfo from '@/shared/assets/icons/nav-info.svg'
 import navPlan from '@/shared/assets/icons/nav-plan.svg'
@@ -26,6 +27,14 @@ interface BottomNavProps {
 }
 
 export default function BottomNav({ current, onSelect }: BottomNavProps) {
+  useEffect(() => {
+    // '기록' 탭 청크는 react-day-picker/date-fns를 물고 있어 유독 무거워서,
+    // 클릭 시점에 처음 로드하면 Suspense fallback(null) 구간 동안 화면 전체가
+    // 잠깐 비었다 다시 그려지며 nav바가 순간 사라졌다 나타나는 것처럼 보인다.
+    // 눌리기 전에 미리 로드해 그 공백을 없앤다.
+    import('@/features/diary/pages/DiaryCalendar')
+  }, [])
+
   return (
     <nav className="border-nav-border bg-nav-background flex h-15 gap-0 rounded-[100px] border p-0.75 shadow-[0px_0px_8.3px_-5px_rgba(0,0,0,0.25)] backdrop-blur-[2px]">
       {TABS.map((tab) => {
