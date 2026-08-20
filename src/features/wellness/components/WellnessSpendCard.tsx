@@ -19,7 +19,7 @@ export default function WellnessSpendCard({
     <div
       className={`flex h-26.25 w-full items-center gap-7.25 rounded-[30px] pl-7.25 ${bgClassName}`}
     >
-      <div className="flex size-16.75 shrink-0 items-center justify-center">
+      <div className="flex size-20 shrink-0 items-center justify-center">
         <img src={icon} alt="" className={iconClassName} />
       </div>
       <div className="flex flex-col items-start gap-2">
