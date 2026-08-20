@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { withSuspense } from '@/shared/utils/withSuspense'
 import { HomeRoutes } from '@/features/home/homeRoutes'
 import { DiaryRoutes } from '@/features/diary/pages/diaryRoutes'
 import { MeasurementRoutes } from '@/features/measurement/measurementRoutes'
@@ -9,15 +10,22 @@ import { OnboardRoutes } from '@/features/onboard/pages/onboardRoutes'
 import { TrialRoutes } from '@/features/trial/pages/trialRoutes'
 import { WellnessRoutes } from '@/features/wellness/wellnessRoutes'
 import BaseLayout from '@/shared/layouts/BaseLayout'
-import { withSuspense } from '@/shared/utils/withSuspense'
 
 const NotFoundPage = lazy(() => import('@/shared/pages/NotFoundPage'))
 const DevLinksPage = lazy(() => import('@/shared/pages/DevLinksPage'))
 
+const isLocalhost =
+  window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+
+function DevLinksGate() {
+  if (!isLocalhost) return <Navigate to="/" replace />
+  return <DevLinksPage />
+}
+
 const router = createBrowserRouter([
   {
     path: '/__dev',
-    element: withSuspense(<DevLinksPage />),
+    element: withSuspense(<DevLinksGate />),
     handle: { title: '개발용 링크' },
   },
   {
