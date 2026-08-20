@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ContributionRow from '@/features/measurement/components/ContributionRow'
 import CostRow from '@/features/measurement/components/CostRow'
@@ -28,20 +28,12 @@ import KeepPlanWarningModal from '@/shared/components/KeepPlanWarningModal'
 import Logo from '@/shared/components/Logo'
 import ProgressRing from '@/shared/components/ProgressRing'
 
-/** 실험 참여 안내 배지가 화면에 떠 있는 시간(ms) */
-const EXPERIMENT_BADGE_VISIBLE_MS = 3000
-/** 배지가 사라지는 페이드아웃 애니메이션 시간(ms). 트랜지션 클래스의 duration과 맞춰야 함 */
-const EXPERIMENT_BADGE_FADE_MS = 300
-
 interface SixWeekReportPageProps {
   report: ReportResponseDto
 }
 
 export default function SixWeekReportPage({ report }: SixWeekReportPageProps) {
   const navigate = useNavigate()
-  const [experimentBadgeState, setExperimentBadgeState] = useState<
-    'visible' | 'fading' | 'hidden'
-  >('visible')
   const [showKeepPlanWarning, setShowKeepPlanWarning] = useState(false)
   const [selectedImprovement, setSelectedImprovement] =
     useState<ReportImprovement | null>(() =>
@@ -72,24 +64,6 @@ export default function SixWeekReportPage({ report }: SixWeekReportPageProps) {
     () => pickTopContribution(selectedContributions),
     [selectedContributions],
   )
-
-  useEffect(() => {
-    const fadeTimer = setTimeout(() => {
-      setExperimentBadgeState('fading')
-    }, EXPERIMENT_BADGE_VISIBLE_MS)
-
-    return () => clearTimeout(fadeTimer)
-  }, [])
-
-  useEffect(() => {
-    if (experimentBadgeState !== 'fading') return
-
-    const removeTimer = setTimeout(() => {
-      setExperimentBadgeState('hidden')
-    }, EXPERIMENT_BADGE_FADE_MS)
-
-    return () => clearTimeout(removeTimer)
-  }, [experimentBadgeState])
 
   return (
     <div className="bg-off-white pb-bottom-bar min-h-screen-safe mx-auto w-full max-w-103.5">
@@ -183,17 +157,9 @@ export default function SixWeekReportPage({ report }: SixWeekReportPageProps) {
 
       <BottomBar>
         <div className="flex flex-col items-center gap-3.75">
-          {experimentBadgeState !== 'hidden' && (
-            <p
-              className={`text-nav-border rounded-full bg-[rgba(21,21,21,0.5)] px-4.75 py-2 text-[13px] leading-normal font-semibold tracking-[-0.26px] backdrop-blur-[2px] transition-opacity duration-300 ${
-                experimentBadgeState === 'visible'
-                  ? 'opacity-100'
-                  : 'pointer-events-none opacity-0'
-              }`}
-            >
-              {WEEK_REPORT_ACTIONS.pillLabel}
-            </p>
-          )}
+          <p className="text-nav-border rounded-full bg-[rgba(21,21,21,0.5)] px-4.75 py-2 text-center text-[13px] leading-normal font-semibold tracking-[-0.26px] backdrop-blur-[2px]">
+            {WEEK_REPORT_ACTIONS.pillLabel}
+          </p>
           <div className="flex w-full gap-2.75">
             <button
               type="button"

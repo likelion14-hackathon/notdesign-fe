@@ -7,7 +7,10 @@ import BottomButton from '@/shared/components/BottomButton'
 import Logo from '@/shared/components/Logo'
 import { applyAdjustedPlan, createPlan } from '@/features/plan/api'
 import { usePlanStore } from '@/features/plan/store'
-import { DEFAULT_MONTHLY_BUDGET } from '@/features/plan/constants'
+import {
+  DEFAULT_MONTHLY_BUDGET,
+  PLAN_STARTED_TOAST,
+} from '@/features/plan/constants'
 import { ApiError } from '@/shared/api/apiError'
 import { queryClient } from '@/shared/api/queryClient'
 
@@ -86,7 +89,10 @@ export default function PlanGeneratingPage() {
       .then(() => {
         // currentWeek이 바뀌었으니 홈/플랜/정보 화면의 진행 상태 캐시를 갱신한다.
         queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
-        navigate('/plan', { replace: true })
+        navigate('/plan', {
+          replace: true,
+          state: { toast: PLAN_STARTED_TOAST },
+        })
       })
       .catch((error: unknown) => {
         if (error instanceof ApiError && error.code === 'C404') {
