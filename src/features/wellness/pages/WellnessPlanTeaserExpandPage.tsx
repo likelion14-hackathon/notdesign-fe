@@ -44,7 +44,7 @@ export default function WellnessPlanTeaserExpandPage() {
           {WELLNESS_PLAN_TEASER_EXPAND.title[1]}
         </h1>
 
-        <div className="border-primary flex h-[121px] items-start gap-4 rounded-[20px] border-2 pt-[25px] pr-[24px] pb-[21px] pl-[25px]">
+        <div className="border-primary flex min-h-[121px] items-start gap-4 rounded-[20px] border-2 pt-[25px] pr-[24px] pb-[21px] pl-[25px]">
           <img src={rocket} alt="" className="h-[75px] w-[70px] shrink-0" />
           <div className="flex flex-col items-start gap-2">
             <p className="text-primary text-[14px] font-semibold tracking-[-0.28px]">
