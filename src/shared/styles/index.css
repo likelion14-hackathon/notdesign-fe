@@ -73,6 +73,10 @@ body {
   }
 }
 
+button:not(:disabled) {
+  cursor: pointer;
+}
+
 @utility pb-bottom-bar {
   padding-bottom: calc(96px + max(35px, env(safe-area-inset-bottom)));
 }

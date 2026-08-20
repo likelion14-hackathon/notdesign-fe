@@ -19,18 +19,18 @@ function Trial_Intro() {
   return (
     <div
       onClick={handleTap}
-      className="bg-off-white relative mx-auto flex h-dvh w-full max-w-md cursor-pointer flex-col overflow-hidden select-none"
+      className="bg-off-white relative mx-auto flex h-dvh w-full max-w-md cursor-pointer flex-col items-center justify-center overflow-hidden px-6 select-none"
     >
-      <Logo />
-
-      <div className="flex flex-1 items-center justify-center px-6">
-        <p
-          key={currentIndex}
-          className="text-text-primary animate-fade-slide-in text-center font-sans text-2xl leading-10 font-semibold whitespace-pre-line"
-        >
-          {currentSlide.text}
-        </p>
+      <div className="absolute inset-x-0 top-0">
+        <Logo />
       </div>
+
+      <p
+        key={currentIndex}
+        className="text-text-primary animate-fade-slide-in text-center font-sans text-2xl leading-10 font-semibold whitespace-pre-line"
+      >
+        {currentSlide.text}
+      </p>
     </div>
   )
 }
