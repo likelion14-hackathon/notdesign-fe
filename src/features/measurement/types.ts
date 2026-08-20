@@ -1,3 +1,5 @@
+import type { ReportImprovement } from '@/features/report/types'
+
 /** 오프라인 측정을 진행할 수 있는 클리닉(GET /api/clinics 응답) */
 export interface Clinic {
   id: number
@@ -62,12 +64,11 @@ export interface PlanDetailItem {
 
 /** 6주차 중간 리포트 상단 점수 카드 */
 export interface WeekScoreMetric {
+  improvement: ReportImprovement
   label: string
   /** "-14점", "+10점" 처럼 부호가 포함된 표시용 문자열 */
   scoreLabel: string
   status: string
-  /** true면 우선순위 지표로 강조(초록 배경) 표시 */
-  emphasized: boolean
 }
 
 /** "어떤 노력이 기여했을까요?" 목록의 항목 */
@@ -91,13 +92,12 @@ export interface CostItem {
 
 /** 12주 최종 리포트 상단 점수 카드. 6주차 카드에 전/후 비교값이 추가된 버전 */
 export interface FinalScoreMetric {
+  improvement: ReportImprovement
   label: string
   scoreLabel: string
   /** "62 → 34" 처럼 첫 측정과 최종 측정을 비교하는 문자열 */
   beforeAfter: string
   status: string
-  /** true면 우선순위 지표로 강조(초록 배경) 표시 */
-  emphasized: boolean
 }
 
 /** "12주 동안 어떻게 실천했을까요?" 차트의 한 줄 */

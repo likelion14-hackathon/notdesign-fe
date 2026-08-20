@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import type { RouteObject } from 'react-router-dom'
+import { Navigate, type RouteObject } from 'react-router-dom'
 import { withSuspense } from '@/shared/utils/withSuspense'
 
 const ReportRequestPage = lazy(
@@ -26,8 +26,8 @@ const PlanGeneratingPage = lazy(
 const PlanResultPage = lazy(
   () => import('@/features/measurement/pages/PlanResultPage'),
 )
-const SixWeekReportPage = lazy(
-  () => import('@/features/measurement/pages/SixWeekReportPage'),
+const ReportViewPage = lazy(
+  () => import('@/features/measurement/pages/ReportViewPage'),
 )
 const ReportImportFailedPage = lazy(
   () => import('@/features/measurement/pages/ReportImportFailedPage'),
@@ -37,9 +37,6 @@ const ReportGeneratingPage = lazy(
 )
 const NewPlanResultPage = lazy(
   () => import('@/features/measurement/pages/NewPlanResultPage'),
-)
-const FinalReportPage = lazy(
-  () => import('@/features/measurement/pages/FinalReportPage'),
 )
 
 export const MeasurementRoutes: RouteObject[] = [
@@ -84,9 +81,17 @@ export const MeasurementRoutes: RouteObject[] = [
     handle: { title: '12주 플랜 결과' },
   },
   {
+    path: 'report',
+    element: withSuspense(<ReportViewPage />),
+    handle: { title: '내 리포트' },
+  },
+  {
     path: 'six-week-report',
-    element: withSuspense(<SixWeekReportPage />),
-    handle: { title: '6주차 중간 리포트' },
+    element: <Navigate to="/measurement/report" replace />,
+  },
+  {
+    path: 'final-report',
+    element: <Navigate to="/measurement/report" replace />,
   },
   {
     path: 'report-import-failed',
@@ -102,10 +107,5 @@ export const MeasurementRoutes: RouteObject[] = [
     path: 'new-plan-result',
     element: withSuspense(<NewPlanResultPage />),
     handle: { title: '새 플랜 결과' },
-  },
-  {
-    path: 'final-report',
-    element: withSuspense(<FinalReportPage />),
-    handle: { title: '12주 최종 리포트' },
   },
 ]

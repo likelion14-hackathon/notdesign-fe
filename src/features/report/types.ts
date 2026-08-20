@@ -28,11 +28,11 @@ export interface ReportContribution {
   reliability: ReportReliability
 }
 
-/** "실천 현황" 원본 데이터. 항목명 필드는 name (contributions와 다름) */
+/** "실천 현황" 원본 데이터 */
 export interface ReportExecution {
   category: ReportCategory
   categoryName: string
-  name: string
+  content: string
   plannedWeeks: number[]
   doneWeeks: number[]
 }

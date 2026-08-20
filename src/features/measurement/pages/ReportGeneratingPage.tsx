@@ -11,7 +11,7 @@ export default function ReportGeneratingPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/measurement/final-report', { replace: true })
+      navigate('/measurement/report', { replace: true })
     }, SIMULATED_LOADING_MS)
 
     return () => clearTimeout(timer)

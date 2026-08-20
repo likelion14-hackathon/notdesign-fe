@@ -35,11 +35,10 @@ const ROUTE_GROUPS: { group: string; links: { path: string; title: string }[] }[
       { path: '/measurement/plan-request', title: '12주 플랜 만들기' },
       { path: '/measurement/plan-generating', title: '12주 플랜 생성 중' },
       { path: '/measurement/plan-result', title: '12주 플랜 결과' },
-      { path: '/measurement/six-week-report', title: '6주차 중간 리포트' },
+      { path: '/measurement/report', title: '내 리포트 (중간/최종 자동 분기)' },
       { path: '/measurement/report-import-failed', title: '측정 데이터 불러오기 실패' },
       { path: '/measurement/report-generating', title: '리포트 생성 중' },
       { path: '/measurement/new-plan-result', title: '새 플랜 결과' },
-      { path: '/measurement/final-report', title: '12주 최종 리포트' },
     ],
   },
   {
