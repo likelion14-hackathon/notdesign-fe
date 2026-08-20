@@ -29,7 +29,8 @@ interface PlanGeneratingLocationState {
 export default function PlanGeneratingPage() {
   const navigate = useNavigate()
   const location = useLocation()
-  const mode = (location.state as PlanGeneratingLocationState | null)?.mode ?? 'NEW'
+  const mode =
+    (location.state as PlanGeneratingLocationState | null)?.mode ?? 'NEW'
   const setCreatedPlan = usePlanStore((state) => state.setCreatedPlan)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   /** 404(직전 사이클 미종료/진행 중 사이클 없음)는 다시 시도해도 해결되지 않아 재시도 버튼을 숨긴다 */
@@ -85,7 +86,7 @@ export default function PlanGeneratingPage() {
       .then(() => {
         // currentWeek이 바뀌었으니 홈/플랜/정보 화면의 진행 상태 캐시를 갱신한다.
         queryClient.invalidateQueries({ queryKey: ['plans', 'current'] })
-        navigate('/', { replace: true })
+        navigate('/plan', { replace: true })
       })
       .catch((error: unknown) => {
         if (error instanceof ApiError && error.code === 'C404') {
@@ -139,7 +140,9 @@ export default function PlanGeneratingPage() {
 
       <FlowHeader
         eyebrow="12주 플랜 만들기"
-        title={errorMessage ? '플랜을 생성하지 못했어요' : '12주 플랜을 생성하는 중'}
+        title={
+          errorMessage ? '플랜을 생성하지 못했어요' : '12주 플랜을 생성하는 중'
+        }
         showBack={false}
       />
 

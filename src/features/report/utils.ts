@@ -15,6 +15,7 @@ import type {
   ReportMetric,
   ReportReliability,
 } from '@/features/report/types'
+import { truncateText } from '@/shared/utils/truncateText'
 
 const REPORT_TIMELINE_WEEKS = 12
 
@@ -68,6 +69,9 @@ export function filterContributionsByImprovement(
   return contributions.filter((item) => item.improvement === improvement)
 }
 
+/** 도넛 가운데에 들어가는 항목명 최대 길이. 더 길면 잘라서 표시한다 */
+const TOP_CONTRIBUTION_NAME_MAX_LENGTH = 9
+
 /** 선택된 지표에서 기여율이 가장 높은 항목 */
 export function pickTopContribution(
   contributions: ReportContribution[],
@@ -76,7 +80,10 @@ export function pickTopContribution(
   const top = contributions.reduce((a, b) =>
     b.contributionRate > a.contributionRate ? b : a,
   )
-  return { name: top.content, percentage: Math.round(top.contributionRate) }
+  return {
+    name: truncateText(top.content, TOP_CONTRIBUTION_NAME_MAX_LENGTH),
+    percentage: Math.round(top.contributionRate),
+  }
 }
 
 /** 12주 최종 리포트 상단 점수 카드(전/후 비교 포함) */

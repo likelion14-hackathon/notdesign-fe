@@ -10,12 +10,3 @@ export async function agreeToMeasurementUsage(): Promise<UserInfo> {
     throw toApiError(error)
   }
 }
-
-export async function getMyInfo(): Promise<UserInfo> {
-  try {
-    const { data } = await api.get<ApiEnvelope<UserInfo>>('/api/users/me')
-    return unwrap(data)
-  } catch (error) {
-    throw toApiError(error)
-  }
-}
