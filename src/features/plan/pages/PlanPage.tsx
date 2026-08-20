@@ -4,10 +4,6 @@ import PlanCostCards from '@/features/measurement/components/PlanCostCards'
 import PlanDetailSection from '@/features/measurement/components/PlanDetailSection'
 import PlanScoreCards from '@/features/measurement/components/PlanScoreCards'
 import PlanTimelineSection from '@/features/measurement/components/PlanTimelineSection'
-import {
-  PLAN_TAB_COST_SUMMARY,
-  PLAN_TAB_TITLE,
-} from '@/features/plan/constants'
 import { useCurrentPlanDetail } from '@/features/plan/hooks/useCurrentPlanDetail'
 import {
   buildDetailItems,
@@ -20,6 +16,7 @@ import BottomBar from '@/shared/components/BottomBar'
 import type { NavTabId } from '@/shared/components/BottomNav'
 import BottomNav from '@/shared/components/BottomNav'
 import Logo from '@/shared/components/Logo'
+import SkeletonBar from '@/shared/components/SkeletonBar'
 import Toast from '@/shared/components/Toast'
 
 interface PlanLocationState {
@@ -80,24 +77,19 @@ export default function PlanPage() {
           <p className="text-text-secondary text-[15px] leading-4.5 font-semibold tracking-[-0.3px]">
             현재 진행 중인 플랜
           </p>
-          <h1 className="text-text-primary mt-2.75 text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
-            {plan ? (
-              plan.planSummary
-            ) : (
-              <>
-                {PLAN_TAB_TITLE[0]}
-                <br />
-                {PLAN_TAB_TITLE[1]}
-              </>
-            )}
-          </h1>
+          {plan ? (
+            <h1 className="text-text-primary mt-2.75 text-[26px] leading-10 font-semibold tracking-[-0.52px] break-keep">
+              {plan.planSummary}
+            </h1>
+          ) : (
+            isLoading && (
+              <div className="mt-4.5 flex flex-col gap-2.5">
+                <SkeletonBar className="h-6.5 w-4/5" />
+                <SkeletonBar className="h-6.5 w-3/5" />
+              </div>
+            )
+          )}
         </div>
-
-        {isLoading && (
-          <p className="text-text-secondary mt-7.5 px-5 text-[14px] font-medium">
-            플랜 정보를 불러오는 중이에요...
-          </p>
-        )}
 
         {!isLoading && plan === null && !error && (
           <p className="text-text-secondary mt-7.5 px-5 text-[14px] font-medium break-keep">
@@ -121,7 +113,7 @@ export default function PlanPage() {
               </div>
             )}
             <div className="px-5">
-              <PlanCostCards summary={costSummary ?? PLAN_TAB_COST_SUMMARY} />
+              <PlanCostCards summary={costSummary} />
             </div>
             <PlanTimelineSection
               insightPosition="above"
